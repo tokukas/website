@@ -2,8 +2,9 @@
 import React from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
 import PrimaryButton from '@/Components/PrimaryButton';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import { Link, useForm } from '@inertiajs/inertia-react';
 import route from 'ziggy-js';
+import AppHead from '@/Components/AppHead';
 
 type TPropsVerifyEmail = {
   status: string;
@@ -20,7 +21,11 @@ export default function VerifyEmail({ status }: TPropsVerifyEmail) {
 
   return (
     <GuestLayout>
-      <Head title="Email Verification" />
+      <AppHead
+        title="Verifikasi Email"
+        description="Kami telah mengirimkan email verifikasi ke alamat
+          email Anda. Silakan cek email Anda untuk melanjutkan."
+      />
 
       <div className="mb-4 text-sm text-gray-600">
         Thanks for signing up! Before getting started, could you verify your email address by clicking on the

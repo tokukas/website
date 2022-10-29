@@ -1,9 +1,10 @@
 /* eslint-disable max-len */
+import AppHead from '@/Components/AppHead';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/inertia-react';
+import { useForm } from '@inertiajs/inertia-react';
 import React from 'react';
 import route from 'ziggy-js';
 
@@ -30,7 +31,12 @@ export default function ForgotPassword({ status }: TPropsForgotPassword) {
 
   return (
     <GuestLayout>
-      <Head title="Forgot Password" />
+      <AppHead
+        title="Lupa Kata Sandi"
+        description="Lupa kata sandi? Tidak masalah. Masukkan alamat email
+          Anda di bawah ini dan kami akan mengirimkan tautan untuk mengatur
+          ulang kata sandi Anda."
+      />
 
       <div className="mb-4 text-sm text-gray-500 leading-normal">
         Forgot your password? No problem. Just let us know your email address and we will email you a password

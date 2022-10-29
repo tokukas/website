@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
+import AppHead from '@/Components/AppHead';
 import Checkbox from '@/Components/Checkbox';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import { Link, useForm } from '@inertiajs/inertia-react';
 import React, { useEffect } from 'react';
 import route from 'ziggy-js';
 
@@ -39,7 +40,10 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
 
   return (
     <GuestLayout>
-      <Head title="Log in" />
+      <AppHead
+        title="Masuk"
+        description="Masuk ke akun Tokukas Anda untuk mulai bertransaksi."
+      />
 
       {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
