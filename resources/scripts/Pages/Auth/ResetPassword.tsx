@@ -1,9 +1,10 @@
+import AppHead from '@/Components/AppHead';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/inertia-react';
+import { useForm } from '@inertiajs/inertia-react';
 import React, { useEffect } from 'react';
 import route from 'ziggy-js';
 
@@ -38,7 +39,11 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
 
   return (
     <GuestLayout>
-      <Head title="Reset Password" />
+      <AppHead
+        title="Atur Ulang Kata Sandi"
+        description="Buat kata sandi baru untuk akun Anda.
+          Pastikan kata sandi Anda kuat dan mudah diingat."
+      />
 
       <form onSubmit={submit}>
         <div>

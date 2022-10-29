@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
+import AppHead from '@/Components/AppHead';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/inertia-react';
+import { useForm } from '@inertiajs/inertia-react';
 import React, { useEffect } from 'react';
 import route from 'ziggy-js';
 
@@ -31,7 +32,10 @@ export default function ConfirmPassword() {
 
   return (
     <GuestLayout>
-      <Head title="Confirm Password" />
+      <AppHead
+        title="Konfirmasi Kata Sandi"
+        description="Silakan masukkan kata sandi Anda untuk melanjutkan."
+      />
 
       <div className="mb-4 text-sm text-gray-600">
         This is a secure area of the application. Please confirm your password before continuing.

@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
+import AppHead from '@/Components/AppHead';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import { Link, useForm } from '@inertiajs/inertia-react';
 import React, { useEffect } from 'react';
 import route from 'ziggy-js';
 
@@ -34,7 +35,10 @@ export default function Register() {
 
   return (
     <GuestLayout>
-      <Head title="Register" />
+      <AppHead
+        title="Daftar"
+        description="Buat akun Tokukas Anda sekarang untuk mulai bertransaksi."
+      />
 
       <form onSubmit={submit}>
         <div>

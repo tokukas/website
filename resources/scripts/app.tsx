@@ -6,12 +6,14 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/inertia-react';
 import { InertiaProgress } from '@inertiajs/progress';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import AppConfig from './Config/App';
 
-const appName = window.document
-  .getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const appName = AppConfig.name;
 
 await createInertiaApp({
-  title: (title) => `${title} - ${appName}`,
+  title: (title) => (title.toLowerCase().includes(appName.toLowerCase())
+    ? title : `${title} - ${appName}`
+  ),
   resolve: (name) => (
     resolvePageComponent(
       `./Pages/${name}.tsx`,
