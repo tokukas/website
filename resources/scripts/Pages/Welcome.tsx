@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import { Head, Link } from '@inertiajs/inertia-react';
+import AppHead from '@/Components/AppHead';
+import { Link } from '@inertiajs/inertia-react';
 import React from 'react';
 import route from 'ziggy-js';
 
@@ -14,10 +15,18 @@ type TPropsWelcome = {
   phpVersion: string;
 }
 
-export default function Welcome({ auth, laravelVersion, phpVersion }: TPropsWelcome) {
+export default function Welcome({
+  auth,
+  laravelVersion,
+  phpVersion,
+}: TPropsWelcome) {
   return (
     <>
-      <Head title="Welcome" />
+      <AppHead
+        title="Tokukas - Toko Buku Bekas"
+        description="Tokukas adalah tempat jual beli buku bekas berkualitas
+          dengan harga terjangkau. #YangBekasPastiLebihMurah"
+      />
       <div className="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
         <div className="fixed top-0 right-0 px-6 py-4 sm:block">
           {auth.user ? (
