@@ -33,6 +33,6 @@ export default function AppHead({
 
 AppHead.defaultProps = {
   title: AppConfig.name,
-  description: '',
+  description: AppConfig.description,
   children: null,
 };
