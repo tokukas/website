@@ -58,6 +58,8 @@
                 "tsx": "never"
             }
         ],
-        "react/button-has-type": "off"
+        "react/button-has-type": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error"
     }
 }
