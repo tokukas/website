@@ -6,6 +6,9 @@ import { PaletteMode, ThemeOptions } from '@mui/material';
  * @returns The theme options.
  */
 const AppThemeOptions = (colorMode: PaletteMode): ThemeOptions => ({
+  typography: {
+    fontFamily: 'Quicksand, sans-serif',
+  },
   palette: {
     mode: colorMode,
     ...(colorMode === 'light'
