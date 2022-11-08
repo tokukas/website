@@ -12,30 +12,32 @@ import BaseLayout from './Layouts/BaseLayout';
 
 const appName = AppConfig.name;
 
-await createInertiaApp({
-  title: (title) => (title.toLowerCase().includes(appName.toLowerCase())
-    ? title : `${title} - ${appName}`
-  ),
-  resolve: (name) => (
-    resolvePageComponent(
-      `./Pages/${name}.tsx`,
-      import.meta.glob('./Pages/**/*.tsx'),
-    )
-  ),
-  setup({ el, App, props }) {
-    const root = createRoot(el);
+(async () => {
+  await createInertiaApp({
+    title: (title) => (title.toLowerCase().includes(appName.toLowerCase())
+      ? title : `${title} - ${appName}`
+    ),
+    resolve: (name) => (
+      resolvePageComponent(
+        `./Pages/${name}.tsx`,
+        import.meta.glob('./Pages/**/*.tsx'),
+      )
+    ),
+    setup({ el, App, props }) {
+      const root = createRoot(el);
 
-    root.render(
-      <React.StrictMode>
-        <StyledEngineProvider injectFirst>
-          <BaseLayout>
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <App {...props} />
-          </BaseLayout>
-        </StyledEngineProvider>
-      </React.StrictMode>,
-    );
-  },
-});
+      root.render(
+        <React.StrictMode>
+          <StyledEngineProvider injectFirst>
+            <BaseLayout>
+              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+              <App {...props} />
+            </BaseLayout>
+          </StyledEngineProvider>
+        </React.StrictMode>,
+      );
+    },
+  });
+})();
 
 InertiaProgress.init({ color: '#4B5563' });
