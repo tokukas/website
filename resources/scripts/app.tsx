@@ -8,6 +8,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import AppConfig from './Config/App';
+import BaseLayout from './Layouts/BaseLayout';
 
 const appName = AppConfig.name;
 
@@ -25,10 +26,14 @@ await createInertiaApp({
     const root = createRoot(el);
 
     root.render(
-      <StyledEngineProvider injectFirst>
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <App {...props} />
-      </StyledEngineProvider>,
+      <React.StrictMode>
+        <StyledEngineProvider injectFirst>
+          <BaseLayout>
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+            <App {...props} />
+          </BaseLayout>
+        </StyledEngineProvider>
+      </React.StrictMode>,
     );
   },
 });
