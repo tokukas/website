@@ -25,7 +25,6 @@ export default function AppHead({
   return (
     <Head title={title}>
       <meta name="description" content={description} />
-      <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
       {children}
     </Head>
   );
