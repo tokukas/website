@@ -1,4 +1,6 @@
 import AppHead from '@/Components/AppHead';
+import BrandLogo from '@/Components/BrandLogo';
+import Navbar from '@/Components/Navbar';
 import ColorModeContext from '@/Utils/ColorModeContext';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
@@ -14,6 +16,7 @@ export default function Welcome() {
         description="Tokukas adalah tempat jual beli buku bekas berkualitas
           dengan harga terjangkau. #YangBekasPastiLebihMurah"
       />
+      <Navbar />
       <IconButton
         sx={{ ml: 1 }}
         onClick={toggleColorMode}
