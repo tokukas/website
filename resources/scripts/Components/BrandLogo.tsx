@@ -6,10 +6,10 @@ type TPropsBrandLogo = SvgIconProps & {
   /**
    * The width of the logo.
    *
-   * @default 32
+   * @default '1.5em'
    * @see https://developer.mozilla.org/en-US/docs/Web/CSS/width
    */
-  width?: number | string;
+  width?: string | number;
 
   /**
    * The height of the logo.
@@ -17,7 +17,7 @@ type TPropsBrandLogo = SvgIconProps & {
    * @default 'auto'
    * @see https://developer.mozilla.org/en-US/docs/Web/CSS/height
    */
-  height?: number | string;
+  height?: string | number;
 }
 
 export default function BrandLogo({
@@ -40,6 +40,6 @@ export default function BrandLogo({
 }
 
 BrandLogo.defaultProps = {
-  width: 32,
+  width: '1.5em',
   height: 'auto',
 };
