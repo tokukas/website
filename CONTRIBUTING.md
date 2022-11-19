@@ -105,9 +105,9 @@ If you have an idea for an enhancement, please [open an issue](https://github.co
 If you want to contribute code, follow these steps:
 
 1. Fork the repository.
-2. Create a new branch from the `main` branch. The branch name should be in the format like [Git Commit Message](#commit-message), but replace the `:` with `/` (e.g. `feat/feature-name`).
+2. Create a new branch from the `main` branch. The branch name should be in the format like [Commit Message](#commit-message), but replace the `:` with `/` (e.g. `feat/feature-name`).
 3. Make your changes.
-4. Commit your changes. The commit message must follow the [Git Commit Message](#commit-message) format.
+4. Commit your changes. The commit message must follow the [Commit Message](#commit-message) format.
 5. Push your changes to your fork.
 6. [Open a pull request](https://github.com/tokukas/website/issues/new/choose) to the `main` branch and select the `Pull Request` template.
 7. Wait for the review.
