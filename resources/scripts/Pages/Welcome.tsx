@@ -1,10 +1,10 @@
 import AppHead from '@/Components/AppHead';
-import BrandLogo from '@/Components/BrandLogo';
 import Navbar from '@/Components/Navbar';
 import ColorModeContext from '@/Utils/ColorModeContext';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { Button, IconButton } from '@mui/material';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import React from 'react';
 
 export default function Welcome() {
