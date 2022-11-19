@@ -11,7 +11,7 @@ Welcome to the Tokukas website repository on GitHub. Here you can browse the sou
   - [Installation](#installation)
 - [Code of Conduct](#code-of-conduct)
 - [Style Guide](#style-guide)
-  - [Git Commit Message](#git-commit-message)
+  - [Commit Message](#commit-message)
   - [JavaScript and TypeScript Style Guide](#javascript-and-typescript-style-guide)
 - [How to Contribute](#how-to-contribute)
   - [Reporting Bugs](#reporting-bugs)
@@ -60,13 +60,15 @@ This project and everyone participating in it is governed by the [Tokukas Code o
 
 ## Style Guide
 
-### Git Commit Message
+### Commit Message
+
+All commit messages SHOULD adhere the [**Conventional Commits specification**](https://www.conventionalcommits.org/en/v1.0.0/).
 
 -   Use the present tense ("Add feature" not "Added feature").
 -   Use the imperative mood ("Move cursor to..." not "Moves cursor to...").
 -   Limit the first line to 72 characters or less.
 -   Reference issues and pull requests liberally after the first line.
--   Use semantic commit messages with [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format which the available types are:
+-   Use semantic commit messages like:
     -   `feat`: A new feature.
     -   `fix`: A bug fix.
     -   `docs`: Documentation only changes.
