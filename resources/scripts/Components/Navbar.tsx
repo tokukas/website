@@ -41,7 +41,7 @@ export default function Navbar() {
   const { name: appName } = AppConfig;
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <BrandLogo
@@ -138,7 +138,12 @@ export default function Navbar() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{
+                  my: 2,
+                  color: 'white',
+                  display: 'block',
+                  textTransform: 'capitalize',
+                }}
               >
                 {page}
               </Button>
