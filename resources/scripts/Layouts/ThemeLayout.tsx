@@ -5,11 +5,11 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-type TPropsBaseLayout = {
+type TPropsThemeLayout = {
   children?: React.ReactNode;
 }
 
-export default function BaseLayout({ children }: TPropsBaseLayout) {
+export default function ThemeLayout({ children }: TPropsThemeLayout) {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const [colorMode, setColorMode] = React.useState<PaletteMode>(
@@ -46,6 +46,6 @@ export default function BaseLayout({ children }: TPropsBaseLayout) {
   );
 }
 
-BaseLayout.defaultProps = {
+ThemeLayout.defaultProps = {
   children: null,
 };

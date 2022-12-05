@@ -12,7 +12,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import AppConfig from './Config/App';
-import BaseLayout from './Layouts/BaseLayout';
+import ThemeLayout from './Layouts/ThemeLayout';
 
 const appName = AppConfig.name;
 
@@ -33,10 +33,10 @@ const appName = AppConfig.name;
       root.render(
         <React.StrictMode>
           <StyledEngineProvider injectFirst>
-            <BaseLayout>
+            <ThemeLayout>
               {/* eslint-disable-next-line react/jsx-props-no-spreading */}
               <App {...props} />
-            </BaseLayout>
+            </ThemeLayout>
           </StyledEngineProvider>
         </React.StrictMode>,
       );
