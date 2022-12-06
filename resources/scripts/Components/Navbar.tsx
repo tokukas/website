@@ -18,6 +18,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import route from 'ziggy-js';
 import BrandLogo from './BrandLogo';
 import MenuItemLink from './MenuItemLink';
 
@@ -178,25 +179,32 @@ export default function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItemLink href="/dashboard" onClick={handleCloseUserMenu}>
+              <MenuItemLink
+                href={route('dashboard')}
+                onClick={handleCloseUserMenu}
+              >
                 <ListItemIcon>
                   <DashboardIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>Dashboard</ListItemText>
               </MenuItemLink>
-              <MenuItem onClick={handleCloseUserMenu}>
+              <MenuItemLink
+                onClick={handleCloseUserMenu}
+              >
                 <ListItemIcon>
                   <SettingsIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>Settings</ListItemText>
-              </MenuItem>
+              </MenuItemLink>
               <Divider />
-              <MenuItem onClick={handleCloseUserMenu}>
+              <MenuItemLink
+                onClick={handleCloseUserMenu}
+              >
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>Logout</ListItemText>
-              </MenuItem>
+              </MenuItemLink>
             </Menu>
           </Box>
         </Toolbar>
