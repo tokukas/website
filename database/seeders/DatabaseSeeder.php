@@ -26,8 +26,9 @@ class DatabaseSeeder extends Seeder
             $theTester = $this->createTester();
         }
 
-        // Seed the publishers.
+        // Call another seeders.
         $this->seedPublishers();
+        $this->seedCategories();
     }
 
     /**
@@ -60,5 +61,13 @@ class DatabaseSeeder extends Seeder
     private function seedPublishers()
     {
         $this->call(PublisherSeeder::class);
+    }
+
+    /**
+     * Seed the categories.
+     */
+    private function seedCategories()
+    {
+        $this->call(CategorySeeder::class);
     }
 }
