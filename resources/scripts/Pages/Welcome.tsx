@@ -1,16 +1,17 @@
 import AppHead from '@/Components/AppHead';
 import Navbar from '@/Components/Navbar';
+import BaseLayout from '@/Layouts/BaseLayout';
 import ColorModeContext from '@/Utils/ColorModeContext';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import React from 'react';
+import * as React from 'react';
 
 export default function Welcome() {
   const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
   return (
-    <>
+    <BaseLayout>
       <AppHead
         title="Tokukas - Toko Buku Bekas"
         description="Tokukas adalah tempat jual beli buku bekas berkualitas
@@ -38,6 +39,6 @@ export default function Welcome() {
         <Button variant="contained" color="error">Error</Button>
         <Button variant="outlined" color="error">Error</Button>
       </div>
-    </>
+    </BaseLayout>
   );
 }

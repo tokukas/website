@@ -1,5 +1,9 @@
 import AppConfig from '@/Config/App';
+import AuthContext from '@/Utils/AuthContext';
+import { useForm } from '@inertiajs/inertia-react';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -22,6 +26,14 @@ import route from 'ziggy-js';
 import BrandLogo from './BrandLogo';
 import MenuItemLink from './MenuItemLink';
 
+type TMenuItem = {
+  name: string;
+  icon?: React.ReactNode;
+  href?: string;
+  onClick?: () => void;
+};
+
+const MENU_ITEM_DIVIDER = 'DIVIDER';
 const pages = ['Products', 'Pricing', 'Blog'];
 
 export default function Navbar() {
@@ -36,16 +48,52 @@ export default function Navbar() {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
   const { name: appName } = AppConfig;
+  const { user } = React.useContext(AuthContext);
+  const { post } = useForm();
+  const [userMenuItems, setUserMenuItems] = React.useState<TMenuItem[]>([]);
+
+  React.useEffect(() => {
+    setUserMenuItems(user
+      ? [
+        {
+          name: 'Dashboard',
+          href: route('dashboard'),
+          icon: <DashboardIcon fontSize="small" />,
+        },
+        {
+          name: 'Settings',
+          icon: <SettingsIcon fontSize="small" />,
+        },
+        {
+          // Divider element
+          name: MENU_ITEM_DIVIDER,
+        },
+        {
+          name: 'Logout',
+          icon: <LogoutIcon fontSize="small" />,
+          onClick: () => post(route('logout')),
+        },
+      ] : [
+        {
+          name: 'Login',
+          href: route('login'),
+          icon: <LoginIcon fontSize="small" />,
+        },
+        {
+          name: 'Register',
+          href: route('register'),
+          icon: <AppRegistrationIcon fontSize="small" />,
+        },
+      ]);
+  }, [user]);
 
   return (
     <AppBar position="sticky">
@@ -158,9 +206,12 @@ export default function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title={user ? 'Open settings' : 'Sign to App'}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar
+                  alt="Remy Sharp"
+                  src={user ? '/static/images/avatar/2.jpg' : ''}
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -179,32 +230,35 @@ export default function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItemLink
-                href={route('dashboard')}
-                onClick={handleCloseUserMenu}
-              >
-                <ListItemIcon>
-                  <DashboardIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Dashboard</ListItemText>
-              </MenuItemLink>
-              <MenuItemLink
-                onClick={handleCloseUserMenu}
-              >
-                <ListItemIcon>
-                  <SettingsIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Settings</ListItemText>
-              </MenuItemLink>
-              <Divider />
-              <MenuItemLink
-                onClick={handleCloseUserMenu}
-              >
-                <ListItemIcon>
-                  <LogoutIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Logout</ListItemText>
-              </MenuItemLink>
+              {userMenuItems.map((menu, i) => {
+                if (menu.name.includes(MENU_ITEM_DIVIDER)) {
+                  // eslint-disable-next-line react/no-array-index-key
+                  return <Divider key={`divider-${i}`} />;
+                }
+                return (
+                  <MenuItemLink
+                    key={menu.name}
+                    href={menu.href}
+                    onClick={() => {
+                      if (menu.onClick) {
+                        menu.onClick();
+                      }
+                      handleCloseUserMenu();
+                    }}
+                    onKeyDown={menu.onClick}
+                  >
+                    {
+                      menu.icon && (
+                        <ListItemIcon>{menu.icon}</ListItemIcon>
+                      )
+                    }
+                    <ListItemText>
+                      {' '}
+                      {menu.name}
+                    </ListItemText>
+                  </MenuItemLink>
+                );
+              })}
             </Menu>
           </Box>
         </Toolbar>
