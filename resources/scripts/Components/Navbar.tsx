@@ -98,16 +98,10 @@ export default function Navbar() {
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <BrandLogo
-            height="1.5rem"
-            width="auto"
-            sx={{
-              mr: 1,
-              display: { xs: 'none', md: 'flex' },
-              alignItems: 'center',
-            }}
-          />
+        <Toolbar
+          disableGutters
+          sx={{ justifyContent: 'space-between' }}
+        >
           <Typography
             variant="h6"
             noWrap
@@ -122,10 +116,19 @@ export default function Navbar() {
               textDecoration: 'none',
             }}
           >
+            <BrandLogo
+              height="1.5rem"
+              width="auto"
+              sx={{
+                mr: 1,
+                display: { xs: 'none', md: 'flex' },
+                alignItems: 'center',
+              }}
+            />
             {appName}
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -162,32 +165,28 @@ export default function Navbar() {
             </Menu>
           </Box>
 
-          <BrandLogo
-            height="1.5rem"
-            width="auto"
-            sx={{
-              mr: 1,
-              display: { xs: 'flex', md: 'none' },
-              alignItems: 'center',
-            }}
-          />
           <Typography
-            variant="h5"
-            noWrap
             component="a"
             href="/"
+            variant="h5"
+            noWrap
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
               alignItems: 'center',
-              fontWeight: 700,
               color: 'inherit',
+              fontWeight: 700,
               textDecoration: 'none',
             }}
           >
+            <BrandLogo
+              height="1.5rem"
+              width="auto"
+              sx={{ mr: 1 }}
+            />
             {appName}
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
@@ -205,7 +204,7 @@ export default function Navbar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box>
             <Tooltip title={user ? 'Open settings' : 'Sign to App'}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
