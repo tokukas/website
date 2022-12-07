@@ -25,6 +25,9 @@ class DatabaseSeeder extends Seeder
         if (empty($theTester)) {
             $theTester = $this->createTester();
         }
+
+        // Seed the publishers.
+        $this->seedPublishers();
     }
 
     /**
@@ -49,5 +52,13 @@ class DatabaseSeeder extends Seeder
         \App\Models\Role::factory()->createMany([
             ['key' => 'admin', 'name' => 'Administrator'],
         ]);
+    }
+
+    /**
+     * Seed the publishers.
+     */
+    private function seedPublishers()
+    {
+        $this->call(PublisherSeeder::class);
     }
 }
