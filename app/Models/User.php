@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -52,31 +53,32 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Interacts with the user's name.
      *
-     * Casts the name to capitalized.
-     * Sets the name to uppercase.
+     * Sets the name to UPPER CASE.
+     * Casts the name to Title Case.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute.
      */
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => mb_convert_case($value, MB_CASE_TITLE),
-            set: fn ($value) => mb_strtoupper($value),
+            set: fn ($value) => Str::upper($value),
+            get: fn ($value) => Str::title($value),
         );
     }
 
     /**
      * Interacts with the user's email address.
      *
-     * Casts the email address to lowercase.
+     * Set the email address to lower case.
+     * Casts the email address to lower case.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function email(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => strtolower($value),
-            set: fn ($value) => strtolower($value),
+            set: fn ($value) => Str::lower($value),
+            get: fn ($value) => Str::lower($value),
         );
     }
 
