@@ -89,6 +89,6 @@ class Role extends Model
      */
     public function users()
     {
-        return $this->hasMany(User::class, 'role', $this->getKeyName());
+        return $this->hasMany(User::class, 'role_key', $this->getKeyName());
     }
 }

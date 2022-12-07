@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             'email' => config('seeder.tester_email'),
             'password' => Hash::make(config('seeder.tester_password')),
             'email_verified_at' => now(),
-            'role' => config('seeder.tester_is_admin') ? 'admin' : null,
+            'role_key' => config('seeder.tester_is_admin') ? 'admin' : null,
         ]);
     }
 
