@@ -33,6 +33,7 @@ return new class extends Migration
             // Revert the ulid id column
             $table->dropPrimary('users_id_primary');
             $table->dropColumn('id');
+            $table->id();
         });
     }
 };
