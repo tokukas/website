@@ -91,4 +91,15 @@ class Book extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * The book authors.
+     *
+     * @param \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function authors()
+    {
+        return $this->belongsToMany(Author::class, BookAuthor::TABLE_NAME)
+            ->using(BookAuthor::class);
+    }
 }

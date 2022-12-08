@@ -36,4 +36,15 @@ class Author extends Model
             get: fn ($value) => str()->title($value),
         );
     }
+
+    /**
+     * The books that belong to the author.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, BookAuthor::TABLE_NAME)
+            ->using(BookAuthor::class);
+    }
 }
