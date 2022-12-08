@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +30,47 @@ class Book extends Model
         'isbn',
         'description',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var string[]
+     */
+    protected $casts = [
+        'year_published' => 'integer',
+        'width' => 'float',
+        'height' => 'float',
+        'weight' => 'float',
+        'num_of_pages' => 'integer',
+    ];
+
+    /**
+     * Interacts with the book's title.
+     *
+     * Sets the title to Sentence case.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute.
+     */
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => str()->ucfirst($value),
+        );
+    }
+
+    /**
+     * Interacts with the book's description.
+     *
+     * Sets the description to Sentence case.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute.
+     */
+    protected function description(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => str()->ucfirst($value),
+        );
+    }
 
     /**
      * The book publisher.
