@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         $this->seedPublishers();
         $this->seedCategories();
         $this->seedBooks();
+        $this->seedAuthors();
     }
 
     /**
@@ -78,5 +79,13 @@ class DatabaseSeeder extends Seeder
     private function seedBooks()
     {
         $this->call(BookSeeder::class);
+    }
+
+    /**
+     * Seed the authors.
+     */
+    private function seedAuthors()
+    {
+        $this->call(AuthorSeeder::class);
     }
 }
