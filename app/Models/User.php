@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -61,8 +60,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function name(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => Str::upper($value),
-            get: fn ($value) => Str::title($value),
+            set: fn ($value) => str()->upper($value),
+            get: fn ($value) => str()->title($value),
         );
     }
 
@@ -70,15 +69,13 @@ class User extends Authenticatable implements MustVerifyEmail
      * Interacts with the user's email address.
      *
      * Set the email address to lower case.
-     * Casts the email address to lower case.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function email(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => Str::lower($value),
-            get: fn ($value) => Str::lower($value),
+            set: fn ($value) => str()->lower($value),
         );
     }
 

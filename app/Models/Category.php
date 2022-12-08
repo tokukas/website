@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Category extends Model
 {
@@ -33,8 +32,8 @@ class Category extends Model
     protected function name(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => Str::kebab(Str::lower($value)),
-            get: fn ($value) => Str::replace('-', ' ', Str::title($value)),
+            set: fn ($value) => str($value)->lower()->kebab(),
+            get: fn ($value) => str($value)->replace('-', ' ')->title(),
         );
     }
 }
