@@ -61,6 +61,15 @@ export default function Navbar() {
   const [userMenuItems, setUserMenuItems] = React.useState<TMenuItem[]>([]);
 
   React.useEffect(() => {
+    const divider = {
+      name: MENU_ITEM_DIVIDER,
+    };
+    const settingsMenu = {
+      name: 'Settings',
+      href: route('settings'),
+      icon: <SettingsIcon fontSize="small" />,
+    };
+
     setUserMenuItems(user
       ? [
         {
@@ -68,14 +77,8 @@ export default function Navbar() {
           href: route('dashboard'),
           icon: <DashboardIcon fontSize="small" />,
         },
-        {
-          name: 'Settings',
-          icon: <SettingsIcon fontSize="small" />,
-        },
-        {
-          // Divider element
-          name: MENU_ITEM_DIVIDER,
-        },
+        settingsMenu,
+        divider,
         {
           name: 'Logout',
           icon: <LogoutIcon fontSize="small" />,
@@ -92,6 +95,8 @@ export default function Navbar() {
           href: route('register'),
           icon: <AppRegistrationIcon fontSize="small" />,
         },
+        divider,
+        settingsMenu,
       ]);
   }, [user]);
 
