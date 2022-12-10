@@ -7,10 +7,6 @@ Welcome to the Tokukas website repository on GitHub. Here you can browse the sou
 <h2>Table of Contents</h2>
 
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-    - [Without Docker](#without-docker)
-    - [With Docker (Laravel Sail)](#with-docker-laravel-sail)
 - [Code of Conduct](#code-of-conduct)
 - [Style Guide](#style-guide)
   - [Commit Message](#commit-message)
@@ -24,90 +20,10 @@ Welcome to the Tokukas website repository on GitHub. Here you can browse the sou
 
 ## Getting Started
 
-### Prerequisites
+Install this app by following one of this guides:
 
-- [PHP 8.0](https://www.php.net/downloads.php)
-- [Composer](https://getcomposer.org/download)
-- [Node.js](https://nodejs.org/en/download)
-- [NPM](https://www.npmjs.com/get-npm)
-- [MySQL](https://www.mysql.com/downloads)
-
-### Installation
-
-#### Without Docker
-
-1. Clone this repository.
-2. Install the dependencies. Run `composer install` command, then run `npm install` command.
-3. Create `.env` file by simply copying the `.env.example` file and rename it.
-4. Make sure you have a database created and the database server is running.
-5. Configure the `.env` file with your **database connection**, **seeder configuration**, etc.
-6. Generate the application key with `php artisan key:generate` command.
-7. Generate the database structure with this commands based on your preferences:
-    - Use **`php artisan migrate`** for [creating / updating the database](https://laravel.com/docs/9.x/migrations).
-    - Use **`php artisan db:seed`** for [seeding the database](https://laravel.com/docs/9.x/seeding#running-seeders).
-    - Use `php artisan migrate:fresh` for fresh installation.
-    - Use `php artisan migrate:fresh --seed` for fresh installation and seeding the database.
-
-> **!!! Warning !!!**
->
-> If you use `php artisan migrate:fresh` command, all tables will be dropped and recreated. **All data in the tables will be lost**.
-
-8. Start the application with `php artisan serve` command.
-9. Finally, compile the app resources with [Vite](https://vitejs.dev) using **`npm run dev`** command.
-
-> In **production**, use `npm run build` command.
-
-#### With Docker (Laravel Sail)
-
-1. Clone this repository, and go to the application's directory.
-
-2. [Install the application's dependencies](https://laravel.com/docs/9.x/sail#installing-composer-dependencies-for-existing-projects) by executing the following command:
-    ```bash
-    docker run --rm \
-       -u "$(id -u):$(id -g)" \
-       -v "$(pwd):/var/www/html" \
-       -w /var/www/html \
-       laravelsail/php81-composer:latest \
-       composer install --ignore-platform-reqs
-    ```
-
-3. Create `.env` file by simply copying the `.env.example` file and rename it.
-
-4. Configure the `.env` file to modify:
-    - the **app configuration** (`APP_NAME`, `APP_PORT`, etc),
-    - the **database connection** (`DB_PORT`, `DB_DATABASE`, etc),
-    - the **seeder configuration** (`SEEDER_TESTER_NAME`, etc),
-    - etc.
-
-    > See [docker-compose.yml](./docker-compose.yml) file to find out what environment variables are used by docker.
-
-5. Start the app:
-    ```bash
-    ./vendor/bin/sail up -d
-    ```
-
-    > To **stop the app**, use `./vendor/bin/sail down` command.
-
-6. Enter to app bash:
-    ```bash
-    ./vendor/bin/sail bash
-    ```
-
-7. Install the front-end dependencies with `npm install` command.
-8. Generate the application key with `php artisan key:generate` command.
-9. Generate the database structure with this commands based on your preferences:
-    - Use **`php artisan migrate`** for [creating / updating the database](https://laravel.com/docs/9.x/migrations).
-    - Use **`php artisan db:seed`** for [seeding the database](https://laravel.com/docs/9.x/seeding#running-seeders).
-    - Use `php artisan migrate:fresh` for fresh installation.
-    - Use `php artisan migrate:fresh --seed` for fresh installation and seeding the database.
-
-    > **!!! Warning !!!**
-    >
-    > If you use `php artisan migrate:fresh` command, all tables will be dropped and recreated. **All data in the tables will be lost**.
-
-10. Finally, compile the app resources with [Vite](https://vitejs.dev) using **`npm run dev`** command.
-
-    > In **production**, use `npm run build` command
+- [Installation with Docker](docs/installation-with-docker.md)
+- [Installation without Docker](docs/installation-without-docker.md)
 
 ## Code of Conduct
 
