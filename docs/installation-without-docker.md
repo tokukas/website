@@ -14,7 +14,7 @@ This is the guide to install the app in your local machine without docker.
     - [Generate the app key](#generate-the-app-key)
     - [Configure the `.env` variables](#configure-the-env-variables)
   - [Generate the database tables](#generate-the-database-tables)
-  - [Compile the front-end resources](#compile-the-front-end-resources)
+  - [Bundle the front-end resources](#bundle-the-front-end-resources)
   - [Start the app](#start-the-app)
 
 ---
@@ -60,6 +60,8 @@ In `.env` file, you may need to modify:
 - the seeder configuration (`SEEDER_TESTER_NAME`, etc),
 - etc.
 
+> See Laravel documentation about [databases and migrations](https://laravel.com/docs/9.x/#databases-and-migrations) and [environment configuration](https://laravel.com/docs/9.x/configuration#environment-configuration) for details.
+
 ### Generate the database tables
 
 Make sure you have a database created, the database server is running, and you have configured the database connection in `.env` correctly.
@@ -75,9 +77,11 @@ Then, generate the database structure with this commands based on your preferenc
 >
 > If you use `php artisan migrate:fresh` command, all tables will be dropped and recreated. **All data in the tables will be lost**.
 
-### Compile the front-end resources
+### Bundle the front-end resources
 
-Compile the front-end resources using **`npm run dev`** command. This command will execute [Vite](https://vitejs.dev) to bundle the resources.
+Use `npm run dev` command to start [Vite](https://vitejs.dev) bundling your resources.
+
+> See [Laravel documentation](https://laravel.com/docs/9.x/vite) about Vite.
 
 ### Start the app
 
