@@ -15,4 +15,9 @@ export default defineConfig({
       '@': '/resources/scripts',
     },
   },
+  server: {
+    hmr: {
+      host: 'localhost',
+    },
+  },
 });
