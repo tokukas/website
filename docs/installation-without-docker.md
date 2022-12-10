@@ -1,6 +1,6 @@
 <h1>Installation without Docker</h1>
 
-This is the guide to install the app in your local machine without docker.
+This is the guide to install the app in your local machine without Docker.
 
 ---
 
