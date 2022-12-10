@@ -55,32 +55,30 @@ class Role extends Model
     /**
      * Interacts with the role's key.
      *
-     * Casts the key to lowercase.
-     * Sets the key to lowercase and kebab-case.
+     * Sets the key to kebab-case.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute.
      */
     protected function key(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => strtolower($value),
-            set: fn ($value) => str_replace([' ', '_'], '-', strtolower($value)),
+            set: fn ($value) => str($value)->lower()->kebab(),
         );
     }
 
     /**
      * Interacts with the role's name.
      *
-     * Casts the name to capitalized.
-     * Sets the name to uppercase.
+     * Sets the name to UPPER CASE.
+     * Casts the name to Title Case.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute.
      */
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => ucwords($value),
-            set: fn ($value) => strtoupper($value),
+            set: fn ($value) => str()->upper($value),
+            get: fn ($value) => str()->title($value),
         );
     }
 
@@ -89,6 +87,6 @@ class Role extends Model
      */
     public function users()
     {
-        return $this->hasMany(User::class, 'role', $this->getKeyName());
+        return $this->hasMany(User::class, 'role_key', $this->getKeyName());
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +13,11 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, CanResetPassword;
+    use HasApiTokens;
+    use HasFactory;
+    use HasUlids;
+    use Notifiable;
+    use CanResetPassword;
 
     /**
      * The attributes that are mass assignable.
@@ -47,31 +52,30 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Interacts with the user's name.
      *
-     * Casts the name to capitalized.
-     * Sets the name to uppercase.
+     * Sets the name to UPPER CASE.
+     * Casts the name to Title Case.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute.
      */
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => mb_convert_case($value, MB_CASE_TITLE),
-            set: fn ($value) => mb_strtoupper($value),
+            set: fn ($value) => str()->upper($value),
+            get: fn ($value) => str()->title($value),
         );
     }
 
     /**
      * Interacts with the user's email address.
      *
-     * Casts the email address to lowercase.
+     * Set the email address to lower case.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function email(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => strtolower($value),
-            set: fn ($value) => strtolower($value),
+            set: fn ($value) => str()->lower($value),
         );
     }
 
@@ -80,6 +84,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function role()
     {
-        return $this->belongsTo(Role::class, 'role', (new Role)->getKeyName());
+        return $this->belongsTo(Role::class, 'role_key', (new Role)->getKeyName());
     }
 }

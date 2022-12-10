@@ -25,6 +25,12 @@ class DatabaseSeeder extends Seeder
         if (empty($theTester)) {
             $theTester = $this->createTester();
         }
+
+        // Call another seeders.
+        $this->seedPublishers();
+        $this->seedCategories();
+        $this->seedBooks();
+        $this->seedAuthors();
     }
 
     /**
@@ -37,7 +43,7 @@ class DatabaseSeeder extends Seeder
             'email' => config('seeder.tester_email'),
             'password' => Hash::make(config('seeder.tester_password')),
             'email_verified_at' => now(),
-            'role' => config('seeder.tester_is_admin') ? 'admin' : null,
+            'role_key' => config('seeder.tester_is_admin') ? 'admin' : null,
         ]);
     }
 
@@ -49,5 +55,37 @@ class DatabaseSeeder extends Seeder
         \App\Models\Role::factory()->createMany([
             ['key' => 'admin', 'name' => 'Administrator'],
         ]);
+    }
+
+    /**
+     * Seed the publishers.
+     */
+    private function seedPublishers()
+    {
+        $this->call(PublisherSeeder::class);
+    }
+
+    /**
+     * Seed the categories.
+     */
+    private function seedCategories()
+    {
+        $this->call(CategorySeeder::class);
+    }
+
+    /**
+     * Seed the books.
+     */
+    private function seedBooks()
+    {
+        $this->call(BookSeeder::class);
+    }
+
+    /**
+     * Seed the authors.
+     */
+    private function seedAuthors()
+    {
+        $this->call(AuthorSeeder::class);
     }
 }
