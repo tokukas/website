@@ -12,6 +12,8 @@ We use [Laravel Sail](https://laravel.com/docs/9.x/sail) to help dockerize this 
 <h2>Table of Contents</h2>
 
 - [Prerequisites](#prerequisites)
+- [Docker Services](#docker-services)
+  - [phpMyAdmin](#phpmyadmin)
 - [Steps](#steps)
   - [Clone this repository](#clone-this-repository)
   - [Install the dependencies](#install-the-dependencies)
@@ -31,6 +33,43 @@ We use [Laravel Sail](https://laravel.com/docs/9.x/sail) to help dockerize this 
 To install this application with Docker, you must have Docker running on your machine.
 
 Please go to the [Docker installation guide](https://docs.docker.com/engine/install), select your platform machine, and follow the instructions.
+
+## Docker Services
+
+The [docker-compose.yml](../docker-compose.yml) file is used to define the app's services, consist of:
+
+- `laravel.test` - the app container, which is based on [Laravel Sail's PHP 8.1 image](https://hub.docker.com/r/laravelsail/php81-composer).
+- `mysql` - the database container,  which is based on [MySQL 8.0 image](https://hub.docker.com/_/mysql/tags?name=8).
+- `phpmyadmin` - the [phpMyAdmin](https://www.phpmyadmin.net) container to access the database from browser. Based on [phpMyAdmin latest image](https://hub.docker.com/_/phpmyadmin).
+
+### phpMyAdmin
+
+You can access your database from `http://localhost:8080`, and insert the username and password with the value that you set to `DB_USERNAME` and `DB_PASSWORD` in `.env` file.
+
+Of course you can only access it after completing the entire [installation steps](#steps).
+
+If you don't want using phpMyAdmin, you can use alternative database management app and remove the `phpmyadmin` service from [docker-compose.yml](../docker-compose.yml) file:
+
+```yml
+- services:
+  # ...
+  # Delete the lines below
+  phpmyadmin:
+    image: "phpmyadmin:latest"
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql
+    networks:
+      - sail
+    depends_on:
+      - mysql
+  # End deleted line
+- networks:
+# ...
+```
+
+> See [Interacting with Sail Databases](https://laravel.com/docs/9.x/sail#interacting-with-sail-databases) in Laravel documentation.
 
 ## Steps
 
