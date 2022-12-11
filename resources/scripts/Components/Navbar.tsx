@@ -27,6 +27,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import route from 'ziggy-js';
 import BrandLogo from './BrandLogo';
+import Link from './Link';
 import MenuItemLink from './MenuItemLink';
 
 type TMenuItem = {
@@ -121,7 +122,7 @@ export default function Navbar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
+            component={Link}
             href="/"
             sx={{
               mr: 2,
@@ -182,7 +183,7 @@ export default function Navbar() {
           </Box>
 
           <Typography
-            component="a"
+            component={Link}
             href="/"
             variant="h5"
             noWrap
