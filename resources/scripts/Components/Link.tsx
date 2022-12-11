@@ -8,17 +8,15 @@ export type TPropsLink = Omit<LinkProps<'a'>, 'component'>;
  * A custom Link component that wraps the [Material-UI Link](https://mui.com/material-ui/api/link)
  * component and the [Inertia.js Link](https://inertiajs.com/links) component.
  */
-export default function Link({
-  href, children, ...props
-}: TPropsLink) {
-  return (
-    <MuiLink
-      component={InertiaLink}
-      href={href}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...props}
-    >
-      {children}
-    </MuiLink>
-  );
-}
+const Link = React.forwardRef((props: TPropsLink, ref) => (
+  <MuiLink
+    component={InertiaLink}
+    ref={ref}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...props}
+  >
+    {props.children}
+  </MuiLink>
+));
+
+export default Link;
