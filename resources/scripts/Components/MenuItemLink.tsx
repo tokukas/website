@@ -2,7 +2,7 @@ import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
 import * as React from 'react';
 import Link from './Link';
 
-export type TPropsMenuItemLink = MenuItemProps<'a'>;
+export type TPropsMenuItemLink = Omit<MenuItemProps<'a'>, 'component'>;
 
 /**
  * The Link variant of the
@@ -12,12 +12,11 @@ export type TPropsMenuItemLink = MenuItemProps<'a'>;
  * Usefull inside a [Menu](https://mui.com/material-ui/api/menu) component.
  */
 export default function MenuItemLink({
-  href, children, ...props
+  children, ...props
 }: TPropsMenuItemLink) {
   return (
     <MenuItem
       component={Link}
-      href={href}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
