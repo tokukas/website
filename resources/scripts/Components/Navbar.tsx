@@ -1,7 +1,10 @@
 import AppConfig from '@/Config/App';
 import AuthContext from '@/Utils/AuthContext';
+import ColorModeContext from '@/Utils/ColorModeContext';
 import { useForm } from '@inertiajs/inertia-react';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -59,6 +62,7 @@ export default function Navbar() {
   const { user } = React.useContext(AuthContext);
   const { post } = useForm();
   const [userMenuItems, setUserMenuItems] = React.useState<TMenuItem[]>([]);
+  const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
   React.useEffect(() => {
     const divider = {
@@ -69,6 +73,13 @@ export default function Navbar() {
       href: route('settings'),
       icon: <SettingsIcon fontSize="small" />,
     };
+    const themeMenu = {
+      name: colorMode === 'light' ? 'Dark Mode' : 'Light Mode',
+      icon: colorMode === 'light'
+        ? <Brightness4Icon fontSize="small" />
+        : <Brightness7Icon fontSize="small" />,
+      onClick: toggleColorMode,
+    };
 
     setUserMenuItems(user
       ? [
@@ -78,6 +89,7 @@ export default function Navbar() {
           icon: <DashboardIcon fontSize="small" />,
         },
         settingsMenu,
+        themeMenu,
         divider,
         {
           name: 'Logout',
@@ -95,10 +107,9 @@ export default function Navbar() {
           href: route('register'),
           icon: <AppRegistrationIcon fontSize="small" />,
         },
-        divider,
-        settingsMenu,
+        themeMenu,
       ]);
-  }, [user]);
+  }, [user, colorMode]);
 
   return (
     <AppBar position="sticky">
