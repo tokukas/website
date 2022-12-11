@@ -1,11 +1,11 @@
-import Link from '@mui/material/Link';
 import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
-import React from 'react';
+import * as React from 'react';
+import Link from './Link';
 
 export type TPropsMenuItemLink = MenuItemProps<'a'>;
 
 /**
- * The [Link](https://mui.com/material-ui/api/link) variant of the
+ * The Link variant of the
  * [MenuItem](https://mui.com/material-ui/api/menu-item) component.
  *
  * This component is used to render a menu item that is a link.
