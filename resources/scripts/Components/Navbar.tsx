@@ -260,7 +260,6 @@ export default function Navbar() {
                       }
                       handleCloseUserMenu();
                     }}
-                    onKeyDown={menu.onClick}
                   >
                     {
                       menu.icon && (
