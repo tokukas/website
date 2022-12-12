@@ -17,6 +17,7 @@ export default function MenuItemLink({
   return (
     <MenuItem
       component={Link}
+      ref={Link}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
