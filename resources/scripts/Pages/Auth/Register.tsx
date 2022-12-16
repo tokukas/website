@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import AppHead from '@/Components/AppHead';
 import Link from '@/Components/Link';
 import GuestLayout from '@/Layouts/GuestLayout';
@@ -25,7 +24,9 @@ export default function Register() {
 
   const onHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData(
-      event.target.name as 'name' | 'email' | 'password' | 'password_confirmation',
+      event.target.name as (
+        'name' | 'email' | 'password' | 'password_confirmation'
+      ),
       event.target.value,
     );
   };
