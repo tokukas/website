@@ -1,11 +1,10 @@
-/* eslint-disable max-len */
 import AppHead from '@/Components/AppHead';
-import InputError from '@/Components/InputError';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { useForm } from '@inertiajs/inertia-react';
-import React from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import route from 'ziggy-js';
 
 type TPropsForgotPassword = {
@@ -25,7 +24,6 @@ export default function ForgotPassword({ status }: TPropsForgotPassword) {
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     post(route('password.email'));
   };
 
@@ -38,30 +36,54 @@ export default function ForgotPassword({ status }: TPropsForgotPassword) {
           ulang kata sandi Anda."
       />
 
-      <div className="mb-4 text-sm text-gray-500 leading-normal">
-        Forgot your password? No problem. Just let us know your email address and we will email you a password
-        reset link that will allow you to choose a new one.
-      </div>
+      <Typography
+        variant="h5"
+        component="h1"
+        sx={{ textAlign: 'center', mb: 3.2 }}
+      >
+        Forgot your password?
+        <br />
+        No problem.
+      </Typography>
 
-      {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+      <Typography>
+        Just let us know your email address and we will email you a password
+        reset link that will allow you to choose a new one.
+      </Typography>
+
+      {status
+        && (
+          <div className="mb-4 font-medium text-sm text-green-600">
+            {status}
+          </div>
+        )}
 
       <form onSubmit={submit}>
-        <TextInput
-          type="text"
+        <TextField
+          id="email"
+          label="Email"
+          variant="outlined"
           name="email"
           value={data.email}
-          className="mt-1 block w-full"
-          isFocused
-          handleChange={onHandleChange}
+          onChange={onHandleChange}
+          fullWidth
+          autoFocus
+          autoComplete="email"
+          required
+          error={Boolean(errors.email)}
+          helperText={errors.email}
+          sx={{ my: 3.2 }}
         />
 
-        <InputError message={errors.email} className="mt-2" />
-
-        <div className="flex items-center justify-end mt-4">
-          <PrimaryButton className="ml-4" processing={processing}>
-            Email Password Reset Link
-          </PrimaryButton>
-        </div>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={processing}
+          fullWidth
+        >
+          Email Password Reset Link
+        </Button>
       </form>
     </GuestLayout>
   );
