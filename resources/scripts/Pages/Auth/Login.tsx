@@ -1,13 +1,13 @@
-/* eslint-disable max-len */
 import AppHead from '@/Components/AppHead';
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import Link from '@/Components/Link';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Link, useForm } from '@inertiajs/inertia-react';
-import React, { useEffect } from 'react';
+import { useForm } from '@inertiajs/inertia-react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import TextField from '@mui/material/TextField';
+import * as React from 'react';
 import route from 'ziggy-js';
 
 type TPropsLogin = {
@@ -21,20 +21,24 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
   } = useForm({
     email: '',
     password: '',
-    remember: '',
+    remember: false,
   });
 
-  useEffect(() => () => {
+  React.useEffect(() => () => {
     reset('password');
   }, []);
 
   const onHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
+    setData(
+      event.target.name as 'email' | 'password' | 'remember',
+      event.target.type === 'checkbox'
+        ? event.target.checked
+        : event.target.value,
+    );
   };
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     post(route('login'));
   };
 
@@ -45,63 +49,84 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
         description="Masuk ke akun Tokukas Anda untuk mulai bertransaksi."
       />
 
-      {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+      {status && (
+        <div className="mb-4 font-medium text-sm text-green-600">
+          {status}
+        </div>
+      )}
 
       <form onSubmit={submit}>
-        <div>
-          <InputLabel forInput="email" value="Email" />
+        <TextField
+          id="email"
+          label="Email"
+          variant="outlined"
+          name="email"
+          value={data.email}
+          fullWidth
+          autoFocus
+          autoComplete="email"
+          onChange={onHandleChange}
+          error={Boolean(errors.email)}
+          helperText={errors.email}
+        />
 
-          <TextInput
-            type="text"
-            name="email"
-            value={data.email}
-            className="mt-1 block w-full"
-            autoComplete="username"
-            isFocused
-            handleChange={onHandleChange}
-          />
+        <TextField
+          id="password"
+          label="Password"
+          variant="outlined"
+          name="password"
+          value={data.password}
+          fullWidth
+          type="password"
+          autoComplete="current-password"
+          onChange={onHandleChange}
+          error={Boolean(errors.password)}
+          helperText={errors.password}
+          sx={{ mt: 2.4 }}
+        />
 
-          <InputError message={errors.email} className="mt-2" />
-        </div>
+        <FormControlLabel
+          label="Remember me"
+          control={(
+            <Checkbox
+              id="remember"
+              name="remember"
+              checked={data.remember}
+              onChange={onHandleChange}
+            />
+          )}
+          sx={{ mt: 2.4 }}
+        />
 
-        <div className="mt-4">
-          <InputLabel forInput="password" value="Password" />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row-reverse',
+            justifyContent: {
+              xs: 'center',
+              sm: 'flex-start',
+            },
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            mt: 2.4,
+            gap: 2.4,
+          }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={processing}
+          >
+            Log in
+          </Button>
 
-          <TextInput
-            type="password"
-            name="password"
-            value={data.password}
-            className="mt-1 block w-full"
-            autoComplete="current-password"
-            handleChange={onHandleChange}
-          />
-
-          <InputError message={errors.password} className="mt-2" />
-        </div>
-
-        <div className="block mt-4">
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label className="flex items-center">
-            <Checkbox id="remember" name="remember" value={data.remember} handleChange={onHandleChange} />
-
-            <span className="ml-2 text-sm text-gray-600">Remember me</span>
-          </label>
-        </div>
-
-        <div className="flex items-center justify-end mt-4">
           {canResetPassword && (
-            <Link
-              href={route('password.request')}
-              className="underline text-sm text-gray-600 hover:text-gray-900"
-            >
+            <Link href={route('password.request')}>
               Forgot your password?
             </Link>
           )}
-
-          <PrimaryButton className="ml-4" processing={processing}>
-            Log in
-          </PrimaryButton>
-        </div>
+        </Box>
       </form>
     </GuestLayout>
   );
