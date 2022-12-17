@@ -1,11 +1,15 @@
-import * as React from 'react';
+import AppHead from '@/Components/AppHead';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { useForm } from '@inertiajs/inertia-react';
-import route from 'ziggy-js';
-import AppHead from '@/Components/AppHead';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import Close from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { SnackbarKey, useSnackbar } from 'notistack';
+import * as React from 'react';
+import route from 'ziggy-js';
 
 type TPropsVerifyEmail = {
   status: string;
@@ -13,6 +17,34 @@ type TPropsVerifyEmail = {
 
 export default function VerifyEmail({ status }: TPropsVerifyEmail) {
   const { post, processing } = useForm();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const dismissSnackbarAction = (id: SnackbarKey) => (
+    <Tooltip title="Dismiss" arrow>
+      <IconButton
+        color="inherit"
+        size="small"
+        onClick={() => closeSnackbar(id)}
+      >
+        <Close fontSize="small" />
+      </IconButton>
+    </Tooltip>
+  );
+
+  // Display a notification to the user if the resend verification email was successful.
+  React.useEffect(() => {
+    if (status === 'verification-link-sent') {
+      enqueueSnackbar(
+        `A new verification link has been sent to the email address you
+          provided during registration.`,
+        {
+          variant: 'success',
+          action: dismissSnackbarAction,
+          preventDuplicate: true,
+        },
+      );
+    }
+  }, [status]);
 
   return (
     <GuestLayout>
@@ -35,13 +67,6 @@ export default function VerifyEmail({ status }: TPropsVerifyEmail) {
         on the link we just emailed to you? If you didn&apos;t receive the
         email, we will gladly send you another.
       </Typography>
-
-      {status === 'verification-link-sent' && (
-        <div className="mb-4 font-medium text-sm text-green-600">
-          A new verification link has been sent to the email address you
-          provided during registration.
-        </div>
-      )}
 
       <Box
         sx={{
