@@ -1,9 +1,11 @@
 import AppHead from '@/Components/AppHead';
+import DismissSnackbarAction from '@/Components/DismissSnackbarAction';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { useForm } from '@inertiajs/inertia-react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useSnackbar } from 'notistack';
 import * as React from 'react';
 import route from 'ziggy-js';
 
@@ -26,6 +28,19 @@ export default function ForgotPassword({ status }: TPropsForgotPassword) {
     e.preventDefault();
     post(route('password.email'));
   };
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  // Display a notification if the reset password email has been sent.
+  React.useEffect(() => {
+    if (status) {
+      enqueueSnackbar(status, {
+        variant: 'success',
+        action: DismissSnackbarAction,
+        preventDuplicate: true,
+      });
+    }
+  }, [status]);
 
   return (
     <GuestLayout>
@@ -50,13 +65,6 @@ export default function ForgotPassword({ status }: TPropsForgotPassword) {
         Just let us know your email address and we will email you a password
         reset link that will allow you to choose a new one.
       </Typography>
-
-      {status
-        && (
-          <div className="mb-4 font-medium text-sm text-green-600">
-            {status}
-          </div>
-        )}
 
       <form onSubmit={submit}>
         <TextField

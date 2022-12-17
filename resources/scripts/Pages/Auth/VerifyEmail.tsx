@@ -1,11 +1,13 @@
-import * as React from 'react';
+import AppHead from '@/Components/AppHead';
+import DismissSnackbarAction from '@/Components/DismissSnackbarAction';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { useForm } from '@inertiajs/inertia-react';
-import route from 'ziggy-js';
-import AppHead from '@/Components/AppHead';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { useSnackbar } from 'notistack';
+import * as React from 'react';
+import route from 'ziggy-js';
 
 type TPropsVerifyEmail = {
   status: string;
@@ -13,6 +15,22 @@ type TPropsVerifyEmail = {
 
 export default function VerifyEmail({ status }: TPropsVerifyEmail) {
   const { post, processing } = useForm();
+  const { enqueueSnackbar } = useSnackbar();
+
+  // Display a notification to the user if the resend verification email was successful.
+  React.useEffect(() => {
+    if (status === 'verification-link-sent') {
+      enqueueSnackbar(
+        `A new verification link has been sent to the email address you
+          provided during registration.`,
+        {
+          variant: 'success',
+          action: DismissSnackbarAction,
+          preventDuplicate: true,
+        },
+      );
+    }
+  }, [status]);
 
   return (
     <GuestLayout>
@@ -35,13 +53,6 @@ export default function VerifyEmail({ status }: TPropsVerifyEmail) {
         on the link we just emailed to you? If you didn&apos;t receive the
         email, we will gladly send you another.
       </Typography>
-
-      {status === 'verification-link-sent' && (
-        <div className="mb-4 font-medium text-sm text-green-600">
-          A new verification link has been sent to the email address you
-          provided during registration.
-        </div>
-      )}
 
       <Box
         sx={{
