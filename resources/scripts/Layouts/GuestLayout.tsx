@@ -1,24 +1,75 @@
-/* eslint-disable max-len */
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Link } from '@inertiajs/inertia-react';
-import React from 'react';
+import BrandLogo from '@/Components/BrandLogo';
+import Link from '@/Components/Link';
+import ColorModeContext from '@/Utils/ColorModeContext';
+import Brightness4 from '@mui/icons-material/Brightness4';
+import Brightness7 from '@mui/icons-material/Brightness7';
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
+import Zoom from '@mui/material/Zoom';
+import * as React from 'react';
+import BaseLayout from './BaseLayout';
 
 type TPropsGuestLayout = {
   children: React.ReactNode;
 }
 
 export default function Guest({ children }: TPropsGuestLayout) {
-  return (
-    <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-      <div>
-        <Link href="/">
-          <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
-        </Link>
-      </div>
+  const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
-      <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-        {children}
-      </div>
-    </div>
+  return (
+    <BaseLayout>
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: {
+            sm: 'start',
+            md: 'center',
+          },
+          alignItems: 'center',
+        }}
+      >
+        <Tooltip
+          title={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
+          placement="left"
+        >
+          <Zoom in>
+            <Fab
+              color="primary"
+              aria-label="Theme Toggle"
+              size="small"
+              sx={{
+                position: 'fixed',
+                top: 16,
+                right: 16,
+              }}
+              onClick={toggleColorMode}
+            >
+              {colorMode === 'light' ? <Brightness4 /> : <Brightness7 />}
+            </Fab>
+          </Zoom>
+        </Tooltip>
+        <Paper
+          className="w-full max-w-md"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            px: 6,
+            py: 4,
+            overflow: 'hidden',
+          }}
+        >
+          <Link href="/" sx={{ mb: 4 }}>
+            <BrandLogo className="w-24" />
+          </Link>
+          {children}
+        </Paper>
+      </Box>
+    </BaseLayout>
   );
 }

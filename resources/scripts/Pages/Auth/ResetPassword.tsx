@@ -1,11 +1,9 @@
 import AppHead from '@/Components/AppHead';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { useForm } from '@inertiajs/inertia-react';
-import React, { useEffect } from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import * as React from 'react';
 import route from 'ziggy-js';
 
 type TPropsResetPassword = {
@@ -23,17 +21,21 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
     password_confirmation: '',
   });
 
-  useEffect(() => () => {
+  React.useEffect(() => () => {
     reset('password', 'password_confirmation');
   }, []);
 
   const onHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData(event.target.name, event.target.value);
+    setData(
+      event.target.name as (
+        'email' | 'password' | 'password_confirmation' | 'token'
+      ),
+      event.target.value,
+    );
   };
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     post(route('password.update'));
   };
 
@@ -46,60 +48,65 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
       />
 
       <form onSubmit={submit}>
-        <div>
-          <InputLabel forInput="email" value="Email" />
+        <TextField
+          id="email"
+          label="Email"
+          name="email"
+          value={data.email}
+          autoComplete="email"
+          onChange={onHandleChange}
+          error={Boolean(errors.email)}
+          helperText={errors.email}
+          required
+          variant="outlined"
+          fullWidth
+          disabled={Boolean(data.email)}
+        />
 
-          <TextInput
-            type="email"
-            name="email"
-            value={data.email}
-            className="mt-1 block w-full"
-            autoComplete="username"
-            handleChange={onHandleChange}
-          />
+        <TextField
+          id="password"
+          label="New Password"
+          name="password"
+          type="password"
+          value={data.password}
+          autoComplete="new-password"
+          onChange={onHandleChange}
+          error={Boolean(errors.password)}
+          helperText={errors.password}
+          required
+          variant="outlined"
+          fullWidth
+          autoFocus
+          sx={{ mt: 2.4 }}
+        />
 
-          <InputError message={errors.email} className="mt-2" />
-        </div>
+        <TextField
+          id="password_confirmation"
+          label="Confirm New Password"
+          name="password_confirmation"
+          type="password"
+          value={data.password_confirmation}
+          autoComplete="new-password"
+          onChange={onHandleChange}
+          error={Boolean(errors.password_confirmation)}
+          helperText={errors.password_confirmation}
+          disabled={!data.password}
+          required
+          variant="outlined"
+          fullWidth
+          sx={{ mt: 2.4 }}
+        />
 
-        <div className="mt-4">
-          <InputLabel forInput="password" value="Password" />
-
-          <TextInput
-            type="password"
-            name="password"
-            value={data.password}
-            className="mt-1 block w-full"
-            autoComplete="new-password"
-            isFocused
-            handleChange={onHandleChange}
-          />
-
-          <InputError message={errors.password} className="mt-2" />
-        </div>
-
-        <div className="mt-4">
-          <InputLabel
-            forInput="password_confirmation"
-            value="Confirm Password"
-          />
-
-          <TextInput
-            type="password"
-            name="password_confirmation"
-            value={data.password_confirmation}
-            className="mt-1 block w-full"
-            autoComplete="new-password"
-            handleChange={onHandleChange}
-          />
-
-          <InputError message={errors.password_confirmation} className="mt-2" />
-        </div>
-
-        <div className="flex items-center justify-end mt-4">
-          <PrimaryButton className="ml-4" processing={processing}>
-            Reset Password
-          </PrimaryButton>
-        </div>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={processing}
+          sx={{ mt: 3.2 }}
+          fullWidth
+        >
+          Reset Password
+        </Button>
       </form>
     </GuestLayout>
   );

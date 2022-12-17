@@ -11,6 +11,7 @@ import { StyledEngineProvider } from '@mui/material';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { SnackbarProvider } from 'notistack';
 import AppConfig from './Config/App';
 import ThemeLayout from './Layouts/ThemeLayout';
 
@@ -33,10 +34,12 @@ const appName = AppConfig.name;
       root.render(
         <React.StrictMode>
           <StyledEngineProvider injectFirst>
-            <ThemeLayout>
-              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-              <App {...props} />
-            </ThemeLayout>
+            <SnackbarProvider>
+              <ThemeLayout>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                <App {...props} />
+              </ThemeLayout>
+            </SnackbarProvider>
           </StyledEngineProvider>
         </React.StrictMode>,
       );
