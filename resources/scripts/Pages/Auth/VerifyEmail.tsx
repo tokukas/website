@@ -1,13 +1,11 @@
 import AppHead from '@/Components/AppHead';
+import DismissSnackbarAction from '@/Components/DismissSnackbarAction';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { useForm } from '@inertiajs/inertia-react';
-import Close from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { SnackbarKey, useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 import * as React from 'react';
 import route from 'ziggy-js';
 
@@ -17,19 +15,7 @@ type TPropsVerifyEmail = {
 
 export default function VerifyEmail({ status }: TPropsVerifyEmail) {
   const { post, processing } = useForm();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-  const dismissSnackbarAction = (id: SnackbarKey) => (
-    <Tooltip title="Dismiss" arrow>
-      <IconButton
-        color="inherit"
-        size="small"
-        onClick={() => closeSnackbar(id)}
-      >
-        <Close fontSize="small" />
-      </IconButton>
-    </Tooltip>
-  );
+  const { enqueueSnackbar } = useSnackbar();
 
   // Display a notification to the user if the resend verification email was successful.
   React.useEffect(() => {
@@ -39,7 +25,7 @@ export default function VerifyEmail({ status }: TPropsVerifyEmail) {
           provided during registration.`,
         {
           variant: 'success',
-          action: dismissSnackbarAction,
+          action: DismissSnackbarAction,
           preventDuplicate: true,
         },
       );
