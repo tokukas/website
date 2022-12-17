@@ -1,4 +1,5 @@
 import AppHead from '@/Components/AppHead';
+import DismissSnackbarAction from '@/Components/DismissSnackbarAction';
 import Link from '@/Components/Link';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { useForm } from '@inertiajs/inertia-react';
@@ -7,6 +8,7 @@ import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
+import { useSnackbar } from 'notistack';
 import * as React from 'react';
 import route from 'ziggy-js';
 
@@ -42,18 +44,24 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
     post(route('login'));
   };
 
+  const { enqueueSnackbar } = useSnackbar();
+
+  React.useEffect(() => {
+    if (status) {
+      enqueueSnackbar(status, {
+        variant: 'success',
+        action: DismissSnackbarAction,
+        preventDuplicate: true,
+      });
+    }
+  }, [status]);
+
   return (
     <GuestLayout>
       <AppHead
         title="Masuk"
         description="Masuk ke akun Tokukas Anda untuk mulai bertransaksi."
       />
-
-      {status && (
-        <div className="mb-4 font-medium text-sm text-green-600">
-          {status}
-        </div>
-      )}
 
       <form onSubmit={submit}>
         <TextField
