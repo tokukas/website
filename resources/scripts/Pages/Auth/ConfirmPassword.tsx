@@ -1,12 +1,10 @@
-/* eslint-disable max-len */
 import AppHead from '@/Components/AppHead';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { useForm } from '@inertiajs/inertia-react';
-import React, { useEffect } from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import route from 'ziggy-js';
 
 export default function ConfirmPassword() {
@@ -16,7 +14,7 @@ export default function ConfirmPassword() {
     password: '',
   });
 
-  useEffect(() => () => {
+  React.useEffect(() => () => {
     reset('password');
   }, []);
 
@@ -26,7 +24,6 @@ export default function ConfirmPassword() {
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     post(route('password.confirm'));
   };
 
@@ -37,31 +34,35 @@ export default function ConfirmPassword() {
         description="Silakan masukkan kata sandi Anda untuk melanjutkan."
       />
 
-      <div className="mb-4 text-sm text-gray-600">
-        This is a secure area of the application. Please confirm your password before continuing.
-      </div>
+      <Typography sx={{ mb: 4 }}>
+        This is a secure area of the application. Please confirm your
+        password before continuing.
+      </Typography>
 
       <form onSubmit={submit}>
-        <div className="mt-4">
-          <InputLabel forInput="password" value="Password" />
+        <TextField
+          id="password"
+          label="Password"
+          name="password"
+          value={data.password}
+          autoComplete="current-password"
+          onChange={onHandleChange}
+          error={Boolean(errors.password)}
+          helperText={errors.password}
+          required
+          autoFocus
+        />
 
-          <TextInput
-            type="password"
-            name="password"
-            value={data.password}
-            className="mt-1 block w-full"
-            isFocused
-            handleChange={onHandleChange}
-          />
-
-          <InputError message={errors.password} className="mt-2" />
-        </div>
-
-        <div className="flex items-center justify-end mt-4">
-          <PrimaryButton className="ml-4" processing={processing}>
-            Confirm
-          </PrimaryButton>
-        </div>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={processing}
+          sx={{ mt: 3.2 }}
+          fullWidth
+        >
+          Confirm
+        </Button>
       </form>
     </GuestLayout>
   );

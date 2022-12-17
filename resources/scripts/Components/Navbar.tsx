@@ -1,7 +1,10 @@
 import AppConfig from '@/Config/App';
 import AuthContext from '@/Utils/AuthContext';
+import ColorModeContext from '@/Utils/ColorModeContext';
 import { useForm } from '@inertiajs/inertia-react';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -24,6 +27,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import route from 'ziggy-js';
 import BrandLogo from './BrandLogo';
+import Link from './Link';
 import MenuItemLink from './MenuItemLink';
 
 type TMenuItem = {
@@ -59,8 +63,25 @@ export default function Navbar() {
   const { user } = React.useContext(AuthContext);
   const { post } = useForm();
   const [userMenuItems, setUserMenuItems] = React.useState<TMenuItem[]>([]);
+  const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
   React.useEffect(() => {
+    const divider = {
+      name: MENU_ITEM_DIVIDER,
+    };
+    const settingsMenu = {
+      name: 'Settings',
+      href: route('settings'),
+      icon: <SettingsIcon fontSize="small" />,
+    };
+    const themeMenu = {
+      name: colorMode === 'light' ? 'Dark Mode' : 'Light Mode',
+      icon: colorMode === 'light'
+        ? <Brightness4Icon fontSize="small" />
+        : <Brightness7Icon fontSize="small" />,
+      onClick: toggleColorMode,
+    };
+
     setUserMenuItems(user
       ? [
         {
@@ -68,14 +89,9 @@ export default function Navbar() {
           href: route('dashboard'),
           icon: <DashboardIcon fontSize="small" />,
         },
-        {
-          name: 'Settings',
-          icon: <SettingsIcon fontSize="small" />,
-        },
-        {
-          // Divider element
-          name: MENU_ITEM_DIVIDER,
-        },
+        settingsMenu,
+        themeMenu,
+        divider,
         {
           name: 'Logout',
           icon: <LogoutIcon fontSize="small" />,
@@ -92,8 +108,9 @@ export default function Navbar() {
           href: route('register'),
           icon: <AppRegistrationIcon fontSize="small" />,
         },
+        themeMenu,
       ]);
-  }, [user]);
+  }, [user, colorMode]);
 
   return (
     <AppBar position="sticky">
@@ -105,7 +122,7 @@ export default function Navbar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
+            component={Link}
             href="/"
             sx={{
               mr: 2,
@@ -166,7 +183,7 @@ export default function Navbar() {
           </Box>
 
           <Typography
-            component="a"
+            component={Link}
             href="/"
             variant="h5"
             noWrap
@@ -244,7 +261,6 @@ export default function Navbar() {
                       }
                       handleCloseUserMenu();
                     }}
-                    onKeyDown={menu.onClick}
                   >
                     {
                       menu.icon && (
