@@ -34,7 +34,7 @@ type TMenuItem = {
   name: string;
   icon?: React.ReactNode;
   href?: string;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 };
 
 const MENU_ITEM_DIVIDER = 'DIVIDER';
@@ -95,7 +95,12 @@ export default function Navbar() {
         {
           name: 'Logout',
           icon: <LogoutIcon fontSize="small" />,
-          onClick: () => post(route('logout')),
+          onClick: (e) => {
+            if (e) {
+              e.preventDefault();
+            }
+            post(route('logout'));
+          },
         },
       ] : [
         {
@@ -255,9 +260,9 @@ export default function Navbar() {
                   <MenuItemLink
                     key={menu.name}
                     href={menu.href}
-                    onClick={() => {
+                    onClick={(e) => {
                       if (menu.onClick) {
-                        menu.onClick();
+                        menu.onClick(e);
                       }
                       handleCloseUserMenu();
                     }}
