@@ -1,4 +1,4 @@
-import { Link as InertiaLink } from '@inertiajs/inertia-react';
+import { InertiaLink } from '@inertiajs/inertia-react';
 import MuiLink, { LinkProps } from '@mui/material/Link';
 import * as React from 'react';
 
