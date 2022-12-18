@@ -28,13 +28,13 @@ import * as React from 'react';
 import route from 'ziggy-js';
 import BrandLogo from './BrandLogo';
 import Link from './Link';
-import MenuItemLink from './MenuItemLink';
+import MenuItemLink, { TPropsMenuItemLink } from './MenuItemLink';
 
-type TMenuItem = {
+type TMenuItem = TPropsMenuItemLink & {
+  /** The name of menu item. */
   name: string;
+  /** The icon of menu item. */
   icon?: React.ReactNode;
-  href?: string;
-  onClick?: (e?: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 };
 
 const MENU_ITEM_DIVIDER = 'DIVIDER';
@@ -66,15 +66,15 @@ export default function Navbar() {
   const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
   React.useEffect(() => {
-    const divider = {
+    const divider: TMenuItem = {
       name: MENU_ITEM_DIVIDER,
     };
-    const settingsMenu = {
+    const settingsMenu: TMenuItem = {
       name: 'Settings',
       href: route('settings'),
       icon: <SettingsIcon fontSize="small" />,
     };
-    const themeMenu = {
+    const themeMenu: TMenuItem = {
       name: colorMode === 'light' ? 'Dark Mode' : 'Light Mode',
       icon: colorMode === 'light'
         ? <Brightness4Icon fontSize="small" />
@@ -258,6 +258,8 @@ export default function Navbar() {
                 }
                 return (
                   <MenuItemLink
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...menu}
                     key={menu.name}
                     href={menu.href}
                     onClick={(e) => {
@@ -267,13 +269,13 @@ export default function Navbar() {
                       handleCloseUserMenu();
                     }}
                   >
-                    {
-                      menu.icon && (
-                        <ListItemIcon>{menu.icon}</ListItemIcon>
-                      )
-                    }
-                    <ListItemText>
-                      {' '}
+                    {menu.icon && (
+                      <ListItemIcon>{menu.icon}</ListItemIcon>
+                    )}
+                    <ListItemText
+                      inset={!menu.icon
+                        && userMenuItems.some((item) => item.icon)}
+                    >
                       {menu.name}
                     </ListItemText>
                   </MenuItemLink>
