@@ -7,7 +7,7 @@ import { Link } from '@inertiajs/inertia-react';
 import React, { useState } from 'react';
 import route from 'ziggy-js';
 
-type TPropsAuthenticatedLayout = {
+export type TPropsAuthenticatedLayout = {
   auth: {
     user: {
       name: string;
@@ -18,7 +18,7 @@ type TPropsAuthenticatedLayout = {
   children: React.ReactNode;
 }
 
-export default function Authenticated({ auth, header, children }: TPropsAuthenticatedLayout) {
+export default function AuthenticatedLayout({ auth, header, children }: TPropsAuthenticatedLayout) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
   return (

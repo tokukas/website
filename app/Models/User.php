@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Roles;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -85,5 +86,26 @@ class User extends Authenticatable implements MustVerifyEmail
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_key', (new Role)->getKeyName());
+    }
+
+    /**
+     * Check if a user has specific role.
+     *
+     * @param string|null $role The role key.
+     * @return bool
+     */
+    public function hasRole(string|null $role): bool
+    {
+        return $this->role?->key === $role;
+    }
+
+    /**
+     * Check if a user is an admin.
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole(Roles::ADMIN);
     }
 }
