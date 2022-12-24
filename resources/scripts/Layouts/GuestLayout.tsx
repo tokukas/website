@@ -11,11 +11,11 @@ import Zoom from '@mui/material/Zoom';
 import * as React from 'react';
 import BaseLayout from './BaseLayout';
 
-type TPropsGuestLayout = {
+export type TPropsGuestLayout = {
   children: React.ReactNode;
 }
 
-export default function Guest({ children }: TPropsGuestLayout) {
+export default function GuestLayout({ children }: TPropsGuestLayout) {
   const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
   return (
@@ -77,6 +77,6 @@ export default function Guest({ children }: TPropsGuestLayout) {
  *
  * @see https://inertiajs.com/pages#persistent-layouts
  */
-Guest.layout = (children: React.ReactNode) => (
+GuestLayout.layout = (children: React.ReactNode) => (
   <BaseLayout>{children}</BaseLayout>
 );
