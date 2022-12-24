@@ -19,57 +19,64 @@ export default function Guest({ children }: TPropsGuestLayout) {
   const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
   return (
-    <BaseLayout>
-      <Box
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: {
+          sm: 'start',
+          md: 'center',
+        },
+        alignItems: 'center',
+      }}
+    >
+      <Tooltip
+        title={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
+        placement="left"
+      >
+        <Zoom in>
+          <Fab
+            color="primary"
+            aria-label="Theme Toggle"
+            size="small"
+            sx={{
+              position: 'fixed',
+              top: 16,
+              right: 16,
+            }}
+            onClick={toggleColorMode}
+          >
+            {colorMode === 'light' ? <Brightness4 /> : <Brightness7 />}
+          </Fab>
+        </Zoom>
+      </Tooltip>
+      <Paper
+        className="w-full max-w-md"
         sx={{
-          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: {
-            sm: 'start',
-            md: 'center',
-          },
+          justifyContent: 'center',
           alignItems: 'center',
+          px: 6,
+          py: 4,
+          overflow: 'hidden',
         }}
       >
-        <Tooltip
-          title={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
-          placement="left"
-        >
-          <Zoom in>
-            <Fab
-              color="primary"
-              aria-label="Theme Toggle"
-              size="small"
-              sx={{
-                position: 'fixed',
-                top: 16,
-                right: 16,
-              }}
-              onClick={toggleColorMode}
-            >
-              {colorMode === 'light' ? <Brightness4 /> : <Brightness7 />}
-            </Fab>
-          </Zoom>
-        </Tooltip>
-        <Paper
-          className="w-full max-w-md"
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            px: 6,
-            py: 4,
-            overflow: 'hidden',
-          }}
-        >
-          <Link href="/" sx={{ mb: 4 }}>
-            <BrandLogo className="w-24" />
-          </Link>
-          {children}
-        </Paper>
-      </Box>
-    </BaseLayout>
+        <Link href="/" sx={{ mb: 4 }}>
+          <BrandLogo className="w-24" />
+        </Link>
+        {children}
+      </Paper>
+    </Box>
   );
 }
+
+/**
+ * Set the parent layout for this page.
+ *
+ * @see https://inertiajs.com/pages#persistent-layouts
+ */
+Guest.layout = (children: React.ReactNode) => (
+  <BaseLayout>{children}</BaseLayout>
+);
