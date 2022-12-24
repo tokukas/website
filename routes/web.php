@@ -24,11 +24,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/settings', fn () => Inertia::render('Settings'))
-    ->name('settings');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::middleware('admin-only')->group(function () {
+        Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
+            ->name('dashboard');
+    });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/settings', fn () => Inertia::render('Settings'))
+        ->name('settings');
+});
 
 require __DIR__ . '/auth.php';
