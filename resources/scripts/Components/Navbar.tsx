@@ -2,14 +2,10 @@ import AppConfig from '@/Config/App';
 import AuthContext from '@/Utils/AuthContext';
 import ColorModeContext from '@/Utils/ColorModeContext';
 import { useForm } from '@inertiajs/inertia-react';
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
-import SettingsIcon from '@mui/icons-material/Settings';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -17,10 +13,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -28,19 +21,48 @@ import * as React from 'react';
 import route from 'ziggy-js';
 import BrandLogo from './BrandLogo';
 import Link from './Link';
-import MenuItemLink, { TPropsMenuItemLink } from './MenuItemLink';
+import NavMenuItem, { TPropsNavMenuItem } from './NavMenuItem';
 
-type TMenuItem = TPropsMenuItemLink & {
-  /** The name of menu item. */
-  name: string;
-  /** The icon of menu item. */
-  icon?: React.ReactNode;
+export type TPropsNavbar = {
+  /**
+   * The navbar items.
+   * If not provided, the default navbar items will be used.
+   *
+   * @default DEFAULT_NAV_ITEMS
+   */
+  navItems?: TPropsNavMenuItem[];
+
+  /**
+   * Whether to display the navbar items or not.
+   *
+   * @default false
+   */
+  withoutNavItems?: boolean;
+
+  /**
+   * The function to set the main user menus.
+   *
+   * @param isUserAuthenticated Whether the user is authenticated or not.
+   * @returns The main user menus.
+   */
+  setMainUserMenus?: (isUserAuthenticated: boolean) => TPropsNavMenuItem[];
 };
 
-const MENU_ITEM_DIVIDER = 'DIVIDER';
-const pages = ['Products', 'Pricing', 'Blog'];
+export const MENU_ITEM_DIVIDER: TPropsNavMenuItem = {
+  name: 'DIVIDER',
+};
 
-export default function Navbar() {
+export const DEFAULT_NAV_ITEMS: TPropsNavMenuItem[] = [
+  { name: 'Tentang' },
+  { name: 'FAQ' },
+];
+
+/**
+ * The Navbar component.
+ */
+export default function Navbar({
+  navItems = [], withoutNavItems, setMainUserMenus,
+}: TPropsNavbar) {
   const [anchorElNav,
     setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser,
@@ -62,19 +84,14 @@ export default function Navbar() {
   const { name: appName } = AppConfig;
   const { user } = React.useContext(AuthContext);
   const { post } = useForm();
-  const [userMenuItems, setUserMenuItems] = React.useState<TMenuItem[]>([]);
+  const [userMenus, setUserMenus] = React.useState<TPropsNavMenuItem[]>([]);
   const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
+  let displayedNavItems = navItems.length ? navItems : DEFAULT_NAV_ITEMS;
+  displayedNavItems = withoutNavItems ? [] : displayedNavItems;
+
   React.useEffect(() => {
-    const divider: TMenuItem = {
-      name: MENU_ITEM_DIVIDER,
-    };
-    const settingsMenu: TMenuItem = {
-      name: 'Settings',
-      href: route('settings'),
-      icon: <SettingsIcon fontSize="small" />,
-    };
-    const themeMenu: TMenuItem = {
+    const themeMenu: TPropsNavMenuItem = {
       name: colorMode === 'light' ? 'Dark Mode' : 'Light Mode',
       icon: colorMode === 'light'
         ? <Brightness4Icon fontSize="small" />
@@ -82,16 +99,14 @@ export default function Navbar() {
       onClick: toggleColorMode,
     };
 
-    setUserMenuItems(user
+    const mainUserMenus = setMainUserMenus
+      ? setMainUserMenus(Boolean(user)) : [];
+
+    setUserMenus(user
       ? [
-        {
-          name: 'Dashboard',
-          href: route('dashboard'),
-          icon: <DashboardIcon fontSize="small" />,
-        },
-        settingsMenu,
+        ...mainUserMenus,
         themeMenu,
-        divider,
+        MENU_ITEM_DIVIDER,
         {
           name: 'Logout',
           icon: <LogoutIcon fontSize="small" />,
@@ -103,16 +118,7 @@ export default function Navbar() {
           },
         },
       ] : [
-        {
-          name: 'Login',
-          href: route('login'),
-          icon: <LoginIcon fontSize="small" />,
-        },
-        {
-          name: 'Register',
-          href: route('register'),
-          icon: <AppRegistrationIcon fontSize="small" />,
-        },
+        ...mainUserMenus,
         themeMenu,
       ]);
   }, [user, colorMode]);
@@ -179,10 +185,13 @@ export default function Navbar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+              {displayedNavItems.map((navItem) => (
+                <NavMenuItem
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...navItem}
+                  key={navItem.name}
+                  onClick={handleCloseNavMenu}
+                />
               ))}
             </Menu>
           </Box>
@@ -210,9 +219,10 @@ export default function Navbar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {displayedNavItems.map((navItem) => (
               <Button
-                key={page}
+                key={navItem.name}
+                href={navItem.href}
                 onClick={handleCloseNavMenu}
                 sx={{
                   my: 2,
@@ -221,7 +231,7 @@ export default function Navbar() {
                   textTransform: 'capitalize',
                 }}
               >
-                {page}
+                {navItem.name}
               </Button>
             ))}
           </Box>
@@ -251,34 +261,22 @@ export default function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {userMenuItems.map((menu, i) => {
-                if (menu.name.includes(MENU_ITEM_DIVIDER)) {
+              {userMenus.map((menu, i) => {
+                if (menu.name === MENU_ITEM_DIVIDER.name) {
                   // eslint-disable-next-line react/no-array-index-key
                   return <Divider key={`divider-${i}`} />;
                 }
                 return (
-                  <MenuItemLink
+                  <NavMenuItem
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     {...menu}
                     key={menu.name}
-                    href={menu.href}
                     onClick={(e) => {
-                      if (menu.onClick) {
-                        menu.onClick(e);
-                      }
+                      if (menu.onClick) { menu.onClick(e); }
                       handleCloseUserMenu();
                     }}
-                  >
-                    {menu.icon && (
-                      <ListItemIcon>{menu.icon}</ListItemIcon>
-                    )}
-                    <ListItemText
-                      inset={!menu.icon
-                        && userMenuItems.some((item) => item.icon)}
-                    >
-                      {menu.name}
-                    </ListItemText>
-                  </MenuItemLink>
+                    inset={!menu.icon && userMenus.some((m) => m.icon)}
+                  />
                 );
               })}
             </Menu>
@@ -288,3 +286,9 @@ export default function Navbar() {
     </AppBar>
   );
 }
+
+Navbar.defaultProps = {
+  navItems: undefined,
+  withoutNavItems: false,
+  setMainUserMenus: undefined,
+};
