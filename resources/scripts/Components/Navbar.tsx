@@ -156,7 +156,14 @@ export default function Navbar({
             {appName}
           </Typography>
 
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box
+            sx={{
+              display: (displayedNavItems.length
+                ? { xs: 'flex', md: 'none' }
+                : 'none'
+              ),
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
