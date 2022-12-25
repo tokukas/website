@@ -130,33 +130,14 @@ export default function Navbar({
           disableGutters
           sx={{ justifyContent: 'space-between' }}
         >
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            href="/"
+          <Box
             sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              alignItems: 'center',
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
+              display: (displayedNavItems.length
+                ? { xs: 'flex', md: 'none' }
+                : 'none'
+              ),
             }}
           >
-            <BrandLogo
-              height="1.5rem"
-              width="auto"
-              sx={{
-                mr: 1,
-                display: { xs: 'none', md: 'flex' },
-                alignItems: 'center',
-              }}
-            />
-            {appName}
-          </Typography>
-
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -167,6 +148,7 @@ export default function Navbar({
             >
               <MenuIcon />
             </IconButton>
+
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -196,18 +178,17 @@ export default function Navbar({
             </Menu>
           </Box>
 
-          <Typography
-            component={Link}
+          {/* Brand */}
+          <Link
             href="/"
-            variant="h5"
-            noWrap
             sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              mr: 3.2,
+              my: 2.4,
+              display: 'flex',
               alignItems: 'center',
               color: 'inherit',
-              fontWeight: 700,
               textDecoration: 'none',
+              overflow: 'hidden',
             }}
           >
             <BrandLogo
@@ -215,10 +196,21 @@ export default function Navbar({
               width="auto"
               sx={{ mr: 1 }}
             />
-            {appName}
-          </Typography>
+            <Typography
+              variant="h5"
+              noWrap
+              fontWeight={700}
+            >
+              {appName}
+            </Typography>
+          </Link>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{
+            flexGrow: 1,
+            display: { xs: 'none', md: 'flex' },
+            gap: 1.6,
+          }}
+          >
             {displayedNavItems.map((navItem) => (
               <Button
                 key={navItem.name}
@@ -229,6 +221,7 @@ export default function Navbar({
                   color: 'white',
                   display: 'block',
                   textTransform: 'capitalize',
+                  fontSize: 'medium',
                 }}
               >
                 {navItem.name}
