@@ -6,7 +6,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
-import AppBar from '@mui/material/AppBar';
+import AppBar, { AppBarProps } from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -23,7 +23,7 @@ import BrandLogo from './BrandLogo';
 import Link from './Link';
 import NavMenuItem, { TPropsNavMenuItem } from './NavMenuItem';
 
-export type TPropsNavbar = {
+export type TPropsNavbar = AppBarProps & {
   /**
    * The navbar items.
    * If not provided, the default navbar items will be used.
@@ -61,7 +61,7 @@ export const DEFAULT_NAV_ITEMS: TPropsNavMenuItem[] = [
  * The Navbar component.
  */
 export default function Navbar({
-  navItems = [], withoutNavItems, setMainUserMenus,
+  navItems = [], withoutNavItems, setMainUserMenus, ...props
 }: TPropsNavbar) {
   const [anchorElNav,
     setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -124,7 +124,10 @@ export default function Navbar({
   }, [user, colorMode]);
 
   return (
-    <AppBar position="sticky">
+    <AppBar
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...props}
+    >
       <Container maxWidth="xl">
         <Toolbar
           disableGutters
