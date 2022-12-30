@@ -1,23 +1,30 @@
-import {
-  styled, Theme, CSSObject,
-} from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
+import { CSSObject, styled, Theme } from '@mui/material/styles';
 
-const baseMixin = (): CSSObject => ({
+const baseMixin = (
+  theme: Theme,
+  top?: number | string,
+): CSSObject => ({
+  top,
+  height: `calc(100% - ${top ?? 0})`,
   overflowX: 'hidden',
 });
 
-const openedMixin = (theme: Theme, width?: number | string): CSSObject => ({
-  ...baseMixin,
+const openedMixin = (
+  theme: Theme,
+  width?: number | string,
+  top?: number | string,
+): CSSObject => ({
+  ...baseMixin(theme, top),
+  width,
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  width,
 });
 
-const closedMixin = (theme: Theme): CSSObject => ({
-  ...baseMixin,
+const closedMixin = (theme: Theme, top?: number | string): CSSObject => ({
+  ...baseMixin(theme, top),
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -28,20 +35,37 @@ const closedMixin = (theme: Theme): CSSObject => ({
   },
 });
 
+export type ExpandableDrawerProps = {
+  /**
+   * The drawer width when expanded.
+   *
+   * @default 200
+   */
+  width?: string | number;
+
+  /**
+   * The drawer top position.
+   *
+   * @default 0
+   */
+  top?: string | number;
+};
+
 const ExpandableDrawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== 'open',
-})<{width?: number | string}>(({ theme, open, width = 200 }) => ({
-  width,
+})<ExpandableDrawerProps>(({
+  theme, open, width = 200, top = 0,
+}) => ({
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
   ...(open && {
-    ...openedMixin(theme, width),
-    '& .MuiDrawer-paper': openedMixin(theme, width),
+    ...openedMixin(theme, width, top),
+    '& .MuiDrawer-paper': openedMixin(theme, width, top),
   }),
   ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
+    ...closedMixin(theme, top),
+    '& .MuiDrawer-paper': closedMixin(theme, top),
   }),
 }));
 
