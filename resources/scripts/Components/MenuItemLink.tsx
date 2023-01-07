@@ -10,13 +10,17 @@ export type TPropsMenuItemLink = Omit<MenuItemProps<'a'>, 'component'>;
  *
  * This component is used to render a menu item that is a link.
  * Usefull inside a [Menu](https://mui.com/material-ui/api/menu) component.
+ *
+ * If the `href` prop is provided, the `component` prop will be set to `Link`.
+ * Otherwise, the `component` prop will be set to `li`.
  */
 export default function MenuItemLink({
-  children, ...props
+  href, children, ...props
 }: TPropsMenuItemLink) {
   return (
     <MenuItem
-      component={Link}
+      href={href}
+      component={href ? Link : 'li'}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
