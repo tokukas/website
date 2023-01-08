@@ -1,13 +1,11 @@
-import { useForm } from '@inertiajs/inertia-react';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton, {
-  ListItemButtonProps,
-} from '@mui/material/ListItemButton';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
+import Link from './Link';
 
-export type TPropsSidebarItem = ListItemButtonProps & {
+export type TPropsSidebarItem = {
   /** The open state of sidebar. */
   open: boolean;
 
@@ -19,31 +17,28 @@ export type TPropsSidebarItem = ListItemButtonProps & {
 
   /** The href of menu item. */
   href?: string;
+
+  onClick?: React.MouseEventHandler;
 };
 
 export default function SidebarItem({
-  open, name, icon, href, sx, onClick, ...props
+  open, name, icon, href, onClick,
 }: TPropsSidebarItem) {
-  const { get } = useForm();
-
   return (
     <ListItem
       disablePadding
       sx={{ display: 'block' }}
     >
       <ListItemButton
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...props}
         sx={{
           height: 48,
           justifyContent: open ? 'initial' : 'center',
           px: 2.5,
-          ...sx,
         }}
-        onClick={(e) => {
-          if (href) { get(href); }
-          onClick?.(e);
-        }}
+        onClick={onClick}
+        component={href ? Link : 'div'}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...(href ? { href } : {})}
       >
         <ListItemIcon
           sx={{
@@ -65,4 +60,5 @@ export default function SidebarItem({
 
 SidebarItem.defaultProps = {
   href: undefined,
+  onClick: undefined,
 };
