@@ -1,6 +1,7 @@
 import ExpandableDrawer, {
   ExpandableDrawerProps,
 } from '@/Components/ExpandableDrawer';
+import SidebarContext, { SidebarContextType } from '@/Utils/SidebarContext';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { DrawerProps } from '@mui/material';
@@ -10,50 +11,55 @@ import * as React from 'react';
 import SidebarItem, { TPropsSidebarItem } from './SidebarItem';
 
 export type TPropsSidebar = Omit<DrawerProps & ExpandableDrawerProps,
-  'variant'
+  'variant' | 'open' | 'children'
 > & {
-  menuItems?: Omit<TPropsSidebarItem, 'open'>[];
-  setOpen?: (open: boolean) => void;
+  menuItems?: TPropsSidebarItem[];
 };
 
 export default function Sidebar({
-  menuItems = [], open, setOpen, ...props
+  menuItems = [], ...props
 }: TPropsSidebar) {
-  const handleSidebarToggle = () => {
+  const [open, setOpen] = React.useState(false);
+
+  const toggle = () => {
     setOpen?.(!open);
   };
 
+  const sidebarContext = React.useMemo<SidebarContextType>(() => ({
+    open,
+    toggle,
+  }), [open]);
+
   return (
-    <ExpandableDrawer
-      variant="permanent"
-      open={open}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...props}
-    >
-      <List>
-        <SidebarItem
-          open={open ?? false}
-          name={open ? 'Collapse' : 'Expand'}
-          icon={open
-            ? <ChevronLeftIcon />
-            : <ChevronRightIcon />}
-          onClick={handleSidebarToggle}
-        />
-        <Divider />
-        {menuItems.map((item) => (
+    <SidebarContext.Provider value={sidebarContext}>
+      <ExpandableDrawer
+        variant="permanent"
+        open={open}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+      >
+        <List>
           <SidebarItem
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...item}
-            key={item.name}
-            open={open ?? false}
+            name={open ? 'Collapse' : 'Expand'}
+            icon={open
+              ? <ChevronLeftIcon />
+              : <ChevronRightIcon />}
+            onClick={toggle}
           />
-        ))}
-      </List>
-    </ExpandableDrawer>
+          <Divider />
+          {menuItems.map((item) => (
+            <SidebarItem
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...item}
+              key={item.name}
+            />
+          ))}
+        </List>
+      </ExpandableDrawer>
+    </SidebarContext.Provider>
   );
 }
 
 Sidebar.defaultProps = {
   menuItems: undefined,
-  setOpen: undefined,
 };

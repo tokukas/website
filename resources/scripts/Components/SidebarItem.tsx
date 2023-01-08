@@ -1,4 +1,4 @@
-import ListItem from '@mui/material/ListItem';
+import SidebarContext from '@/Utils/SidebarContext';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -6,9 +6,6 @@ import * as React from 'react';
 import Link from './Link';
 
 export type TPropsSidebarItem = {
-  /** The open state of sidebar. */
-  open: boolean;
-
   /** The name of menu item. */
   name: string;
 
@@ -22,39 +19,36 @@ export type TPropsSidebarItem = {
 };
 
 export default function SidebarItem({
-  open, name, icon, href, onClick,
+  name, icon, href, onClick,
 }: TPropsSidebarItem) {
+  const { open } = React.useContext(SidebarContext);
+
   return (
-    <ListItem
-      disablePadding
-      sx={{ display: 'block' }}
-    >
-      <ListItemButton
-        sx={{
-          height: 48,
-          justifyContent: open ? 'initial' : 'center',
-          px: 2.5,
-        }}
-        onClick={onClick}
-        component={href ? Link : 'div'}
+    <ListItemButton
+      sx={{
+        height: 48,
+        justifyContent: open ? 'initial' : 'center',
+        px: 2.5,
+      }}
+      onClick={onClick}
+      component={href ? Link : 'div'}
         // eslint-disable-next-line react/jsx-props-no-spreading
-        {...(href ? { href } : {})}
+      {...(href ? { href } : {})}
+    >
+      <ListItemIcon
+        sx={{
+          minWidth: 0,
+          mr: open ? 3 : 'auto',
+          justifyContent: 'center',
+        }}
       >
-        <ListItemIcon
-          sx={{
-            minWidth: 0,
-            mr: open ? 3 : 'auto',
-            justifyContent: 'center',
-          }}
-        >
-          {icon}
-        </ListItemIcon>
-        <ListItemText
-          primary={name}
-          sx={{ opacity: open ? 1 : 0 }}
-        />
-      </ListItemButton>
-    </ListItem>
+        {icon}
+      </ListItemIcon>
+      <ListItemText
+        primary={name}
+        sx={{ opacity: open ? 1 : 0 }}
+      />
+    </ListItemButton>
   );
 }
 
