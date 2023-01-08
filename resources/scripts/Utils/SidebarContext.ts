@@ -9,6 +9,8 @@ const SidebarContext = createContext({
   open: false,
 } as SidebarContextType);
 
-SidebarContext.displayName = 'SidebarContext';
+if (import.meta.env.DEV) {
+  SidebarContext.displayName = 'SidebarContext';
+}
 
 export default SidebarContext;
