@@ -1,3 +1,4 @@
+import AppHead, { TPropsAppHead } from '@/Components/AppHead';
 import Navbar from '@/Components/Navbar';
 import Sidebar from '@/Components/Sidebar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -6,13 +7,16 @@ import * as React from 'react';
 import route from 'ziggy-js';
 import BaseLayout from './BaseLayout';
 
-export type TPropsDashboardLayout = {
+export type TPropsDashboardLayout = Omit<TPropsAppHead, 'children'> & {
   children: React.ReactNode;
 }
 
-export default function DashboardLayout({ children }: TPropsDashboardLayout) {
+export default function DashboardLayout({
+  title, description, children,
+}: TPropsDashboardLayout) {
   return (
     <BaseLayout>
+      <AppHead title={title} description={description} />
       <Navbar withoutNavItems />
       <Box sx={{ display: 'flex', mt: '70px' }}>
         <Sidebar
