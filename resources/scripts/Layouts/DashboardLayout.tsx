@@ -19,7 +19,7 @@ export default function DashboardLayout({ children }: TPropsDashboardLayout) {
           width={240}
           top={70}
           sx={{ zIndex: (theme) => theme.zIndex.appBar - 1 }}
-          menuItems={[
+          items={[
             {
               name: 'Dashboard',
               icon: <DashboardIcon />,

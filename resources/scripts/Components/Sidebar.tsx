@@ -13,11 +13,11 @@ import SidebarItem, { TPropsSidebarItem } from './SidebarItem';
 export type TPropsSidebar = Omit<DrawerProps & ExpandableDrawerProps,
   'variant' | 'open' | 'children'
 > & {
-  menuItems?: TPropsSidebarItem[];
+  items?: TPropsSidebarItem[];
 };
 
 export default function Sidebar({
-  menuItems = [], ...props
+  items = [], ...props
 }: TPropsSidebar) {
   const [open, setOpen] = React.useState(false);
 
@@ -47,7 +47,7 @@ export default function Sidebar({
             onClick={toggle}
           />
           <Divider />
-          {menuItems.map((item) => (
+          {items.map((item) => (
             <SidebarItem
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...item}
@@ -61,5 +61,5 @@ export default function Sidebar({
 }
 
 Sidebar.defaultProps = {
-  menuItems: undefined,
+  items: undefined,
 };
