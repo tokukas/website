@@ -38,7 +38,7 @@ Please go to the [Docker installation guide](https://docs.docker.com/engine/inst
 
 The [docker-compose.yml](../docker-compose.yml) file is used to define the app's services, consist of:
 
-- `laravel.test` - the app container, which is based on [Laravel Sail's PHP 8.1 image](https://hub.docker.com/r/laravelsail/php81-composer).
+- `laravel.test` - the app container, which is based on [Laravel Sail's PHP 8.2 image](https://hub.docker.com/r/laravelsail/php82-composer).
 - `mysql` - the database container,  which is based on [MySQL 8.0 image](https://hub.docker.com/_/mysql/tags?name=8).
 - `phpmyadmin` - the [phpMyAdmin](https://www.phpmyadmin.net) container to access the database from browser. Based on [phpMyAdmin latest image](https://hub.docker.com/_/phpmyadmin).
 
