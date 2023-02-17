@@ -51,7 +51,7 @@ export default function Sidebar({
             <SidebarItem
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...item}
-              key={item.name}
+              key={item.key ?? item.name}
             />
           ))}
         </List>
