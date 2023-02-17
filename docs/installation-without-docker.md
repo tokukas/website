@@ -23,8 +23,8 @@ This is the guide to install the app in your local machine without Docker.
 
 You need to install this requirement in your local machine:
 
-- [PHP 8.0](https://www.php.net/downloads.php)
-- [Composer](https://getcomposer.org/download)
+- [PHP](https://www.php.net/downloads.php) version 8.1.0 or greater
+- [Composer ](https://getcomposer.org/download) version 2.2.0 or greater
 - [Node.js](https://nodejs.org/en/download)
 - [NPM](https://www.npmjs.com/get-npm)
 - [MySQL](https://www.mysql.com/downloads)
