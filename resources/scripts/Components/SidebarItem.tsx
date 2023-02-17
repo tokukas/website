@@ -1,25 +1,25 @@
 import SidebarContext from '@/Utils/SidebarContext';
-import ListItemButton from '@mui/material/ListItemButton';
+import ListItemButton, {
+  ListItemButtonProps,
+} from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
 import Link from './Link';
 
-export type TPropsSidebarItem = {
-  /** The name of menu item. */
+export type TPropsSidebarItem = ListItemButtonProps & {
+  /** The name of sidebar item. */
   name: string;
 
-  /** The icon of menu item. */
+  /** The icon of sidebar item. */
   icon: React.ReactNode;
 
-  /** The href of menu item. */
+  /** The href of sidebar item. */
   href?: string;
-
-  onClick?: React.MouseEventHandler;
 };
 
 export default function SidebarItem({
-  name, icon, href, onClick,
+  name, icon, href, sx, ...props
 }: TPropsSidebarItem) {
   const { open } = React.useContext(SidebarContext);
 
@@ -29,11 +29,13 @@ export default function SidebarItem({
         height: 48,
         justifyContent: open ? 'initial' : 'center',
         px: 2.5,
+        ...sx,
       }}
-      onClick={onClick}
       component={href ? Link : 'div'}
         // eslint-disable-next-line react/jsx-props-no-spreading
       {...(href ? { href } : {})}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...props}
     >
       <ListItemIcon
         sx={{
@@ -54,5 +56,4 @@ export default function SidebarItem({
 
 SidebarItem.defaultProps = {
   href: undefined,
-  onClick: undefined,
 };
