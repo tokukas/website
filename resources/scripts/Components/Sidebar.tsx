@@ -13,11 +13,27 @@ import SidebarItem, { TPropsSidebarItem } from './SidebarItem';
 export type TPropsSidebar = Omit<DrawerProps & ExpandableDrawerProps,
   'variant' | 'open' | 'children'
 > & {
+  /**
+   * Set the sidebar items.
+   * 
+   * @default []
+   */
   items?: TPropsSidebarItem[];
+
+  /**
+   * Set the key of sidebar item that will be selected.
+   *
+   * Make sure the sidebar item has unique `key`.
+   * 
+   * If not set, the `selected` property of the sidebar item will be used.
+   *
+   * @default undefined
+   */
+  selectedItem?: string;
 };
 
 export default function Sidebar({
-  items = [], ...props
+  items = [], selectedItem, ...props
 }: TPropsSidebar) {
   const [open, setOpen] = React.useState(false);
 
@@ -52,6 +68,9 @@ export default function Sidebar({
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...item}
               key={item.key ?? item.name}
+              selected={selectedItem && item.key
+                ? selectedItem === item.key
+                : item.selected}
             />
           ))}
         </List>
@@ -62,4 +81,5 @@ export default function Sidebar({
 
 Sidebar.defaultProps = {
   items: undefined,
+  selectedItem: undefined,
 };

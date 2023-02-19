@@ -1,6 +1,7 @@
 import AppHead, { TPropsAppHead } from '@/Components/AppHead';
 import Navbar from '@/Components/Navbar';
 import Sidebar from '@/Components/Sidebar';
+import { TPropsSidebarItem } from '@/Components/SidebarItem';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import Box from '@mui/material/Box';
 import * as React from 'react';
@@ -8,11 +9,21 @@ import route from 'ziggy-js';
 import BaseLayout from './BaseLayout';
 
 export type TPropsDashboardLayout = Omit<TPropsAppHead, 'children'> & {
+  activeSidebarKey?: string;
   children: React.ReactNode;
 }
 
+export const dashboardSidebarItems: TPropsSidebarItem[] = [
+  {
+    key: 'dashboard',
+    name: 'Dashboard',
+    icon: <DashboardIcon />,
+    href: route('dashboard'),
+  },
+];
+
 export default function DashboardLayout({
-  title, description, children,
+  title, description, activeSidebarKey, children,
 }: TPropsDashboardLayout) {
   return (
     <BaseLayout>
@@ -23,13 +34,8 @@ export default function DashboardLayout({
           width={240}
           top={70}
           sx={{ zIndex: (theme) => theme.zIndex.appBar - 1 }}
-          items={[
-            {
-              name: 'Dashboard',
-              icon: <DashboardIcon />,
-              href: route('dashboard'),
-            },
-          ]}
+          items={dashboardSidebarItems}
+          selectedItem={activeSidebarKey}
         />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           {children}
@@ -38,3 +44,7 @@ export default function DashboardLayout({
     </BaseLayout>
   );
 }
+
+DashboardLayout.defaultProps = {
+  activeSidebarKey: undefined,
+};

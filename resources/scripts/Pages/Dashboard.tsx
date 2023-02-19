@@ -18,6 +18,7 @@ Dashboard.layout = (children: React.ReactNode) => (
   <DashboardLayout
     title="Dashboard"
     description="Dashboard Tokukas Anda"
+    activeSidebarKey="dashboard"
   >
     {children}
   </DashboardLayout>
