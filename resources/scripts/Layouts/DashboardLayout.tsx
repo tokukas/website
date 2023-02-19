@@ -3,6 +3,7 @@ import Navbar from '@/Components/Navbar';
 import Sidebar from '@/Components/Sidebar';
 import { TPropsSidebarItem } from '@/Components/SidebarItem';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import Box from '@mui/material/Box';
 import * as React from 'react';
 import route from 'ziggy-js';
@@ -19,6 +20,12 @@ export const dashboardSidebarItems: TPropsSidebarItem[] = [
     name: 'Dashboard',
     icon: <DashboardIcon />,
     href: route('dashboard'),
+  },
+  {
+    key: 'books',
+    name: 'Books',
+    icon: <LibraryBooksIcon />,
+    href: route('books'),
   },
 ];
 

@@ -28,6 +28,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('admin-only')->group(function () {
         Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
             ->name('dashboard');
+
+        Route::get('/books', fn () => Inertia::render('Books'))
+            ->name('books');
     });
 
     Route::get('/settings', fn () => Inertia::render('Settings'))
