@@ -1,3 +1,5 @@
+import { Publisher } from './Publisher';
+
 export interface Book {
   id: string;
   title: string;
@@ -13,4 +15,5 @@ export interface Book {
   description: string;
   created_at: string;
   updated_at: string;
+  publisher?: Publisher;
 }

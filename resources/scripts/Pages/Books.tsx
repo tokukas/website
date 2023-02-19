@@ -10,10 +10,10 @@ export type TPropsBooks = {
 }
 
 export default function Books({ books }: TPropsBooks) {
-  const bookColumns: GridColDef<Book>[] = [
+  const bookColumns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 80 },
     { field: 'title', headerName: 'Title', width: 240 },
-    { field: 'publisher_id', headerName: 'Publisher ID' },
+    { field: 'publisher', headerName: 'Publisher', width: 160 },
     { field: 'year_published', headerName: 'Year Published', width: 80 },
     { field: 'language_code', headerName: 'Language', width: 80 },
     { field: 'width', headerName: 'Width', width: 80 },
@@ -26,6 +26,11 @@ export default function Books({ books }: TPropsBooks) {
     { field: 'updated_at', headerName: 'Updated At' },
   ];
 
+  const bookRows = books.map((book) => ({
+    ...book,
+    publisher: book.publisher?.name,
+  }));
+
   return (
     <>
       <Typography variant="h4" component="h1" gutterBottom>
@@ -35,7 +40,7 @@ export default function Books({ books }: TPropsBooks) {
       <Paper sx={{ height: 380, width: '100%' }}>
         <DataGrid
           columns={bookColumns}
-          rows={books}
+          rows={bookRows}
           pageSize={5}
           checkboxSelection
           disableSelectionOnClick
