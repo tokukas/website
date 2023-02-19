@@ -1,4 +1,5 @@
 import { PaletteMode, ThemeOptions } from '@mui/material';
+import type { } from '@mui/x-data-grid/themeAugmentation';
 
 /**
  * The app theme options. Defines the theme for the app.
@@ -43,6 +44,14 @@ const AppThemeOptions = (colorMode: PaletteMode): ThemeOptions => ({
         },
       }
     ),
+  },
+  components: {
+    MuiDataGrid: {
+      styleOverrides: {
+        // style overrides for the data grid.
+        // ...
+      },
+    },
   },
 });
 
