@@ -29,8 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
             ->name('dashboard');
 
-        Route::get('/books', fn () => Inertia::render('Books'))
-            ->name('books');
+        Route::resource('books', 'App\Http\Controllers\BookController');
     });
 
     Route::get('/settings', fn () => Inertia::render('Settings'))

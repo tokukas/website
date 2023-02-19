@@ -25,7 +25,7 @@ export const dashboardSidebarItems: TPropsSidebarItem[] = [
     key: 'books',
     name: 'Books',
     icon: <LibraryBooksIcon />,
-    href: route('books'),
+    href: route('books.index'),
   },
 ];
 
