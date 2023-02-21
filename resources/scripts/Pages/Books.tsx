@@ -1,9 +1,15 @@
+import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
 import DashboardLayout from '@/Layouts/DashboardLayout';
+import AddIcon from '@mui/icons-material/Add';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import React from 'react';
+import route from 'ziggy-js';
 
 export type TPropsBooks = {
   books: Book[];
@@ -33,9 +39,27 @@ export default function Books({ books }: TPropsBooks) {
 
   return (
     <>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Books
-      </Typography>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 2,
+        mb: 2,
+      }}
+      >
+        <Typography variant="h4" component="h1">
+          Books
+        </Typography>
+        <Tooltip title="Add Book">
+          <IconButton
+            component={Link}
+            href={route('books.create')}
+            size="large"
+          >
+            <AddIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
+      </Box>
 
       <Paper sx={{ height: 380, width: '100%' }}>
         <DataGrid

@@ -21,13 +21,13 @@ class BookController extends Controller
         ]);
     }
 
-    // /**
-    //  * Show the form for creating a new resource.
-    //  */
-    // public function create(): Response
-    // {
-    //     //
-    // }
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(): InertiaResponse
+    {
+        return Inertia::render('Books/Create');
+    }
 
     // /**
     //  * Store a newly created resource in storage.
