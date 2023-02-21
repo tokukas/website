@@ -9,10 +9,14 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
 import React from 'react';
 import route from 'ziggy-js';
 
 export default function AddBook() {
+  const [dayjsValue, setDayjs] = React.useState<Dayjs | null>();
+
   return (
     <>
       <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
@@ -98,7 +102,20 @@ export default function AddBook() {
           <MenuItem value="id3">Category 3</MenuItem>
         </TextField>
 
-        {/* TODO: Add Year Published field */}
+        <DatePicker
+          label="Year Published"
+          views={['year']}
+          value={dayjsValue}
+          maxDate={dayjs()}
+          onChange={(newValue) => setDayjs(newValue)}
+          renderInput={(props) => (
+            <TextField
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...props}
+              helperText="The year this book was published"
+            />
+          )}
+        />
 
         <TextField
           type="number"
