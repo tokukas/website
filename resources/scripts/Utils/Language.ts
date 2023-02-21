@@ -11,4 +11,10 @@ export default class Language {
       ...languagesAll[code],
     } as TLang & { code: string; }));
   }
+
+  static getLanguageByCode(code: string) {
+    return this.getAllLanguages().find((lang) => (
+      lang.code.toUpperCase() === code.toUpperCase()
+    ));
+  }
 }

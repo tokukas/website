@@ -1,6 +1,7 @@
 import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
 import DashboardLayout from '@/Layouts/DashboardLayout';
+import Language from '@/Utils/Language';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -15,13 +16,20 @@ export type TPropsBooks = {
   books: Book[];
 }
 
+type TBookColumns = Omit<Book,
+  'language_code' | 'publisher'
+> & {
+  language: string;
+  publisher_name: string;
+};
+
 export default function Books({ books }: TPropsBooks) {
-  const bookColumns: GridColDef[] = [
+  const bookColumns: GridColDef<TBookColumns>[] = [
     { field: 'id', headerName: 'ID', width: 80 },
     { field: 'title', headerName: 'Title', width: 240 },
-    { field: 'publisher', headerName: 'Publisher', width: 160 },
+    { field: 'publisher_name', headerName: 'Publisher', width: 160 },
     { field: 'year_published', headerName: 'Year Published', width: 80 },
-    { field: 'language_code', headerName: 'Language', width: 80 },
+    { field: 'language', headerName: 'Language', width: 120 },
     { field: 'width', headerName: 'Width', width: 80 },
     { field: 'height', headerName: 'Height', width: 80 },
     { field: 'weight', headerName: 'Weight', width: 80 },
@@ -32,10 +40,13 @@ export default function Books({ books }: TPropsBooks) {
     { field: 'updated_at', headerName: 'Updated At' },
   ];
 
-  const bookRows = books.map((book) => ({
+  const bookRows = books.map(({
+    language_code: langCode, publisher, ...book
+  }) => ({
     ...book,
-    publisher: book.publisher?.name,
-  }));
+    language: Language.getLanguageByCode(langCode)?.name,
+    publisher_name: publisher?.name,
+  } as TBookColumns));
 
   return (
     <>
