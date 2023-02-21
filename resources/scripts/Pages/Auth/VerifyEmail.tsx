@@ -1,7 +1,7 @@
 import AppHead from '@/Components/AppHead';
 import DismissSnackbarAction from '@/Components/DismissSnackbarAction';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { useForm } from '@inertiajs/inertia-react';
+import { useForm } from '@inertiajs/react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';

@@ -1,7 +1,7 @@
 import AppConfig from '@/Config/App';
 import AuthContext from '@/Utils/AuthContext';
 import ColorModeContext from '@/Utils/ColorModeContext';
-import { useForm } from '@inertiajs/inertia-react';
+import { useForm } from '@inertiajs/react';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';

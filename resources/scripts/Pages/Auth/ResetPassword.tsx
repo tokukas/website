@@ -1,6 +1,6 @@
 import AppHead from '@/Components/AppHead';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { useForm } from '@inertiajs/inertia-react';
+import { useForm } from '@inertiajs/react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import * as React from 'react';
