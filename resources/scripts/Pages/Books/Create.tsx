@@ -1,5 +1,6 @@
 import Link from '@/Components/Link';
 import DashboardLayout from '@/Layouts/DashboardLayout';
+import Language from '@/Utils/Language';
 import HelpIcon from '@mui/icons-material/Help';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -66,12 +67,22 @@ export default function AddBook() {
           label="Language"
           name="language_code"
           required
-          defaultValue=""
+          defaultValue="en"
+          SelectProps={{
+            MenuProps: {
+              MenuListProps: {
+                sx: {
+                  maxHeight: 300,
+                },
+              },
+            },
+          }}
         >
-          {/* TODO: Get data from server */}
-          <MenuItem value="en">English</MenuItem>
-          <MenuItem value="id">Indonesian</MenuItem>
-          <MenuItem value="jp">Japanese</MenuItem>
+          {Language.getAllLanguages().map((lang) => (
+            <MenuItem key={lang.code} value={lang.code}>
+              {`${lang.name} - ${lang.native}`}
+            </MenuItem>
+          ))}
         </TextField>
 
         <TextField
