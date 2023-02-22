@@ -77,6 +77,7 @@ export default function Books({ books }: TPropsBooks) {
           columns={bookColumns}
           rows={bookRows}
           pageSize={5}
+          rowsPerPageOptions={[5]}
           checkboxSelection
           disableSelectionOnClick
         />
