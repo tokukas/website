@@ -1,5 +1,5 @@
 import AppConfig from '@/Config/App';
-import { Head } from '@inertiajs/inertia-react';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 export type TPropsAppHead = {

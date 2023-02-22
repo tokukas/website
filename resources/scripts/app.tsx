@@ -2,16 +2,14 @@ import '@fontsource/quicksand/300.css';
 import '@fontsource/quicksand/400.css';
 import '@fontsource/quicksand/500.css';
 import '@fontsource/quicksand/700.css';
-import '../styles/app.css';
-import './bootstrap';
-
-import { createInertiaApp } from '@inertiajs/inertia-react';
-import { InertiaProgress } from '@inertiajs/progress';
+import { createInertiaApp } from '@inertiajs/react';
 import { StyledEngineProvider } from '@mui/material';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { SnackbarProvider } from 'notistack';
+import '../styles/app.css';
+import './bootstrap';
 import AppConfig from './Config/App';
 import ThemeLayout from './Layouts/ThemeLayout';
 
@@ -44,7 +42,8 @@ const appName = AppConfig.name;
         </React.StrictMode>,
       );
     },
+    progress: {
+      color: '#4B5563',
+    },
   });
 })();
-
-InertiaProgress.init({ color: '#4B5563' });

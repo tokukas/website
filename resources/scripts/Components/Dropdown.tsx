@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { Transition } from '@headlessui/react';
-import { Link } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react';
 import React, {
   Fragment, useContext, useState, useMemo,
 } from 'react';

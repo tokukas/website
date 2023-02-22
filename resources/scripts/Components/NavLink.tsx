@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React from 'react';
-import { Link } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react';
 
 type TPropsNavLink = {
   href: string;
