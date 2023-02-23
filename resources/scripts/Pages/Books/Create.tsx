@@ -121,6 +121,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             <TextField
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...props}
+              required
               helperText="The year this book was published"
             />
           )}
