@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Publisher;
@@ -34,13 +35,23 @@ class BookController extends Controller
         ]);
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  */
-    // public function store(Request $request): RedirectResponse
-    // {
-    //     //
-    // }
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreBookRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+        $book = Book::create($validated);
+
+        if ($book) {
+            // TODO: redirect to detail book page.
+            return redirect()->route('books.index');
+        }
+
+        return back()->withErrors([
+            'error' => 'Error creating book',
+        ]);
+    }
 
     // /**
     //  * Display the specified resource.

@@ -1,12 +1,16 @@
 import Link from '@/Components/Link';
+import { Book } from '@/Entities/Book';
 import { Category } from '@/Entities/Category';
 import { Publisher } from '@/Entities/Publisher';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import Language from '@/Utils/Language';
+import { useForm } from '@inertiajs/react';
+import AddIcon from '@mui/icons-material/Add';
 import HelpIcon from '@mui/icons-material/Help';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box, { BoxProps } from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
@@ -20,6 +24,10 @@ export type TPropsAddBook = {
   publishers: Publisher[];
   categories: Category[];
 }
+
+type AddBookFields = Omit<Book,
+  'id' | 'created_at' | 'updated_at' | 'publisher'
+>;
 
 function FieldSection({ title, sx, children }: BoxProps) {
   return (
@@ -46,7 +54,21 @@ function FieldSection({ title, sx, children }: BoxProps) {
 }
 
 export default function AddBook({ publishers, categories }: TPropsAddBook) {
-  const [dayjsValue, setDayjs] = React.useState<Dayjs | null>();
+  const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
+
+  const { post, setData, errors } = useForm<AddBookFields>();
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setData(
+      event.target.name as keyof AddBookFields,
+      event.target.value,
+    );
+  };
+
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    post(route('books.store'));
+  };
 
   return (
     <>
@@ -67,6 +89,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
 
       <Box
         component="form"
+        onSubmit={submitForm}
       >
         <FieldSection title="Basic Information">
           <TextField
@@ -74,6 +97,9 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             name="title"
             required
             placeholder='e.g. "The Lord of the Rings"'
+            onChange={handleInputChange}
+            error={Boolean(errors.title)}
+            helperText={errors.title}
           />
 
           <Autocomplete
@@ -86,11 +112,16 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
                 label="Language"
-                name="language"
+                name="language_code"
                 required
                 placeholder="Select a language"
+                error={Boolean(errors.language_code)}
+                helperText={errors.language_code}
               />
             )}
+            onChange={(event, newValue) => {
+              setData('language_code', newValue?.code ?? '');
+            }}
           />
 
           <Autocomplete
@@ -103,26 +134,36 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
                 label="Publisher"
-                name="publisher"
-                required
+                name="publisher_id"
                 placeholder="Select a publisher"
-                helperText="The publisher of the book"
+                error={Boolean(errors.publisher_id)}
+                helperText={errors.publisher_id ?? 'The publisher of the book'}
               />
             )}
+            onChange={(event, newValue) => {
+              setData('publisher_id', newValue?.id ?? '');
+            }}
           />
 
           <DatePicker
             label="Year Published"
             views={['year']}
+            openTo="year"
             value={dayjsValue}
             maxDate={dayjs()}
-            onChange={(newValue) => setDayjs(newValue)}
+            onChange={(newValue) => {
+              setDayjs(newValue);
+              setData('year_published', newValue?.year() ?? 0);
+            }}
             renderInput={(props) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...props}
                 required
-                helperText="The year this book was published"
+                name="year_published"
+                error={Boolean(errors.year_published)}
+                helperText={errors.year_published
+                  ?? 'The year this book was published'}
               />
             )}
           />
@@ -130,9 +171,10 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
           <TextField
             label="ISBN"
             name="isbn"
-            required
             placeholder='e.g. "978-3-16-148410-0"'
-            helperText="International Standard Book Number"
+            error={Boolean(errors.isbn)}
+            helperText={errors.isbn ?? 'International Standard Book Number'}
+            onChange={handleInputChange}
           />
         </FieldSection>
 
@@ -143,7 +185,10 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             name="num_of_pages"
             required
             placeholder="0"
-            helperText="Counts from front cover to back cover"
+            error={Boolean(errors.num_of_pages)}
+            helperText={errors.num_of_pages
+              ?? 'Counts from front cover to back cover'}
+            onChange={handleInputChange}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -171,12 +216,14 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             name="weight"
             required
             placeholder="0.0"
-            helperText="The weight of the book in grams"
+            error={Boolean(errors.weight)}
+            helperText={errors.weight ?? 'The weight of the book in grams'}
+            onChange={handleInputChange}
             InputProps={{
               endAdornment: <InputAdornment position="end">gr</InputAdornment>,
               inputProps: {
                 min: 0,
-                step: 0.25,
+                step: 0.1,
               },
             }}
           />
@@ -187,12 +234,14 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             name="width"
             required
             placeholder="0.0"
-            helperText="The width of the book in centimeters"
+            error={Boolean(errors.width)}
+            helperText={errors.width ?? 'The width of the book in centimeters'}
+            onChange={handleInputChange}
             InputProps={{
               endAdornment: <InputAdornment position="end">cm</InputAdornment>,
               inputProps: {
                 min: 0,
-                step: 0.25,
+                step: 0.1,
               },
             }}
           />
@@ -203,12 +252,15 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             name="height"
             required
             placeholder="0.0"
-            helperText="The height of the book in centimeters"
+            error={Boolean(errors.height)}
+            helperText={errors.height
+              ?? 'The height of the book in centimeters'}
+            onChange={handleInputChange}
             InputProps={{
               endAdornment: <InputAdornment position="end">cm</InputAdornment>,
               inputProps: {
                 min: 0,
-                step: 0.25,
+                step: 0.1,
               },
             }}
           />
@@ -225,23 +277,48 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
                 label="Category"
-                name="category"
-                required
+                name="category_id"
                 placeholder="Select a category"
-                helperText="What kind of book is this?"
+                error={Boolean(errors.category_id)}
+                helperText={errors.category_id ?? 'What kind of book is this?'}
               />
             )}
+            onChange={(event, newValue) => {
+              setData('category_id', newValue?.id ?? '');
+            }}
           />
 
           <TextField
             label="Description"
             name="description"
-            required
             multiline
             minRows={2}
             maxRows={6}
+            onChange={handleInputChange}
+            placeholder="Write a short description of the book..."
+            error={Boolean(errors.description)}
+            helperText={errors.description}
           />
         </FieldSection>
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            mt: 2,
+          }}
+        >
+          <Button
+            variant="contained"
+            type="submit"
+            startIcon={<AddIcon />}
+            sx={{
+              width: { xs: '100%', sm: 'auto' },
+            }}
+          >
+            Add Book
+          </Button>
+        </Box>
       </Box>
     </>
   );
