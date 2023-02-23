@@ -15,7 +15,7 @@ export type TPropsSidebar = Omit<DrawerProps & ExpandableDrawerProps,
 > & {
   /**
    * Set the sidebar items.
-   * 
+   *
    * @default []
    */
   items?: TPropsSidebarItem[];
@@ -24,7 +24,7 @@ export type TPropsSidebar = Omit<DrawerProps & ExpandableDrawerProps,
    * Set the key of sidebar item that will be selected.
    *
    * Make sure the sidebar item has unique `key`.
-   * 
+   *
    * If not set, the `selected` property of the sidebar item will be used.
    *
    * @default undefined
