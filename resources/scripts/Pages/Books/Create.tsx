@@ -1,3 +1,4 @@
+import FieldSection from '@/Components/FieldSection';
 import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
 import { Category } from '@/Entities/Category';
@@ -8,7 +9,7 @@ import { useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
 import HelpIcon from '@mui/icons-material/Help';
 import Autocomplete from '@mui/material/Autocomplete';
-import Box, { BoxProps } from '@mui/material/Box';
+import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -28,30 +29,6 @@ export type TPropsAddBook = {
 type AddBookFields = Omit<Book,
   'id' | 'created_at' | 'updated_at' | 'publisher'
 >;
-
-function FieldSection({ title, sx, children }: BoxProps) {
-  return (
-    <Box sx={{ my: 4 }}>
-      <Typography variant="h5" component="h2" gutterBottom>
-        {title}
-      </Typography>
-      <Box
-        sx={{
-          ...sx,
-          display: 'grid',
-          gridTemplateColumns: {
-            sm: '1fr',
-            md: 'repeat(2, 1fr)',
-          },
-          gap: 3.2,
-          mt: 2,
-        }}
-      >
-        {children}
-      </Box>
-    </Box>
-  );
-}
 
 export default function AddBook({ publishers, categories }: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
