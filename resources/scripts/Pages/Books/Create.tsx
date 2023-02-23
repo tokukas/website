@@ -1,7 +1,10 @@
 import Link from '@/Components/Link';
+import { Category } from '@/Entities/Category';
+import { Publisher } from '@/Entities/Publisher';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import Language from '@/Utils/Language';
 import HelpIcon from '@mui/icons-material/Help';
+import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -14,7 +17,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import React from 'react';
 import route from 'ziggy-js';
 
-export default function AddBook() {
+export type TPropsAddBook = {
+  publishers: Publisher[];
+  categories: Category[];
+}
+
+export default function AddBook({ publishers, categories }: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>();
 
   return (
@@ -53,18 +61,22 @@ export default function AddBook() {
           placeholder='e.g. "The Lord of the Rings"'
         />
 
-        <TextField
-          select
-          label="Publisher"
-          name="publisher_id"
-          required
-          defaultValue=""
-        >
-          {/* TODO: Get data from server */}
-          <MenuItem value="id1">Publisher 1</MenuItem>
-          <MenuItem value="id2">Publisher 2</MenuItem>
-          <MenuItem value="id3">Publisher 3</MenuItem>
-        </TextField>
+        <Autocomplete
+          id="publisher"
+          options={publishers}
+          getOptionLabel={(option) => option.name}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          renderInput={(params) => (
+            <TextField
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...params}
+              label="Publisher"
+              name="publisher"
+              required
+              placeholder="Select a publisher"
+            />
+          )}
+        />
 
         <TextField
           select
@@ -89,18 +101,22 @@ export default function AddBook() {
           ))}
         </TextField>
 
-        <TextField
-          select
-          label="Category"
-          name="category_id"
-          required
-          defaultValue=""
-        >
-          {/* TODO: Get data from server */}
-          <MenuItem value="id1">Category 1</MenuItem>
-          <MenuItem value="id2">Category 2</MenuItem>
-          <MenuItem value="id3">Category 3</MenuItem>
-        </TextField>
+        <Autocomplete
+          id="category"
+          options={categories}
+          getOptionLabel={(option) => option.name}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          renderInput={(params) => (
+            <TextField
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...params}
+              label="Category"
+              name="category"
+              required
+              placeholder="Select a category"
+            />
+          )}
+        />
 
         <DatePicker
           label="Year Published"

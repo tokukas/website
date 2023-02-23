@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
+use App\Models\Publisher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -26,7 +28,10 @@ class BookController extends Controller
      */
     public function create(): InertiaResponse
     {
-        return Inertia::render('Books/Create');
+        return Inertia::render('Books/Create', [
+            'publishers' => Publisher::all(),
+            'categories' => Category::all(),
+        ]);
     }
 
     // /**
