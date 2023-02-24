@@ -100,8 +100,8 @@ export default function AddPublisherDrawer({
           required
           placeholder='e.g. "Oxford University Press"'
           onChange={handleInputChange}
-          error={Boolean(errors.name)}
-          helperText={errors.name}
+          error={Boolean(errors.name || errors.slug)}
+          helperText={errors.name || errors.slug}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
