@@ -1,3 +1,4 @@
+import AddPublisherDrawer from '@/Components/AddPublisherDrawer';
 import FieldSection from '@/Components/FieldSection';
 import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
@@ -12,6 +13,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
@@ -46,6 +48,10 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
     e.preventDefault();
     post(route('books.store'));
   };
+
+  const [
+    openPublisherDrawer, setOpenPublisherDrawer,
+  ] = React.useState<boolean>(false);
 
   return (
     <>
@@ -115,6 +121,25 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 placeholder="Select a publisher"
                 error={Boolean(errors.publisher_id)}
                 helperText={errors.publisher_id ?? 'The publisher of the book'}
+                InputProps={{
+                  ...params.InputProps,
+                  type: 'search',
+                  endAdornment: (
+                    <>
+                      {params.InputProps.endAdornment}
+                      <InputAdornment position="end">
+                        <Tooltip title="Add new publisher if not exist" arrow>
+                          <IconButton
+                            size="small"
+                            onClick={() => setOpenPublisherDrawer(true)}
+                          >
+                            <AddIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </InputAdornment>
+                    </>
+                  ),
+                }}
               />
             )}
             onChange={(event, newValue) => {
@@ -297,6 +322,11 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
           </Button>
         </Box>
       </Box>
+
+      <AddPublisherDrawer
+        open={openPublisherDrawer}
+        onClose={() => setOpenPublisherDrawer(false)}
+      />
     </>
   );
 }

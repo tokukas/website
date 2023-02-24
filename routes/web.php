@@ -30,6 +30,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('dashboard');
 
         Route::resource('books', 'App\Http\Controllers\BookController');
+
+        Route::resource('publishers', 'App\Http\Controllers\PublisherController')
+            ->only(['store']);
     });
 
     Route::get('/settings', fn () => Inertia::render('Settings'))
