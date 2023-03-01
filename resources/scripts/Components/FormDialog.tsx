@@ -84,7 +84,7 @@ export default function FormDialog<Fields extends Record<string, unknown>>({
   const {
     clearErrors, data, errors, processing, reset, setData, wasSuccessful,
     ...inertiaForm
-  } = useForm<Fields>(values);
+  } = useForm<Fields>();
 
   const handleClose: ModalProps['onClose'] = (event, reason) => {
     clearErrors();
@@ -141,7 +141,7 @@ export default function FormDialog<Fields extends Record<string, unknown>>({
                     event.target.value as Fields[keyof Fields],
                   );
                 }}
-                value={data[name] ?? ''}
+                value={data[name] ?? values?.[name] ?? ''}
                 error={Boolean(errors[validationKey ?? name])}
                 helperText={errors[validationKey ?? name]}
               />
