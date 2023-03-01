@@ -49,9 +49,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
     post(route('books.store'));
   };
 
-  const [
-    openPublisherDrawer, setOpenPublisherDrawer,
-  ] = React.useState<boolean>(false);
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
 
   return (
     <>
@@ -111,7 +109,6 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             id="publisher"
             options={publishers}
             getOptionLabel={(option) => option.name}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -123,7 +120,6 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 helperText={errors.publisher_id ?? 'The publisher of the book'}
                 InputProps={{
                   ...params.InputProps,
-                  type: 'search',
                   endAdornment: (
                     <>
                       {params.InputProps.endAdornment}
@@ -131,7 +127,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                         <Tooltip title="Add new publisher if not exist" arrow>
                           <IconButton
                             size="small"
-                            onClick={() => setOpenPublisherDrawer(true)}
+                            onClick={() => setOpenDialog(true)}
                           >
                             <AddIcon fontSize="small" />
                           </IconButton>
@@ -324,11 +320,8 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
       </Box>
 
       <AddPublisherDialog
-        open={openPublisherDrawer}
-        onClose={() => setOpenPublisherDrawer(false)}
-        values={{
-          name: 'Tester',
-        }}
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
       />
     </>
   );
