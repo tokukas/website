@@ -1,10 +1,10 @@
 import { Publisher } from '@/Entities/Publisher';
 import { OptionalExceptFor } from '@/Utils/Types';
-import { useForm } from '@inertiajs/react';
-import TextField from '@mui/material/TextField';
+import { useSnackbar } from 'notistack';
 import React from 'react';
 import route from 'ziggy-js';
-import FormDialog, { TPropsFormDialog } from './FormDialog';
+import DismissSnackbarAction from './DismissSnackbarAction';
+import BaseFormDialog, { TPropsFormDialog } from './FormDialog';
 
 type AddPublisherFields = Partial<Omit<
   Publisher,
@@ -16,50 +16,40 @@ type TPropsAddPublisherDialog = OptionalExceptFor<
   'open' | 'onClose'
 >;
 
-export default function AddPublisherDialog({
-  onClose, values, ...props
-}: TPropsAddPublisherDialog) {
-  const {
-    post, setData, data, errors, clearErrors, processing, reset, wasSuccessful,
-  } = useForm<AddPublisherFields>(values);
+const FormDialog = BaseFormDialog<AddPublisherFields>;
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData(
-      event.target.name as keyof AddPublisherFields,
-      event.target.value,
-    );
-  };
+export default function AddPublisherDialog({
+  onSuccess, ...props
+}: TPropsAddPublisherDialog) {
+  const { enqueueSnackbar } = useSnackbar();
 
   return (
     <FormDialog
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       title="Add Publisher"
-      onSubmit={(e) => {
-        e.preventDefault();
-        post(route('publishers.store'));
-        reset();
-      }}
-      onClose={(e, r) => {
-        clearErrors();
-        onClose?.(e, r);
-      }}
+      method="post"
+      route={route('publishers.store')}
+      formFields={[
+        {
+          name: 'name',
+          validationKey: 'slug',
+          label: 'Publisher Name',
+          required: true,
+          placeholder: 'e.g. "Oxford University Press"',
+        },
+      ]}
       description="Fill this form to add a new publisher.
         Please don't add the publisher that already exist."
       submitButtonName="Add"
-      processing={processing}
-      wasSuccessful={wasSuccessful}
-    >
-      <TextField
-        label="Publisher Name"
-        name="name"
-        required
-        value={data.name}
-        placeholder='e.g. "Oxford University Press"'
-        onChange={handleInputChange}
-        error={Boolean(errors.name || errors.slug)}
-        helperText={errors.name || errors.slug}
-      />
-    </FormDialog>
+      onSuccess={() => {
+        enqueueSnackbar('Publisher successfully added', {
+          variant: 'success',
+          action: DismissSnackbarAction,
+          preventDuplicate: true,
+        });
+        onSuccess?.();
+      }}
+    />
   );
 }

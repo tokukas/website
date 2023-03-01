@@ -1,4 +1,6 @@
 import { RequiredFor } from '@/Utils/Types';
+import { useForm } from '@inertiajs/react';
+import { ModalProps } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
@@ -6,20 +8,39 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useSnackbar } from 'notistack';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import * as React from 'react';
-import DismissSnackbarAction from './DismissSnackbarAction';
+
+type TFormDialogFieldProps<
+  Fields extends Record<string, unknown>
+> = TextFieldProps & {
+  /**
+   * The name of field.
+   */
+  name: keyof Fields;
+  /**
+   * The custom key to get validation message.
+   */
+  validationKey?: keyof Fields;
+};
 
 export type TPropsFormDialog<
   Fields extends Record<string, unknown>
-> = RequiredFor<
-  Omit<DialogProps, 'onSubmit'>,
-  'children' | 'onClose' | 'title'
-> & {
+> = RequiredFor<DialogProps, 'onClose' | 'title'> & {
   /**
    * The description of form dialog.
    */
   description?: string;
+  /**
+   * Define the form fields with [TextFieldProps](https://mui.com/material-ui/api/text-field/#props).
+   */
+  formFields: readonly TFormDialogFieldProps<Fields>[];
+  /**
+   * The form method.
+   *
+   * @default 'get'
+   */
+  method?: 'get' | 'post' | 'put' | 'patch' | 'delete';
   /**
    * Handle action after successfull form submit.
    *
@@ -27,27 +48,15 @@ export type TPropsFormDialog<
    */
   onSuccess?: () => void;
   /**
-   * Handle form submit action.
+   * The form route destination.
    */
-  onSubmit: React.FormEventHandler<HTMLFormElement>;
-  /**
-   * Determine if the form is being submitted.
-   *
-   * @default false
-   */
-  processing?: boolean;
+  route: string;
   /**
    * The name for submit button.
    *
    * @default Will follow the `title` prop.
    */
   submitButtonName?: string;
-  /**
-   * Determine if the form was successfully submitted.
-   *
-   * @default false
-   */
-  wasSuccessful?: boolean;
   /**
    * Set the default value.
    */
@@ -57,43 +66,41 @@ export type TPropsFormDialog<
 /**
  * The component to create form as a [Dialog](https://mui.com/material-ui/react-dialog/).
  *
- * How to use:
- * - Put the form title in `title` prop.
- * - Put the form fields that will be displayed in `children` prop.
- * - Handle action to close the dialog in `onClose` prop.
- * - Handle action to submit the form in `onSubmit` prop.
- * - Handle action after the form sucessfully submitted in `onSuccess` prop.
- *
  * The props in inherit to [MUI DialogProps](https://mui.com/material-ui/api/dialog/#props).
  */
 export default function FormDialog<Fields extends Record<string, unknown>>({
   children,
   description,
+  formFields,
+  method = 'get',
   onClose,
-  onSubmit,
   onSuccess,
-  processing,
+  route,
   submitButtonName,
   title,
-  wasSuccessful,
+  values,
   ...props
 }: TPropsFormDialog<Fields>) {
-  const handleClose = () => {
-    onClose?.({}, 'backdropClick');
+  const {
+    clearErrors, data, errors, processing, reset, setData, wasSuccessful,
+    ...inertiaForm
+  } = useForm<Fields>(values);
+
+  const handleClose: ModalProps['onClose'] = (event, reason) => {
+    clearErrors();
+    reset();
+    onClose(event, reason);
   };
 
-  const { enqueueSnackbar } = useSnackbar();
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    inertiaForm[method](route);
+  };
 
   React.useEffect(() => {
     if (wasSuccessful) {
-      enqueueSnackbar('Publisher successfully added', {
-        variant: 'success',
-        action: DismissSnackbarAction,
-        preventDuplicate: true,
-      });
-
       onSuccess?.();
-      handleClose();
+      handleClose({}, 'backdropClick');
     }
   }, [wasSuccessful]);
 
@@ -101,9 +108,9 @@ export default function FormDialog<Fields extends Record<string, unknown>>({
     <Dialog
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
-      onClose={onClose}
+      onClose={handleClose}
     >
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           {description && (
@@ -119,12 +126,41 @@ export default function FormDialog<Fields extends Record<string, unknown>>({
               gap: 2,
             }}
           >
-            {children}
+            {formFields.map(({
+              id, name, validationKey, ...fieldProps
+            }) => (
+              <TextField
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...fieldProps}
+                id={id}
+                key={id ?? name}
+                name={name}
+                onChange={(event) => {
+                  setData(
+                    event.target.name as keyof Fields,
+                    event.target.value as Fields[keyof Fields],
+                  );
+                }}
+                value={data[name] ?? ''}
+                error={Boolean(errors[validationKey ?? name])}
+                helperText={errors[validationKey ?? name]}
+              />
+            ))}
           </Box>
+
+          {children}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit" variant="contained" disabled={processing}>
+          <Button
+            onClick={(event) => handleClose(event, 'backdropClick')}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={processing}
+          >
             {submitButtonName ?? title}
           </Button>
         </DialogActions>
@@ -135,9 +171,8 @@ export default function FormDialog<Fields extends Record<string, unknown>>({
 
 FormDialog.defaultProps = {
   description: undefined,
+  method: 'get',
   onSuccess: undefined,
-  processing: false,
   submitButtonName: undefined,
-  wasSuccessful: false,
   values: undefined,
 };
