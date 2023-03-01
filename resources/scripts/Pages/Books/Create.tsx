@@ -1,4 +1,4 @@
-import AddPublisherDrawer from '@/Components/AddPublisherDrawer';
+import AddPublisherDialog from '@/Components/AddPublisherDialog';
 import FieldSection from '@/Components/FieldSection';
 import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
@@ -323,9 +323,12 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
         </Box>
       </Box>
 
-      <AddPublisherDrawer
+      <AddPublisherDialog
         open={openPublisherDrawer}
         onClose={() => setOpenPublisherDrawer(false)}
+        values={{
+          name: 'Tester',
+        }}
       />
     </>
   );
