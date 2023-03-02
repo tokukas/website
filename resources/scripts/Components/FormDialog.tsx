@@ -9,23 +9,25 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
-import * as React from 'react';
+import React from 'react';
+
+type TBaseField = Record<string, string | number>;
 
 type TFormDialogFieldProps<
-  Fields extends Record<string, unknown>
+  Field extends TBaseField
 > = TextFieldProps & {
   /**
    * The name of field.
    */
-  name: keyof Fields;
+  name: keyof Field;
   /**
    * The custom key to get validation message.
    */
-  validationKey?: keyof Fields;
+  validationKey?: keyof Field;
 };
 
 export type TPropsFormDialog<
-  Fields extends Record<string, unknown>
+  Field extends TBaseField
 > = RequiredFor<DialogProps, 'onClose' | 'title'> & {
   /**
    * The description of form dialog.
@@ -34,7 +36,7 @@ export type TPropsFormDialog<
   /**
    * Define the form fields with [TextFieldProps](https://mui.com/material-ui/api/text-field/#props).
    */
-  formFields: readonly TFormDialogFieldProps<Fields>[];
+  formFields: readonly TFormDialogFieldProps<Field>[];
   /**
    * The form method.
    *
@@ -60,7 +62,7 @@ export type TPropsFormDialog<
   /**
    * Set the default value.
    */
-  values?: Fields;
+  values?: Field;
 };
 
 /**
@@ -68,7 +70,9 @@ export type TPropsFormDialog<
  *
  * The props in inherit to [MUI DialogProps](https://mui.com/material-ui/api/dialog/#props).
  */
-export default function FormDialog<Fields extends Record<string, unknown>>({
+export default function FormDialog<
+  Field extends TBaseField
+>({
   children,
   description,
   formFields,
@@ -80,11 +84,11 @@ export default function FormDialog<Fields extends Record<string, unknown>>({
   title,
   values,
   ...props
-}: TPropsFormDialog<Fields>) {
+}: TPropsFormDialog<Field>) {
   const {
     clearErrors, data, errors, processing, reset, setData, wasSuccessful,
     ...inertiaForm
-  } = useForm<Fields>();
+  } = useForm<Field>();
 
   const handleClose: ModalProps['onClose'] = (event, reason) => {
     clearErrors();
@@ -137,8 +141,8 @@ export default function FormDialog<Fields extends Record<string, unknown>>({
                 name={name}
                 onChange={(event) => {
                   setData(
-                    event.target.name as keyof Fields,
-                    event.target.value as Fields[keyof Fields],
+                    event.target.name,
+                    event.target.value as Field[keyof Field],
                   );
                 }}
                 value={data[name] ?? values?.[name] ?? ''}
