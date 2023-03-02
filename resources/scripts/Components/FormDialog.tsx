@@ -9,7 +9,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
+import { useSnackbar } from 'notistack';
 import React from 'react';
+import DismissSnackbarAction from './DismissSnackbarAction';
 
 export type TField = Record<string, string | number>;
 
@@ -35,6 +37,10 @@ export type TPropsFormDialog<Field extends TField> = RequiredFor<
    * Define the form fields with [TextFieldProps](https://mui.com/material-ui/api/text-field/#props).
    */
   formFields: readonly TFormDialogFieldProps<Field>[];
+  /**
+   * If present, will show the message on successfull form submit using `Snackbar` component.
+   */
+  messageOnSuccess?: string;
   /**
    * The form method.
    *
@@ -72,6 +78,7 @@ export default function FormDialog<Field extends TField>({
   children,
   description,
   formFields,
+  messageOnSuccess,
   method = 'get',
   onClose,
   onSuccess,
@@ -81,6 +88,8 @@ export default function FormDialog<Field extends TField>({
   values,
   ...props
 }: TPropsFormDialog<Field>) {
+  const { enqueueSnackbar } = useSnackbar();
+
   const {
     clearErrors, data, errors, processing, reset, setData, wasSuccessful,
     ...inertiaForm
@@ -107,6 +116,13 @@ export default function FormDialog<Field extends TField>({
 
   React.useEffect(() => {
     if (wasSuccessful) {
+      if (messageOnSuccess) {
+        enqueueSnackbar(messageOnSuccess, {
+          variant: 'success',
+          action: DismissSnackbarAction,
+          preventDuplicate: true,
+        });
+      }
       onSuccess?.();
       handleClose({}, 'backdropClick');
     }
@@ -179,6 +195,7 @@ export default function FormDialog<Field extends TField>({
 
 FormDialog.defaultProps = {
   description: undefined,
+  messageOnSuccess: undefined,
   method: 'get',
   onSuccess: undefined,
   submitButtonName: undefined,

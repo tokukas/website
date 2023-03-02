@@ -1,9 +1,7 @@
 import { Publisher } from '@/Entities/Publisher';
 import { OptionalExceptFor } from '@/Utils/Types';
-import { useSnackbar } from 'notistack';
 import React from 'react';
 import route from 'ziggy-js';
-import DismissSnackbarAction from './DismissSnackbarAction';
 import BaseFormDialog, { TPropsFormDialog } from './FormDialog';
 
 type AddPublisherFields = Partial<Omit<
@@ -18,11 +16,7 @@ type TPropsAddPublisherDialog = OptionalExceptFor<
 
 const FormDialog = BaseFormDialog<AddPublisherFields>;
 
-export default function AddPublisherDialog({
-  onSuccess, ...props
-}: TPropsAddPublisherDialog) {
-  const { enqueueSnackbar } = useSnackbar();
-
+export default function AddPublisherDialog(props: TPropsAddPublisherDialog) {
   return (
     <FormDialog
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -42,14 +36,7 @@ export default function AddPublisherDialog({
       description="Fill this form to add a new publisher.
         Please don't add the publisher that already exist."
       submitButtonName="Add"
-      onSuccess={() => {
-        enqueueSnackbar('Publisher successfully added', {
-          variant: 'success',
-          action: DismissSnackbarAction,
-          preventDuplicate: true,
-        });
-        onSuccess?.();
-      }}
+      messageOnSuccess="Publisher successfully added"
     />
   );
 }
