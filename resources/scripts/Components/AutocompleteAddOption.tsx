@@ -49,7 +49,7 @@ export type TPropsAutocompleteWithAddOption<T extends BaseOption> = RequiredFor<
  * - [MUI Docs](https://mui.com/material-ui/react-autocomplete/#creatable)
  * - [`FreeSoloCreateOptionDialog` in MUI GitHub](https://github.com/mui/material-ui/blob/v5.11.11/docs/data/material/components/autocomplete/FreeSoloCreateOptionDialog.tsx)
  */
-export default function AutocompleteWithAddOption<T extends BaseOption>({
+export default function AutocompleteAddOption<T extends BaseOption>({
   dataKey,
   labelKey,
   onSelectAddOption,
@@ -119,6 +119,6 @@ export default function AutocompleteWithAddOption<T extends BaseOption>({
   );
 }
 
-AutocompleteWithAddOption.defaultProps = {
+AutocompleteAddOption.defaultProps = {
   dataKey: undefined,
 };

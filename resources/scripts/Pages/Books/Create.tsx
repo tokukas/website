@@ -1,5 +1,5 @@
 import AddPublisherDialog from '@/Components/AddPublisherDialog';
-import AutocompleteWithAddOption from '@/Components/AutoCompleteWithAddOption';
+import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
 import FieldSection from '@/Components/FieldSection';
 import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
@@ -112,7 +112,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             }}
           />
 
-          <AutocompleteWithAddOption
+          <AutocompleteAddOption
             options={publishers as readonly PublisherOptionType[]}
             dataKey="id"
             labelKey="name"
