@@ -6,14 +6,14 @@ import { Category } from '@/Entities/Category';
 import { Publisher } from '@/Entities/Publisher';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import Language from '@/Utils/Language';
+import { OptionalExceptFor } from '@/Utils/Types';
 import { useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
 import HelpIcon from '@mui/icons-material/Help';
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
@@ -24,13 +24,17 @@ import React from 'react';
 import route from 'ziggy-js';
 
 export type TPropsAddBook = {
-  publishers: Publisher[];
-  categories: Category[];
+  publishers: readonly Publisher[];
+  categories: readonly Category[];
 }
 
 type AddBookFields = Omit<Book,
   'id' | 'created_at' | 'updated_at' | 'publisher'
 >;
+
+type PublisherOptionType = OptionalExceptFor<Publisher, 'name'> & {
+  inputValue?: string;
+}
 
 export default function AddBook({ publishers, categories }: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
@@ -50,6 +54,12 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
   };
 
   const [openDialog, setOpenDialog] = React.useState<boolean>(false);
+
+  const [
+    publisherValue, setPublisherValue,
+  ] = React.useState<PublisherOptionType | null>(null);
+
+  const filterPublisherOptions = createFilterOptions<PublisherOptionType>();
 
   return (
     <>
@@ -107,8 +117,55 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
 
           <Autocomplete
             id="publisher"
-            options={publishers}
-            getOptionLabel={(option) => option.name}
+            value={publisherValue}
+            freeSolo
+            clearOnBlur
+            options={publishers as readonly PublisherOptionType[]}
+            getOptionLabel={(option) => (typeof option === 'string'
+              ? option
+              : option.inputValue ?? option.name
+            )}
+            filterOptions={(options, state) => {
+              const filtered = filterPublisherOptions(options, state);
+              const findOption = options.find((opt) => (
+                opt.name.toUpperCase() === state.inputValue.trim().toUpperCase()
+              ));
+
+              if (state.inputValue && !findOption) {
+                filtered.push({
+                  inputValue: state.inputValue,
+                  name: `Add "${state.inputValue}"`,
+                });
+              }
+
+              return filtered;
+            }}
+            renderOption={(props, option) => (
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              <li {...props}>{option.name}</li>
+            )}
+            onChange={(event, newValue) => {
+              // e.g value selected with enter, right from the input
+              if (typeof newValue === 'string') {
+                const publisher = publishers.find((pub) => (
+                  pub.name.toUpperCase() === newValue.trim().toUpperCase()
+                ));
+
+                if (publisher) {
+                  setPublisherValue(publisher);
+                  setData('publisher_id', publisher.id);
+                } else {
+                  setPublisherValue({ name: newValue });
+                  setOpenDialog(true);
+                }
+              } else if (newValue && newValue.inputValue) {
+                setPublisherValue({ name: newValue.inputValue });
+                setOpenDialog(true);
+              } else {
+                setPublisherValue(newValue);
+                setData('publisher_id', newValue?.id ?? '');
+              }
+            }}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -118,29 +175,8 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 placeholder="Select a publisher"
                 error={Boolean(errors.publisher_id)}
                 helperText={errors.publisher_id ?? 'The publisher of the book'}
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                    <>
-                      {params.InputProps.endAdornment}
-                      <InputAdornment position="end">
-                        <Tooltip title="Add new publisher if not exist" arrow>
-                          <IconButton
-                            size="small"
-                            onClick={() => setOpenDialog(true)}
-                          >
-                            <AddIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                      </InputAdornment>
-                    </>
-                  ),
-                }}
               />
             )}
-            onChange={(event, newValue) => {
-              setData('publisher_id', newValue?.id ?? '');
-            }}
           />
 
           <DatePicker
@@ -321,7 +357,12 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
 
       <AddPublisherDialog
         open={openDialog}
-        onClose={() => setOpenDialog(false)}
+        onClose={() => {
+          setOpenDialog(false);
+          setPublisherValue(null);
+          setData('publisher_id', '');
+        }}
+        values={publisherValue ?? { name: '' }}
       />
     </>
   );
