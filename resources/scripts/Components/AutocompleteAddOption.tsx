@@ -4,11 +4,11 @@ import Autocomplete, {
 } from '@mui/material/Autocomplete';
 import React from 'react';
 
-export type BaseOption = Record<string, string> & {
+export type Option = Record<string, string> & {
   inputValue?: string;
 };
 
-export type AutocompleteAddOptionBaseProps<T extends BaseOption> = {
+export type AutocompleteAddOptionBaseProps<T extends Option> = {
   /**
    * Determine which prop that used as the data.
    */
@@ -37,7 +37,7 @@ export type FreeSoloAutocompleteProps<T> = Omit<
 >;
 
 export type TPropsAutocompleteAddOption<
-  T extends BaseOption
+  T extends Option
 > = AutocompleteAddOptionBaseProps<T> & RequiredFor<
   FreeSoloAutocompleteProps<T>,
   'renderInput' | 'value'
@@ -55,7 +55,7 @@ export type TPropsAutocompleteAddOption<
  * - [MUI Docs](https://mui.com/material-ui/react-autocomplete/#creatable)
  * - [`FreeSoloCreateOptionDialog` in MUI GitHub](https://github.com/mui/material-ui/blob/v5.11.11/docs/data/material/components/autocomplete/FreeSoloCreateOptionDialog.tsx)
  */
-export default function AutocompleteAddOption<T extends BaseOption>({
+export default function AutocompleteAddOption<T extends Option>({
   dataKey,
   labelKey,
   onSelectAddOption,
