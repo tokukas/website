@@ -11,7 +11,7 @@ type BaseOption = Record<string, string> & {
 export type TPropsAutocompleteWithAddOption<T extends BaseOption> = RequiredFor<
   Omit<
     AutocompleteProps<T, false, false, true>,
-    'freeSolo' | 'multiple' | 'disableClearable'
+    'freeSolo' | 'multiple' | 'disableClearable' | 'clearOnBlur'
   >,
   'renderInput'
 > & {
@@ -42,7 +42,8 @@ export type TPropsAutocompleteWithAddOption<T extends BaseOption> = RequiredFor<
  *
  * This component will provide an additional option when the user
  * input is not found in the options. This additional option will
- * trigger the `onSelectAddOption` handler.
+ * trigger the `onSelectAddOption` handler. If user doesn't select
+ * any options, the input will be cleared.
  *
  * Based on:
  * - [MUI Docs](https://mui.com/material-ui/react-autocomplete/#creatable)
@@ -65,6 +66,7 @@ export default function AutocompleteWithAddOption<T extends BaseOption>({
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...otherProps}
       freeSolo
+      clearOnBlur
       value={value}
       options={options}
       getOptionLabel={(option) => (typeof option === 'string'
