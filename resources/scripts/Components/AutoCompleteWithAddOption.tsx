@@ -100,6 +100,7 @@ export default function AutocompleteWithAddOption<T extends BaseOption>({
           ));
 
           if (option) {
+            event.preventDefault();
             setValue(option);
             setData(option[dataKey ?? labelKey]);
           } else {
