@@ -4,17 +4,11 @@ import Autocomplete, {
 } from '@mui/material/Autocomplete';
 import React from 'react';
 
-type BaseOption = Record<string, string> & {
+export type BaseOption = Record<string, string> & {
   inputValue?: string;
 };
 
-export type TPropsAutocompleteWithAddOption<T extends BaseOption> = RequiredFor<
-  Omit<
-    AutocompleteProps<T, false, false, true>,
-    'freeSolo' | 'multiple' | 'disableClearable' | 'clearOnBlur'
-  >,
-  'renderInput'
-> & {
+export type AutocompleteAddOptionBaseProps<T extends BaseOption> = {
   /**
    * Determine which prop that used as the data.
    */
@@ -37,6 +31,18 @@ export type TPropsAutocompleteWithAddOption<T extends BaseOption> = RequiredFor<
   setValue: (value: T | null) => void;
 };
 
+export type FreeSoloAutocompleteProps<T> = Omit<
+  AutocompleteProps<T, false, false, true>,
+  'freeSolo' | 'multiple' | 'disableClearable' | 'clearOnBlur'
+>;
+
+export type TPropsAutocompleteAddOption<
+  T extends BaseOption
+> = AutocompleteAddOptionBaseProps<T> & RequiredFor<
+  FreeSoloAutocompleteProps<T>,
+  'renderInput' | 'value'
+>;
+
 /**
  * Custom Autocomplete Component with Add Option.
  *
@@ -58,7 +64,7 @@ export default function AutocompleteAddOption<T extends BaseOption>({
   setValue,
   value,
   ...otherProps
-}: TPropsAutocompleteWithAddOption<T>) {
+}: TPropsAutocompleteAddOption<T>) {
   const filterOptions = createFilterOptions<T>();
 
   return (
