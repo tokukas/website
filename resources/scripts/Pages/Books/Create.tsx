@@ -1,6 +1,8 @@
-import AddPublisherDialog from '@/Components/AddPublisherDialog';
-import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
+import AutocompleteAddOption, {
+  TOption,
+} from '@/Components/AutocompleteAddOption';
 import FieldSection from '@/Components/FieldSection';
+import FormDialog from '@/Components/FormDialog';
 import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
 import { Category } from '@/Entities/Category';
@@ -34,6 +36,7 @@ type AddBookFields = Omit<Book,
 >;
 
 type PublisherOptionType = OptionalExceptFor<Publisher, 'name'>;
+type CategoryOptionType = OptionalExceptFor<Category, 'name'>;
 
 export default function AddBook({ publishers, categories }: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
@@ -52,11 +55,10 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
     post(route('books.store'));
   };
 
-  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
+  const [openDialog, setOpenDialog] = React.useState<
+    'publisher' | 'category' | null>(null);
 
-  const [
-    publisherValue, setPublisherValue,
-  ] = React.useState<PublisherOptionType | null>(null);
+  const [dialogValues, setDialogValue] = React.useState<TOption | null>(null);
 
   return (
     <>
@@ -116,7 +118,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             options={publishers as readonly PublisherOptionType[]}
             dataKey="id"
             labelKey="name"
-            value={publisherValue}
+            value={dialogValues}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -129,8 +131,8 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
               />
             )}
             setData={(key, value) => setData('publisher_id', value ?? '')}
-            setValue={setPublisherValue}
-            onSelectAddOption={() => setOpenDialog(true)}
+            setValue={setDialogValue}
+            onSelectAddOption={() => setOpenDialog('publisher')}
           />
 
           <DatePicker
@@ -255,11 +257,11 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
         </FieldSection>
 
         <FieldSection title="Additional Information">
-          <Autocomplete
-            id="category"
-            options={categories}
-            getOptionLabel={(option) => option.name}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+          <AutocompleteAddOption
+            options={categories as readonly CategoryOptionType[]}
+            dataKey="id"
+            labelKey="name"
+            value={dialogValues}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -271,9 +273,9 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 helperText={errors.category_id ?? 'What kind of book is this?'}
               />
             )}
-            onChange={(event, newValue) => {
-              setData('category_id', newValue?.id ?? '');
-            }}
+            setData={(key, value) => setData('category_id', value ?? '')}
+            setValue={setDialogValue}
+            onSelectAddOption={() => setOpenDialog('category')}
           />
 
           <TextField
@@ -309,14 +311,44 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
         </Box>
       </Box>
 
-      <AddPublisherDialog
-        open={openDialog}
+      <FormDialog
+        open={openDialog !== null}
+        method="post"
+        values={dialogValues}
+        submitButtonName="Add"
+        title="Add Publisher"
+        route={route('publishers.store')}
+        formFields={[{
+          name: 'name',
+          validationKey: 'slug',
+          label: 'Publisher Name',
+          required: true,
+          placeholder: 'e.g. "Oxford University Press"',
+        }]}
         onClose={() => {
-          setOpenDialog(false);
-          setPublisherValue(null);
-          setData('publisher_id', '');
+          setOpenDialog(null);
+          setDialogValue(null);
+          setData(openDialog === 'category'
+            ? 'category_id' : 'publisher_id', '');
         }}
-        values={publisherValue}
+        messageOnSuccess="Publisher successfully added"
+        description={`
+          Fill this form to add a new ${openDialog ?? 'publisher'}. 
+          Please don't add the ${openDialog ?? 'publisher'} that already exist.
+        `}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...(openDialog === 'category' && {
+          title: 'Add Category',
+          route: '/',
+          formFields: [{
+            name: 'name',
+            validationKey: 'name',
+            label: 'Category Name',
+            required: true,
+            placeholder: 'e.g. "Fiction"',
+          }],
+          messageOnSuccess: 'Category successfully added',
+        })}
       />
     </>
   );
