@@ -35,10 +35,6 @@ export type TPropsAutocompleteWithAddOption<T extends BaseOption> = RequiredFor<
    * Handle action to set the value.
    */
   setValue: (value: T | null) => void;
-  /**
-   * The value.
-   */
-  value: T | null;
 };
 
 /**
