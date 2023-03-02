@@ -1,4 +1,5 @@
 import AddPublisherDialog from '@/Components/AddPublisherDialog';
+import AutocompleteWithAddOption from '@/Components/AutoCompleteWithAddOption';
 import FieldSection from '@/Components/FieldSection';
 import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
@@ -10,7 +11,7 @@ import { OptionalExceptFor } from '@/Utils/Types';
 import { useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
 import HelpIcon from '@mui/icons-material/Help';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Button from '@mui/material/Button';
@@ -32,9 +33,7 @@ type AddBookFields = Omit<Book,
   'id' | 'created_at' | 'updated_at' | 'publisher'
 >;
 
-type PublisherOptionType = OptionalExceptFor<Publisher, 'name'> & {
-  inputValue?: string;
-}
+type PublisherOptionType = OptionalExceptFor<Publisher, 'name'>;
 
 export default function AddBook({ publishers, categories }: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
@@ -58,8 +57,6 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
   const [
     publisherValue, setPublisherValue,
   ] = React.useState<PublisherOptionType | null>(null);
-
-  const filterPublisherOptions = createFilterOptions<PublisherOptionType>();
 
   return (
     <>
@@ -115,57 +112,11 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             }}
           />
 
-          <Autocomplete
-            id="publisher"
-            value={publisherValue}
-            freeSolo
-            clearOnBlur
+          <AutocompleteWithAddOption
             options={publishers as readonly PublisherOptionType[]}
-            getOptionLabel={(option) => (typeof option === 'string'
-              ? option
-              : option.inputValue ?? option.name
-            )}
-            filterOptions={(options, state) => {
-              const filtered = filterPublisherOptions(options, state);
-              const findOption = options.find((opt) => (
-                opt.name.toUpperCase() === state.inputValue.trim().toUpperCase()
-              ));
-
-              if (state.inputValue && !findOption) {
-                filtered.push({
-                  inputValue: state.inputValue,
-                  name: `Add "${state.inputValue}"`,
-                });
-              }
-
-              return filtered;
-            }}
-            renderOption={(props, option) => (
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              <li {...props}>{option.name}</li>
-            )}
-            onChange={(event, newValue) => {
-              // e.g value selected with enter, right from the input
-              if (typeof newValue === 'string') {
-                const publisher = publishers.find((pub) => (
-                  pub.name.toUpperCase() === newValue.trim().toUpperCase()
-                ));
-
-                if (publisher) {
-                  setPublisherValue(publisher);
-                  setData('publisher_id', publisher.id);
-                } else {
-                  setPublisherValue({ name: newValue });
-                  setOpenDialog(true);
-                }
-              } else if (newValue && newValue.inputValue) {
-                setPublisherValue({ name: newValue.inputValue });
-                setOpenDialog(true);
-              } else {
-                setPublisherValue(newValue);
-                setData('publisher_id', newValue?.id ?? '');
-              }
-            }}
+            dataKey="id"
+            labelKey="name"
+            value={publisherValue}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -177,6 +128,9 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 helperText={errors.publisher_id ?? 'The publisher of the book'}
               />
             )}
+            setData={(value) => setData('publisher_id', value ?? '')}
+            setValue={setPublisherValue}
+            onSelectAddOption={() => setOpenDialog(true)}
           />
 
           <DatePicker
