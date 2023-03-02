@@ -11,6 +11,8 @@ export type TOption = Record<string, string> & {
 export type AutocompleteAddOptionBaseProps<Option extends TOption> = {
   /**
    * Determine which prop that used as the data.
+   *
+   * @default labelKey - Same as `labelKey` value.
    */
   dataKey?: keyof Omit<Option, 'inputValue'>;
   /**
@@ -24,7 +26,7 @@ export type AutocompleteAddOptionBaseProps<Option extends TOption> = {
   /**
    * Handle action to set the data.
    */
-  setData: (value: Option[keyof Option]) => void;
+  setData: (key: keyof Option, value: Option[keyof Option]) => void;
   /**
    * Handle action to set the value.
    */
@@ -65,6 +67,7 @@ export default function AutocompleteAddOption<Option extends TOption>({
   value,
   ...otherProps
 }: TPropsAutocompleteAddOption<Option>) {
+  const usedDataKey = dataKey ?? labelKey;
   const filterOptions = createFilterOptions<Option>();
 
   return (
@@ -108,7 +111,7 @@ export default function AutocompleteAddOption<Option extends TOption>({
           if (option) {
             event.preventDefault();
             setValue(option);
-            setData(option[dataKey ?? labelKey]);
+            setData(usedDataKey, option[usedDataKey]);
           } else {
             setValue({ [labelKey]: newValue } as Option);
             onSelectAddOption();
@@ -118,7 +121,7 @@ export default function AutocompleteAddOption<Option extends TOption>({
           onSelectAddOption();
         } else {
           setValue(newValue);
-          setData(newValue?.[dataKey ?? labelKey] as Option[keyof Option]);
+          setData(usedDataKey, newValue?.[usedDataKey] as Option[keyof Option]);
         }
       }}
     />

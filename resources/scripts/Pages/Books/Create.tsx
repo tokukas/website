@@ -128,7 +128,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 helperText={errors.publisher_id ?? 'The publisher of the book'}
               />
             )}
-            setData={(value) => setData('publisher_id', value ?? '')}
+            setData={(key, value) => setData('publisher_id', value ?? '')}
             setValue={setPublisherValue}
             onSelectAddOption={() => setOpenDialog(true)}
           />
