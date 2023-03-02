@@ -62,7 +62,7 @@ export type TPropsFormDialog<
   /**
    * Set the default value.
    */
-  values?: Field;
+  values?: Field | null;
 };
 
 /**

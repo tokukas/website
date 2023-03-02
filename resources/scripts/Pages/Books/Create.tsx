@@ -316,7 +316,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
           setPublisherValue(null);
           setData('publisher_id', '');
         }}
-        values={publisherValue ?? { name: '' }}
+        values={publisherValue}
       />
     </>
   );
