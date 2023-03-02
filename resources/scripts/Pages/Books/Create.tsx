@@ -339,7 +339,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...(openDialog === 'category' && {
           title: 'Add Category',
-          route: '/',
+          route: route('categories.store'),
           formFields: [{
             name: 'name',
             validationKey: 'name',

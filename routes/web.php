@@ -33,6 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('publishers', 'App\Http\Controllers\PublisherController')
             ->only(['store']);
+
+        Route::resource('categories', 'App\Http\Controllers\CategoryController')
+            ->only(['store']);
     });
 
     Route::get('/settings', fn () => Inertia::render('Settings'))
