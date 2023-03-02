@@ -102,6 +102,14 @@ export default function FormDialog<
   };
 
   React.useEffect(() => {
+    if (values) {
+      setData(values);
+    } else {
+      reset();
+    }
+  }, [values]);
+
+  React.useEffect(() => {
     if (wasSuccessful) {
       onSuccess?.();
       handleClose({}, 'backdropClick');
