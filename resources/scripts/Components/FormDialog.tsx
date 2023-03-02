@@ -11,11 +11,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import React from 'react';
 
-type TBaseField = Record<string, string | number>;
+export type TField = Record<string, string | number>;
 
-type TFormDialogFieldProps<
-  Field extends TBaseField
-> = TextFieldProps & {
+type TFormDialogFieldProps<Field extends TField> = TextFieldProps & {
   /**
    * The name of field.
    */
@@ -26,9 +24,9 @@ type TFormDialogFieldProps<
   validationKey?: keyof Field;
 };
 
-export type TPropsFormDialog<
-  Field extends TBaseField
-> = RequiredFor<DialogProps, 'onClose' | 'title'> & {
+export type TPropsFormDialog<Field extends TField> = RequiredFor<
+  DialogProps, 'onClose' | 'title'
+> & {
   /**
    * The description of form dialog.
    */
@@ -70,9 +68,7 @@ export type TPropsFormDialog<
  *
  * The props in inherit to [MUI DialogProps](https://mui.com/material-ui/api/dialog/#props).
  */
-export default function FormDialog<
-  Field extends TBaseField
->({
+export default function FormDialog<Field extends TField>({
   children,
   description,
   formFields,
