@@ -4,19 +4,19 @@ import Autocomplete, {
 } from '@mui/material/Autocomplete';
 import React from 'react';
 
-export type Option = Record<string, string> & {
+export type TOption = Record<string, string> & {
   inputValue?: string;
 };
 
-export type AutocompleteAddOptionBaseProps<T extends Option> = {
+export type AutocompleteAddOptionBaseProps<Option extends TOption> = {
   /**
    * Determine which prop that used as the data.
    */
-  dataKey?: keyof Omit<T, 'inputValue'>;
+  dataKey?: keyof Omit<Option, 'inputValue'>;
   /**
    * Determine which prop that used as the label.
    */
-  labelKey: keyof Omit<T, 'inputValue'>;
+  labelKey: keyof Omit<Option, 'inputValue'>;
   /**
    * Handle action when Add Option is selected.
    */
@@ -24,11 +24,11 @@ export type AutocompleteAddOptionBaseProps<T extends Option> = {
   /**
    * Handle action to set the data.
    */
-  setData: (value: T[keyof T]) => void;
+  setData: (value: Option[keyof Option]) => void;
   /**
    * Handle action to set the value.
    */
-  setValue: (value: T | null) => void;
+  setValue: (value: Option | null) => void;
 };
 
 export type FreeSoloAutocompleteProps<T> = Omit<
@@ -37,9 +37,9 @@ export type FreeSoloAutocompleteProps<T> = Omit<
 >;
 
 export type TPropsAutocompleteAddOption<
-  T extends Option
-> = AutocompleteAddOptionBaseProps<T> & RequiredFor<
-  FreeSoloAutocompleteProps<T>,
+  Option extends TOption
+> = AutocompleteAddOptionBaseProps<Option> & RequiredFor<
+  FreeSoloAutocompleteProps<Option>,
   'renderInput' | 'value'
 >;
 
@@ -55,7 +55,7 @@ export type TPropsAutocompleteAddOption<
  * - [MUI Docs](https://mui.com/material-ui/react-autocomplete/#creatable)
  * - [`FreeSoloCreateOptionDialog` in MUI GitHub](https://github.com/mui/material-ui/blob/v5.11.11/docs/data/material/components/autocomplete/FreeSoloCreateOptionDialog.tsx)
  */
-export default function AutocompleteAddOption<T extends Option>({
+export default function AutocompleteAddOption<Option extends TOption>({
   dataKey,
   labelKey,
   onSelectAddOption,
@@ -64,8 +64,8 @@ export default function AutocompleteAddOption<T extends Option>({
   setValue,
   value,
   ...otherProps
-}: TPropsAutocompleteAddOption<T>) {
-  const filterOptions = createFilterOptions<T>();
+}: TPropsAutocompleteAddOption<Option>) {
+  const filterOptions = createFilterOptions<Option>();
 
   return (
     <Autocomplete
@@ -89,7 +89,7 @@ export default function AutocompleteAddOption<T extends Option>({
           filtered.push({
             [labelKey]: `Add "${state.inputValue}"`,
             inputValue: state.inputValue,
-          } as T);
+          } as Option);
         }
 
         return filtered;
@@ -110,15 +110,15 @@ export default function AutocompleteAddOption<T extends Option>({
             setValue(option);
             setData(option[dataKey ?? labelKey]);
           } else {
-            setValue({ [labelKey]: newValue } as T);
+            setValue({ [labelKey]: newValue } as Option);
             onSelectAddOption();
           }
         } else if (newValue && newValue.inputValue) {
-          setValue({ [labelKey]: newValue.inputValue } as T);
+          setValue({ [labelKey]: newValue.inputValue } as Option);
           onSelectAddOption();
         } else {
           setValue(newValue);
-          setData(newValue?.[dataKey ?? labelKey] as T[keyof T]);
+          setData(newValue?.[dataKey ?? labelKey] as Option[keyof Option]);
         }
       }}
     />
