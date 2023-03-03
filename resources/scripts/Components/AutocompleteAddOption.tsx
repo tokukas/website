@@ -5,17 +5,40 @@ import Autocomplete, {
 import { CreateFilterOptionsConfig } from '@mui/material/useAutocomplete';
 import React from 'react';
 
-export type TOption = Record<string, string> & {
+/**
+ * The type of Autocomplete option.
+ * - `Option` is a object properties for the Option.
+ * - `Label` is a key that used as labelKey.
+ */
+export type TOption<
+  Option extends Record<string, string | undefined>,
+  Label extends keyof Option,
+> = Option & {
+  [key in Label]: string;
+} & {
   inputValue?: string;
 };
 
-export type AutocompleteAddOptionBaseProps<Option extends TOption> = {
+export type FreeSoloAutocompleteProps<
+  T, Multiple extends boolean | undefined
+> = Omit<AutocompleteProps<T, Multiple, false, true>,
+  'freeSolo' | 'disableClearable' | 'clearOnBlur'
+  | 'getOptionLabel' | 'filterOptions' | 'onChange'
+>;
+
+export type TPropsAutocompleteAddOption<
+  O extends Record<string, string | undefined>,
+  L extends keyof O,
+  Multiple extends boolean | undefined,
+> = RequiredFor<
+  FreeSoloAutocompleteProps<TOption<O, L>, Multiple>, 'value'
+> & {
   /**
    * Determine which prop that used as the data.
    *
    * @default labelKey - Same as `labelKey` value.
    */
-  dataKey?: keyof Omit<Option, 'inputValue'>;
+  dataKey?: keyof O;
   /**
    * The config to filter the options.
    *
@@ -33,37 +56,27 @@ export type AutocompleteAddOptionBaseProps<Option extends TOption> = {
    * }
    * ```
    */
-  filterConfig?: CreateFilterOptionsConfig<Option>;
+  filterConfig?: CreateFilterOptionsConfig<TOption<O, L>>;
   /**
    * Determine which prop that used as the label.
    */
-  labelKey: keyof Omit<Option, 'inputValue'>;
+  labelKey: L;
   /**
    * Handle action when Add Option is selected.
    */
   onSelectAddOption: () => void;
   /**
    * Handle action to set the data.
+   *
+   * @param key Equals to `dataKey` (or `labelKey`)
+   * @param value The data value.
    */
-  setData: (key: keyof Option, value: Option[keyof Option]) => void;
+  setData: <K extends keyof O | L>(key: K, value: O[K]) => void;
   /**
    * Handle action to set the value.
    */
-  setValue: (value: Option | null) => void;
+  setValue: <Option extends TOption<O, L>>(value: Option | null) => void;
 };
-
-export type FreeSoloAutocompleteProps<T> = Omit<
-  AutocompleteProps<T, false, false, true>,
-  'freeSolo' | 'multiple' | 'disableClearable' | 'clearOnBlur'
-  | 'filterOptions' | 'getOptionLabel' | 'renderOption' | 'onChange'
->;
-
-export type TPropsAutocompleteAddOption<
-  Option extends TOption
-> = AutocompleteAddOptionBaseProps<Option> & RequiredFor<
-  FreeSoloAutocompleteProps<Option>,
-  'renderInput' | 'value'
->;
 
 /**
  * Custom Autocomplete Component with Add Option.
@@ -77,7 +90,11 @@ export type TPropsAutocompleteAddOption<
  * - [MUI Docs](https://mui.com/material-ui/react-autocomplete/#creatable)
  * - [`FreeSoloCreateOptionDialog` in MUI GitHub](https://github.com/mui/material-ui/blob/v5.11.11/docs/data/material/components/autocomplete/FreeSoloCreateOptionDialog.tsx)
  */
-export default function AutocompleteAddOption<Option extends TOption>({
+export default function AutocompleteAddOption<
+  T extends Record<string, string | undefined>,
+  K extends keyof T,
+  Multiple extends boolean | undefined = false,
+>({
   dataKey,
   filterConfig,
   labelKey,
@@ -85,12 +102,15 @@ export default function AutocompleteAddOption<Option extends TOption>({
   options,
   setData,
   setValue,
+  renderOption,
   value,
   ...otherProps
-}: TPropsAutocompleteAddOption<Option>) {
+}: TPropsAutocompleteAddOption<T, K, Multiple>) {
+  type Option = TOption<T, K>;
+
   const usedDataKey = dataKey ?? labelKey;
 
-  const filterOptions = createFilterOptions<Option>(filterConfig);
+  const filterOptions = createFilterOptions(filterConfig);
 
   const matchOptionWithInput = (option: Option, input: string) => {
     let o: string = option[labelKey];
@@ -107,6 +127,35 @@ export default function AutocompleteAddOption<Option extends TOption>({
     }
 
     return o === i;
+  };
+
+  const handleOnChangeValueString = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: string,
+  ) => {
+    const option = options.find((opt) => matchOptionWithInput(opt, newValue));
+
+    if (option) {
+      event.preventDefault();
+      setValue(option);
+      setData(usedDataKey, option[usedDataKey]);
+    } else {
+      setValue({ [labelKey]: newValue } as Option);
+      onSelectAddOption();
+    }
+  };
+
+  const handleOnChangeValueObject = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: Option,
+  ) => {
+    if (newValue.inputValue) {
+      setValue({ [labelKey]: newValue.inputValue } as Option);
+      onSelectAddOption();
+    } else {
+      setValue(newValue);
+      setData(usedDataKey, newValue[usedDataKey]);
+    }
   };
 
   return (
@@ -136,31 +185,24 @@ export default function AutocompleteAddOption<Option extends TOption>({
 
         return filtered;
       }}
-      renderOption={(props, option) => (
+      renderOption={renderOption ?? ((props, option) => (
         // eslint-disable-next-line react/jsx-props-no-spreading
         <li {...props}>{option[labelKey]}</li>
-      )}
+      ))}
       onChange={(event, newValue) => {
-        // e.g value selected with enter, right from the input
-        if (typeof newValue === 'string') {
-          const option = options.find((opt) => (
-            matchOptionWithInput(opt, newValue)
-          ));
-
-          if (option) {
-            event.preventDefault();
-            setValue(option);
-            setData(usedDataKey, option[usedDataKey]);
-          } else {
-            setValue({ [labelKey]: newValue } as Option);
-            onSelectAddOption();
-          }
-        } else if (newValue && newValue.inputValue) {
-          setValue({ [labelKey]: newValue.inputValue } as Option);
-          onSelectAddOption();
+        if (Array.isArray(newValue)) {
+          // When the `Multiple` is `true`, `newValue` will be an array.
+          // TODO: handle this
+        } else if (typeof newValue === 'string') {
+          // If value selected with enter, `newValue` will be a string.
+          handleOnChangeValueString(event, newValue);
+        } else if (!newValue) {
+          // When the value is cleared, `newValue` will be `null`.
+          setValue(null);
+          setData(usedDataKey, '' as T[keyof T]);
         } else {
-          setValue(newValue);
-          setData(usedDataKey, newValue?.[usedDataKey] as Option[keyof Option]);
+          // If value is selected for option, `newValue` will be an object.
+          handleOnChangeValueObject(event, newValue as Option);
         }
       }}
     />
