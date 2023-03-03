@@ -2,6 +2,7 @@ import { RequiredFor } from '@/Utils/Types';
 import Autocomplete, {
   AutocompleteProps, createFilterOptions,
 } from '@mui/material/Autocomplete';
+import { CreateFilterOptionsConfig } from '@mui/material/useAutocomplete';
 import React from 'react';
 
 export type TOption = Record<string, string> & {
@@ -15,6 +16,24 @@ export type AutocompleteAddOptionBaseProps<Option extends TOption> = {
    * @default labelKey - Same as `labelKey` value.
    */
   dataKey?: keyof Omit<Option, 'inputValue'>;
+  /**
+   * The config to filter the options.
+   *
+   * The default values is follows the values defined in the [docs](https://mui.com/material-ui/react-autocomplete/#custom-filter),
+   * except for `config.trim` is changed to `true`.
+   *
+   * @default
+   * ```
+   * {
+   *   ignoreAccents: true,
+   *   ignoreCase: true,
+   *   limit: null,
+   *   matchFrom: 'any',
+   *   trim: true,
+   * }
+   * ```
+   */
+  filterConfig?: CreateFilterOptionsConfig<Option>;
   /**
    * Determine which prop that used as the label.
    */
@@ -59,6 +78,7 @@ export type TPropsAutocompleteAddOption<
  */
 export default function AutocompleteAddOption<Option extends TOption>({
   dataKey,
+  filterConfig,
   labelKey,
   onSelectAddOption,
   options,
@@ -68,7 +88,25 @@ export default function AutocompleteAddOption<Option extends TOption>({
   ...otherProps
 }: TPropsAutocompleteAddOption<Option>) {
   const usedDataKey = dataKey ?? labelKey;
-  const filterOptions = createFilterOptions<Option>();
+
+  const filterOptions = createFilterOptions<Option>(filterConfig);
+
+  const matchOptionWithInput = (option: Option, input: string) => {
+    let o: string = option[labelKey];
+    let i: string = input;
+
+    if (filterConfig?.trim ?? true) {
+      o = o.trim();
+      i = i.trim();
+    }
+
+    if (filterConfig?.ignoreCase ?? true) {
+      o = o.toLowerCase();
+      i = i.toLowerCase();
+    }
+
+    return o === i;
+  };
 
   return (
     <Autocomplete
@@ -85,7 +123,7 @@ export default function AutocompleteAddOption<Option extends TOption>({
       filterOptions={(opts, state) => {
         const filtered = filterOptions(opts, state);
         const findOption = opts.find((opt) => (
-          opt[labelKey].toUpperCase() === state.inputValue.trim().toUpperCase()
+          matchOptionWithInput(opt, state.inputValue)
         ));
 
         if (state.inputValue && !findOption) {
@@ -105,7 +143,7 @@ export default function AutocompleteAddOption<Option extends TOption>({
         // e.g value selected with enter, right from the input
         if (typeof newValue === 'string') {
           const option = options.find((opt) => (
-            opt[labelKey].toUpperCase() === newValue.trim().toUpperCase()
+            matchOptionWithInput(opt, newValue)
           ));
 
           if (option) {
@@ -130,4 +168,11 @@ export default function AutocompleteAddOption<Option extends TOption>({
 
 AutocompleteAddOption.defaultProps = {
   dataKey: undefined,
+  filterConfig: {
+    ignoreAccents: true,
+    ignoreCase: true,
+    limit: null,
+    matchFrom: 'any',
+    trim: true,
+  },
 };
