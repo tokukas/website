@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Book;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,5 +30,20 @@ class BookFactory extends Factory
             'isbn' => fake()->optional()->isbn13(),
             'description' => fake()->optional()->paragraph(fake()->numberBetween(0, 2)),
         ];
+    }
+    /**
+     * Configure the model factory.
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Book $book) {
+            // Add random authors for each book.
+            $book->authors()->attach(
+                fake()->randomElements(
+                    \App\Models\Author::pluck('id')->toArray(),
+                    fake()->numberBetween(0, 3),
+                ),
+            );
+        });
     }
 }

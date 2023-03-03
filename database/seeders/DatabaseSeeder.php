@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
         // Call another seeders.
         $this->seedPublishers();
         $this->seedCategories();
-        $this->seedBooks();
         $this->seedAuthors();
+        $this->seedBooks();
     }
 
     /**
