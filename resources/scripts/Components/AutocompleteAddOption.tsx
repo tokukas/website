@@ -55,6 +55,7 @@ export type AutocompleteAddOptionBaseProps<Option extends TOption> = {
 export type FreeSoloAutocompleteProps<T> = Omit<
   AutocompleteProps<T, false, false, true>,
   'freeSolo' | 'multiple' | 'disableClearable' | 'clearOnBlur'
+  | 'filterOptions' | 'getOptionLabel' | 'renderOption' | 'onChange'
 >;
 
 export type TPropsAutocompleteAddOption<
