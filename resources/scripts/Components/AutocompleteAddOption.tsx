@@ -29,16 +29,15 @@ export type FreeSoloAutocompleteProps<
 export type TPropsAutocompleteAddOption<
   O extends Record<string, unknown>,
   L extends keyof O,
+  DataKey extends keyof O = L,
   Multiple extends boolean | undefined = false,
 > = RequiredFor<
   FreeSoloAutocompleteProps<TOption<O, L>, Multiple>, 'value'
 > & {
   /**
    * Determine which prop that used as the data.
-   *
-   * @default labelKey - Same as `labelKey` value.
    */
-  dataKey?: keyof O;
+  dataKey?: DataKey;
   /**
    * The config to filter the options.
    *
@@ -67,11 +66,11 @@ export type TPropsAutocompleteAddOption<
   onSelectAddOption: () => void;
   /**
    * Handle action to set the data.
-   *
-   * @param key Equals to `dataKey` (or `labelKey`)
-   * @param value The data value.
    */
-  setData: <K extends keyof O | L>(key: K, value: O[K]) => void;
+  setData: (
+    key: DataKey | L,
+    value: TOption<O, L>[DataKey | L]
+  ) => void;
   /**
    * Handle action to set the value.
    */
@@ -93,6 +92,7 @@ export type TPropsAutocompleteAddOption<
 export default function AutocompleteAddOption<
   T extends Record<string, unknown>,
   K extends keyof T,
+  DataKey extends keyof T = K,
   Multiple extends boolean | undefined = false,
 >({
   dataKey,
@@ -105,7 +105,7 @@ export default function AutocompleteAddOption<
   renderOption,
   value,
   ...otherProps
-}: TPropsAutocompleteAddOption<T, K, Multiple>) {
+}: TPropsAutocompleteAddOption<T, K, DataKey, Multiple>) {
   type Option = TOption<T, K>;
 
   const usedDataKey = dataKey ?? labelKey;
@@ -138,7 +138,7 @@ export default function AutocompleteAddOption<
     if (option) {
       event.preventDefault();
       setValue(option);
-      setData(usedDataKey, option[usedDataKey] as T[keyof T]);
+      setData(usedDataKey, option[usedDataKey]);
     } else {
       setValue({ [labelKey]: newValue } as Option);
       onSelectAddOption();
@@ -154,7 +154,7 @@ export default function AutocompleteAddOption<
       onSelectAddOption();
     } else {
       setValue(newValue);
-      setData(usedDataKey, newValue[usedDataKey] as T[keyof T]);
+      setData(usedDataKey, newValue[usedDataKey]);
     }
   };
 
@@ -196,10 +196,10 @@ export default function AutocompleteAddOption<
         } else if (typeof newValue === 'string') {
           // If value selected with enter, `newValue` will be a string.
           handleOnChangeValueString(event, newValue);
-        } else if (!newValue) {
+        } else if (newValue === null) {
           // When the value is cleared, `newValue` will be `null`.
           setValue(null);
-          setData(usedDataKey, '' as T[keyof T]);
+          setData(usedDataKey, {} as Option[DataKey | K]);
         } else {
           // If value is selected for option, `newValue` will be an object.
           handleOnChangeValueObject(event, newValue as Option);
