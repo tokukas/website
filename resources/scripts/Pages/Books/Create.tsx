@@ -4,6 +4,7 @@ import AutocompleteAddOption, {
 import FieldSection from '@/Components/FieldSection';
 import FormDialog from '@/Components/FormDialog';
 import Link from '@/Components/Link';
+import { Author } from '@/Entities/Author';
 import { Book } from '@/Entities/Book';
 import { Category } from '@/Entities/Category';
 import { Publisher } from '@/Entities/Publisher';
@@ -26,18 +27,27 @@ import React from 'react';
 import route from 'ziggy-js';
 
 export type TPropsAddBook = {
-  publishers: readonly Publisher[];
+  authors: readonly Author[];
   categories: readonly Category[];
+  publishers: readonly Publisher[];
 }
 
 type AddBookFields = Omit<Book,
   'id' | 'created_at' | 'updated_at' | 'publisher'
->;
+> & {
+  // TODO: change to array!
+  author_ids: string;
+};
 
-type PublisherOptionType = TOption<Publisher, 'name'>;
+type AuthorOptionType = TOption<Author, 'name'>;
 type CategoryOptionType = TOption<Category, 'name'>;
+type PublisherOptionType = TOption<Publisher, 'name'>;
 
-export default function AddBook({ publishers, categories }: TPropsAddBook) {
+export default function AddBook({
+  authors,
+  categories,
+  publishers,
+}: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
 
   const { post, setData, errors } = useForm<AddBookFields>();
@@ -55,13 +65,24 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
   };
 
   const [optionDialog, setOptionDialog] = React.useState<
-    'publisher' | 'category' | null>(null);
+    'publisher' | 'category' | 'author' | null>(null);
 
   const [publisherValue, setPublisherValue] = React.useState<
     PublisherOptionType | null>(null);
 
   const [categoryValue, setCategoryValue] = React.useState<
     CategoryOptionType | null>(null);
+
+  const [authorValues, setAuthorValues] = React.useState<
+    AuthorOptionType | null>(null);
+
+  const authorDialogValues = React.useMemo(() => {
+    if (authorValues === null) {
+      return null;
+    }
+    const { books, ...values } = authorValues;
+    return values;
+  }, [authorValues]);
 
   return (
     <>
@@ -169,6 +190,28 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             helperText={errors.isbn ?? 'International Standard Book Number'}
             onChange={handleInputChange}
           />
+
+          <AutocompleteAddOption
+            options={authors as readonly AuthorOptionType[]}
+            dataKey="id"
+            labelKey="name"
+            value={authorValues}
+            renderInput={(params) => (
+              <TextField
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...params}
+                label="Authors"
+                name="authors"
+                placeholder="Select authors"
+                error={Boolean(errors.author_ids)}
+                helperText={errors.author_ids ?? 'The authors of the book'}
+              />
+            )}
+            setData={(key, value) => setData('author_ids', value ?? '')}
+            setValue={setAuthorValues}
+            onSelectAddOption={() => setOptionDialog('author')}
+          />
+
         </FieldSection>
 
         <FieldSection title="Physical Information">
@@ -362,6 +405,31 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
           messageOnSuccess="Category successfully added"
           description="Fill this form to add a new category.
             Please don't add the category that already exist."
+        />
+      )}
+
+      {optionDialog === 'author' && (
+        <FormDialog
+          open
+          title="Add Author"
+          values={authorDialogValues}
+          method="post"
+          route=""
+          formFields={[{
+            name: 'name',
+            label: 'Author Name',
+            required: true,
+            placeholder: 'e.g. "John Doe"',
+          }]}
+          onClose={() => {
+            setOptionDialog(null);
+            setAuthorValues(null);
+            setData('author_ids', '');
+          }}
+          submitButtonName="Add"
+          messageOnSuccess="Author successfully added"
+          description="Fill this form to add a new author.
+            Please don't add the author that already exist."
         />
       )}
     </>
