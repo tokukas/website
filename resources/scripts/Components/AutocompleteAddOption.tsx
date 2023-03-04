@@ -1,4 +1,4 @@
-import { RequiredFor } from '@/Utils/Types';
+import { OptionalExceptFor, RequiredFor } from '@/Utils/Types';
 import Autocomplete, {
   AutocompleteProps, createFilterOptions,
 } from '@mui/material/Autocomplete';
@@ -13,7 +13,7 @@ import React from 'react';
 export type TOption<
   Option extends Record<string, unknown>,
   Label extends keyof Option,
-> = Option & {
+> = OptionalExceptFor<Option, Label> & {
   [key in Label]: string;
 } & {
   inputValue?: string;
@@ -75,7 +75,7 @@ export type TPropsAutocompleteAddOption<
   /**
    * Handle action to set the value.
    */
-  setValue: <Option extends TOption<O, L>>(value: Option | null) => void;
+  setValue: (value: TOption<O, L> | null) => void;
 };
 
 /**
@@ -138,7 +138,7 @@ export default function AutocompleteAddOption<
     if (option) {
       event.preventDefault();
       setValue(option);
-      setData(usedDataKey, option[usedDataKey]);
+      setData(usedDataKey, option[usedDataKey] as T[keyof T]);
     } else {
       setValue({ [labelKey]: newValue } as Option);
       onSelectAddOption();
@@ -154,7 +154,7 @@ export default function AutocompleteAddOption<
       onSelectAddOption();
     } else {
       setValue(newValue);
-      setData(usedDataKey, newValue[usedDataKey]);
+      setData(usedDataKey, newValue[usedDataKey] as T[keyof T]);
     }
   };
 

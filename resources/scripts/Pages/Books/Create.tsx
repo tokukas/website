@@ -1,4 +1,6 @@
-import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
+import AutocompleteAddOption, {
+  TOption,
+} from '@/Components/AutocompleteAddOption';
 import FieldSection from '@/Components/FieldSection';
 import FormDialog from '@/Components/FormDialog';
 import Link from '@/Components/Link';
@@ -7,7 +9,6 @@ import { Category } from '@/Entities/Category';
 import { Publisher } from '@/Entities/Publisher';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import Language from '@/Utils/Language';
-import { OptionalExceptFor } from '@/Utils/Types';
 import { useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
 import HelpIcon from '@mui/icons-material/Help';
@@ -33,8 +34,8 @@ type AddBookFields = Omit<Book,
   'id' | 'created_at' | 'updated_at' | 'publisher'
 >;
 
-type PublisherOptionType = OptionalExceptFor<Publisher, 'name'>;
-type CategoryOptionType = OptionalExceptFor<Category, 'name'>;
+type PublisherOptionType = TOption<Publisher, 'name'>;
+type CategoryOptionType = TOption<Category, 'name'>;
 
 export default function AddBook({ publishers, categories }: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
