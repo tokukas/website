@@ -11,7 +11,7 @@ import React from 'react';
  * - `Label` is a key that used as labelKey.
  */
 export type TOption<
-  Option extends Record<string, string | undefined>,
+  Option extends Record<string, unknown>,
   Label extends keyof Option,
 > = Option & {
   [key in Label]: string;
