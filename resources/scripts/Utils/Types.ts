@@ -10,4 +10,4 @@ export type OptionalExceptFor<
  */
 export type RequiredFor<
   T, K extends keyof T
-> = Omit<T, K> & Record<K, Exclude<T[K], undefined>>;
+> = Omit<T, K> & Required<Pick<T, K>>;
