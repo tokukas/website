@@ -1,6 +1,6 @@
 import { Publisher } from './Publisher';
 
-export interface Book {
+export type Book = {
   id: string;
   title: string;
   publisher_id: string;

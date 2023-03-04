@@ -1,4 +1,4 @@
-export interface Publisher {
+export type Publisher = {
   id: string;
   name: string;
   slug: string;
