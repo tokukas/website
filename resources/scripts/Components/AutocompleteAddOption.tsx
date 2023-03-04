@@ -20,16 +20,16 @@ export type TOption<
 };
 
 export type FreeSoloAutocompleteProps<
-  T, Multiple extends boolean | undefined
+  T, Multiple extends boolean | undefined = false
 > = Omit<AutocompleteProps<T, Multiple, false, true>,
   'freeSolo' | 'disableClearable' | 'clearOnBlur'
   | 'getOptionLabel' | 'filterOptions' | 'onChange'
 >;
 
 export type TPropsAutocompleteAddOption<
-  O extends Record<string, string | undefined>,
+  O extends Record<string, unknown>,
   L extends keyof O,
-  Multiple extends boolean | undefined,
+  Multiple extends boolean | undefined = false,
 > = RequiredFor<
   FreeSoloAutocompleteProps<TOption<O, L>, Multiple>, 'value'
 > & {
@@ -91,7 +91,7 @@ export type TPropsAutocompleteAddOption<
  * - [`FreeSoloCreateOptionDialog` in MUI GitHub](https://github.com/mui/material-ui/blob/v5.11.11/docs/data/material/components/autocomplete/FreeSoloCreateOptionDialog.tsx)
  */
 export default function AutocompleteAddOption<
-  T extends Record<string, string | undefined>,
+  T extends Record<string, unknown>,
   K extends keyof T,
   Multiple extends boolean | undefined = false,
 >({
