@@ -1,8 +1,10 @@
-import { OptionalExceptFor, RequiredFor } from '@/Utils/Types';
+import { RequiredFor } from '@/Utils/Types';
 import Autocomplete, {
   AutocompleteProps, createFilterOptions,
 } from '@mui/material/Autocomplete';
-import { CreateFilterOptionsConfig } from '@mui/material/useAutocomplete';
+import {
+  AutocompleteValue, CreateFilterOptionsConfig,
+} from '@mui/material/useAutocomplete';
 import React from 'react';
 
 /**
@@ -13,7 +15,7 @@ import React from 'react';
 export type TOption<
   Option extends Record<string, unknown>,
   Label extends keyof Option,
-> = OptionalExceptFor<Option, Label> & {
+> = Option & {
   [key in Label]: string;
 } & {
   inputValue?: string;
@@ -25,6 +27,16 @@ export type FreeSoloAutocompleteProps<
   'freeSolo' | 'disableClearable' | 'clearOnBlur'
   | 'getOptionLabel' | 'filterOptions' | 'onChange'
 >;
+
+type FreeSoloAutocompleteValue<
+  T, Multiple extends boolean | undefined = false
+> = AutocompleteValue<T, Multiple, false, true>;
+
+type FreeSoloAutocompleteData<
+  T,
+  K extends keyof T,
+  Multiple extends boolean | undefined = false
+> = Multiple extends true ? Array<T[K]> : T[K];
 
 export type TPropsAutocompleteAddOption<
   O extends Record<string, unknown>,
@@ -69,12 +81,13 @@ export type TPropsAutocompleteAddOption<
    */
   setData: (
     key: DataKey | L,
-    value: TOption<O, L>[DataKey | L]
+    data: FreeSoloAutocompleteData<TOption<O, L>, DataKey | L, Multiple>
   ) => void;
   /**
    * Handle action to set the value.
    */
-  setValue: (value: TOption<O, L> | null) => void;
+  setValue: (value: FreeSoloAutocompleteValue<
+    TOption<O, L>, Multiple>) => void;
 };
 
 /**
@@ -107,6 +120,8 @@ export default function AutocompleteAddOption<
   ...otherProps
 }: TPropsAutocompleteAddOption<T, K, DataKey, Multiple>) {
   type Option = TOption<T, K>;
+  type Value = FreeSoloAutocompleteValue<Option, Multiple>;
+  type Data = FreeSoloAutocompleteData<Option, DataKey | K, Multiple>;
 
   const usedDataKey = dataKey ?? labelKey;
 
@@ -137,10 +152,10 @@ export default function AutocompleteAddOption<
 
     if (option) {
       event.preventDefault();
-      setValue(option);
-      setData(usedDataKey, option[usedDataKey]);
+      setValue(option as Value);
+      setData(usedDataKey, option[usedDataKey] as Data);
     } else {
-      setValue({ [labelKey]: newValue } as Option);
+      setValue({ [labelKey]: newValue } as Value);
       onSelectAddOption();
     }
   };
@@ -150,11 +165,11 @@ export default function AutocompleteAddOption<
     newValue: Option,
   ) => {
     if (newValue.inputValue) {
-      setValue({ [labelKey]: newValue.inputValue } as Option);
+      setValue({ [labelKey]: newValue.inputValue } as Value);
       onSelectAddOption();
     } else {
-      setValue(newValue);
-      setData(usedDataKey, newValue[usedDataKey]);
+      setValue(newValue as Value);
+      setData(usedDataKey, newValue[usedDataKey] as Data);
     }
   };
 
@@ -198,8 +213,8 @@ export default function AutocompleteAddOption<
           handleOnChangeValueString(event, newValue);
         } else if (newValue === null) {
           // When the value is cleared, `newValue` will be `null`.
-          setValue(null);
-          setData(usedDataKey, {} as Option[DataKey | K]);
+          setValue(null as Value);
+          setData(usedDataKey, {} as Data);
         } else {
           // If value is selected for option, `newValue` will be an object.
           handleOnChangeValueObject(event, newValue as Option);

@@ -155,7 +155,9 @@ export default function AddBook({
               />
             )}
             setData={(key, value) => setData('publisher_id', value ?? '')}
-            setValue={setPublisherValue}
+            setValue={(value) => setPublisherValue(
+              typeof value !== 'string' ? value : null,
+            )}
             onSelectAddOption={() => setOptionDialog('publisher')}
           />
 
@@ -208,7 +210,9 @@ export default function AddBook({
               />
             )}
             setData={(key, value) => setData('author_ids', value ?? '')}
-            setValue={setAuthorValues}
+            setValue={(value) => setAuthorValues(
+              typeof value !== 'string' ? value : null,
+            )}
             onSelectAddOption={() => setOptionDialog('author')}
           />
 
@@ -320,7 +324,9 @@ export default function AddBook({
               />
             )}
             setData={(key, value) => setData('category_id', value ?? '')}
-            setValue={setCategoryValue}
+            setValue={(value) => setCategoryValue(
+              typeof value !== 'string' ? value : null,
+            )}
             onSelectAddOption={() => setOptionDialog('category')}
           />
 
