@@ -35,8 +35,7 @@ export type TPropsAddBook = {
 type AddBookFields = Omit<Book,
   'id' | 'created_at' | 'updated_at' | 'publisher'
 > & {
-  // TODO: change to array!
-  author_ids: string;
+  author_ids: string[];
 };
 
 type AuthorOptionType = TOption<Author, 'name'>;
@@ -74,15 +73,16 @@ export default function AddBook({
     CategoryOptionType | null>(null);
 
   const [authorValues, setAuthorValues] = React.useState<
-    AuthorOptionType | null>(null);
+    AuthorOptionType[]>([]);
 
-  const authorDialogValues = React.useMemo(() => {
-    if (authorValues === null) {
-      return null;
-    }
-    const { books, ...values } = authorValues;
-    return values;
-  }, [authorValues]);
+  const [categoryDialogValue, setCategoryDialogValue] = React.useState<
+    Pick<Category, 'name'> | null>(null);
+
+  const [publisherDialogValue, setPublisherDialogValue] = React.useState<
+    Pick<Partial<Publisher>, 'name' | 'slug'> | null>(null);
+
+  const [authorDialogValue, setAuthorDialogValue] = React.useState<
+    Pick<Author, 'name'> | null>(null);
 
   return (
     <>
@@ -158,7 +158,10 @@ export default function AddBook({
             setValue={(value) => setPublisherValue(
               typeof value !== 'string' ? value : null,
             )}
-            onSelectAddOption={() => setOptionDialog('publisher')}
+            onSelectAddOption={(inputValue) => {
+              setOptionDialog('publisher');
+              setPublisherDialogValue({ name: inputValue });
+            }}
           />
 
           <DatePicker
@@ -194,6 +197,7 @@ export default function AddBook({
           />
 
           <AutocompleteAddOption
+            multiple
             options={authors as readonly AuthorOptionType[]}
             dataKey="id"
             labelKey="name"
@@ -209,11 +213,16 @@ export default function AddBook({
                 helperText={errors.author_ids ?? 'The authors of the book'}
               />
             )}
-            setData={(value) => setData('author_ids', value ?? '')}
-            setValue={(value) => setAuthorValues(
-              typeof value !== 'string' ? value : null,
-            )}
-            onSelectAddOption={() => setOptionDialog('author')}
+            setData={(values) => setData('author_ids', values)}
+            setValue={(values) => {
+              setAuthorValues(values.filter((v): v is AuthorOptionType => (
+                typeof v !== 'string' && v !== null
+              )));
+            }}
+            onSelectAddOption={(inputValue) => {
+              setOptionDialog('author');
+              setAuthorDialogValue({ name: inputValue });
+            }}
           />
 
         </FieldSection>
@@ -327,7 +336,10 @@ export default function AddBook({
             setValue={(value) => setCategoryValue(
               typeof value !== 'string' ? value : null,
             )}
-            onSelectAddOption={() => setOptionDialog('category')}
+            onSelectAddOption={(inputValue) => {
+              setOptionDialog('category');
+              setCategoryDialogValue({ name: inputValue });
+            }}
           />
 
           <TextField
@@ -367,7 +379,7 @@ export default function AddBook({
         <FormDialog
           open
           title="Add Publisher"
-          values={publisherValue}
+          values={publisherDialogValue}
           method="post"
           route={route('publishers.store')}
           formFields={[{
@@ -379,7 +391,7 @@ export default function AddBook({
           }]}
           onClose={() => {
             setOptionDialog(null);
-            setPublisherValue(null);
+            setPublisherDialogValue(null);
             setData('publisher_id', '');
           }}
           submitButtonName="Add"
@@ -393,7 +405,7 @@ export default function AddBook({
         <FormDialog
           open
           title="Add Category"
-          values={categoryValue}
+          values={categoryDialogValue}
           method="post"
           route={route('categories.store')}
           formFields={[{
@@ -404,7 +416,7 @@ export default function AddBook({
           }]}
           onClose={() => {
             setOptionDialog(null);
-            setCategoryValue(null);
+            setCategoryDialogValue(null);
             setData('category_id', '');
           }}
           submitButtonName="Add"
@@ -418,7 +430,7 @@ export default function AddBook({
         <FormDialog
           open
           title="Add Author"
-          values={authorDialogValues}
+          values={authorDialogValue}
           method="post"
           route=""
           formFields={[{
@@ -429,8 +441,7 @@ export default function AddBook({
           }]}
           onClose={() => {
             setOptionDialog(null);
-            setAuthorValues(null);
-            setData('author_ids', '');
+            setAuthorDialogValue(null);
           }}
           submitButtonName="Add"
           messageOnSuccess="Author successfully added"
