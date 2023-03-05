@@ -154,7 +154,7 @@ export default function AddBook({
                 helperText={errors.publisher_id ?? 'The publisher of the book'}
               />
             )}
-            setData={(key, value) => setData('publisher_id', value ?? '')}
+            setData={(value) => setData('publisher_id', value ?? '')}
             setValue={(value) => setPublisherValue(
               typeof value !== 'string' ? value : null,
             )}
@@ -209,7 +209,7 @@ export default function AddBook({
                 helperText={errors.author_ids ?? 'The authors of the book'}
               />
             )}
-            setData={(key, value) => setData('author_ids', value ?? '')}
+            setData={(value) => setData('author_ids', value ?? '')}
             setValue={(value) => setAuthorValues(
               typeof value !== 'string' ? value : null,
             )}
@@ -323,7 +323,7 @@ export default function AddBook({
                 helperText={errors.category_id ?? 'What kind of book is this?'}
               />
             )}
-            setData={(key, value) => setData('category_id', value ?? '')}
+            setData={(value) => setData('category_id', value ?? '')}
             setValue={(value) => setCategoryValue(
               typeof value !== 'string' ? value : null,
             )}

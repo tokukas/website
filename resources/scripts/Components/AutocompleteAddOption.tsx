@@ -75,12 +75,12 @@ export type TPropsAutocompleteAddOption<
   /**
    * Handle action when Add Option is selected.
    */
-  onSelectAddOption: () => void;
+  onSelectAddOption: (value: FreeSoloAutocompleteValue<
+    TOption<O, L>, Multiple>) => void;
   /**
    * Handle action to set the data.
    */
   setData: (
-    key: DataKey | L,
     data: FreeSoloAutocompleteData<TOption<O, L>, DataKey | L, Multiple>
   ) => void;
   /**
@@ -111,6 +111,7 @@ export default function AutocompleteAddOption<
   dataKey,
   filterConfig,
   labelKey,
+  multiple,
   onSelectAddOption,
   options,
   setData,
@@ -144,41 +145,13 @@ export default function AutocompleteAddOption<
     return o === i;
   };
 
-  const handleOnChangeValueString = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: string,
-  ) => {
-    const option = options.find((opt) => matchOptionWithInput(opt, newValue));
-
-    if (option) {
-      event.preventDefault();
-      setValue(option as Value);
-      setData(usedDataKey, option[usedDataKey] as Data);
-    } else {
-      setValue({ [labelKey]: newValue } as Value);
-      onSelectAddOption();
-    }
-  };
-
-  const handleOnChangeValueObject = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: Option,
-  ) => {
-    if (newValue.inputValue) {
-      setValue({ [labelKey]: newValue.inputValue } as Value);
-      onSelectAddOption();
-    } else {
-      setValue(newValue as Value);
-      setData(usedDataKey, newValue[usedDataKey] as Data);
-    }
-  };
-
   return (
     <Autocomplete
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...otherProps}
       freeSolo
       clearOnBlur
+      multiple={multiple}
       value={value}
       options={options}
       getOptionLabel={(option) => (typeof option === 'string'
@@ -204,20 +177,78 @@ export default function AutocompleteAddOption<
         // eslint-disable-next-line react/jsx-props-no-spreading
         <li {...props}>{option[labelKey]}</li>
       ))}
-      onChange={(event, newValue) => {
-        if (Array.isArray(newValue)) {
-          // When the `Multiple` is `true`, `newValue` will be an array.
-          // TODO: handle this
-        } else if (typeof newValue === 'string') {
-          // If value selected with enter, `newValue` will be a string.
-          handleOnChangeValueString(event, newValue);
-        } else if (newValue === null) {
-          // When the value is cleared, `newValue` will be `null`.
-          setValue(null as Value);
-          setData(usedDataKey, {} as Data);
-        } else {
-          // If value is selected for option, `newValue` will be an object.
-          handleOnChangeValueObject(event, newValue as Option);
+      onChange={(event, newValue, reason, details) => {
+        if (reason === 'clear') {
+          setValue(multiple
+            ? [] as unknown as Value
+            : null as Value);
+          setData(multiple
+            ? [] as unknown as Data
+            : undefined as unknown as Data);
+          return;
+        }
+
+        // Only if Multiple extends true.
+        if (reason === 'removeOption') {
+          //
+          return;
+        }
+
+        if (reason === 'createOption') {
+          /**
+           * TODO:
+           * IF multiple?: boolean is true
+           *  Remove last item of newValue: [] (because of equals to details?.option: string).
+           *   IF details?.option exists in options
+           *     Add the matched option to newValue.
+           *   ELSE
+           *     execute onSelectAddOption().
+           *   Set newValue as current value.
+           * ELSE
+           *   IF newValue: string is exists in options,
+           *     Set the matched option as current value.
+           *   ELSE
+           *     execute onSelectAddOption().
+           * return;
+           */
+          if (multiple) {
+            // ...
+          } else {
+            const option = options.find((opt) => (
+              matchOptionWithInput(opt, newValue as string)
+            ));
+
+            if (option) {
+              setValue(option as Value);
+              setData(option[usedDataKey] as Data);
+            } else {
+              onSelectAddOption(newValue);
+            }
+          }
+
+          return;
+        }
+
+        if (reason === 'selectOption') {
+          /**
+           * TODO:
+           * IF multiple?: boolean is true
+           *   // ...
+           * ELSE
+           *   IF `inputValue?: string` exists in newValue: T,
+           *     execute onSelectAddOption().
+           *   ELSE
+           *     Set newValue as current value.
+           * return;
+           */
+          if (multiple) {
+            // ...
+          } else if ((newValue as Option)?.inputValue) {
+            onSelectAddOption(newValue);
+          } else {
+            setValue(newValue);
+            setData((newValue as Option)[usedDataKey] as Data);
+          }
         }
       }}
     />
