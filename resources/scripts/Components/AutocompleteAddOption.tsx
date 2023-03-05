@@ -75,8 +75,7 @@ export type TPropsAutocompleteAddOption<
   /**
    * Handle action when Add Option is selected.
    */
-  onSelectAddOption: (value: FreeSoloAutocompleteValue<
-    TOption<O, L>, Multiple>) => void;
+  onSelectAddOption: (inputValue: string) => void;
   /**
    * Handle action to set the data.
    */
@@ -222,7 +221,7 @@ export default function AutocompleteAddOption<
               setValue(option as Value);
               setData(option[usedDataKey] as Data);
             } else {
-              onSelectAddOption(newValue);
+              onSelectAddOption(newValue as string);
             }
           }
 
@@ -230,24 +229,18 @@ export default function AutocompleteAddOption<
         }
 
         if (reason === 'selectOption') {
-          /**
-           * TODO:
-           * IF multiple?: boolean is true
-           *   // ...
-           * ELSE
-           *   IF `inputValue?: string` exists in newValue: T,
-           *     execute onSelectAddOption().
-           *   ELSE
-           *     Set newValue as current value.
-           * return;
-           */
-          if (multiple) {
-            // ...
-          } else if ((newValue as Option)?.inputValue) {
-            onSelectAddOption(newValue);
+          if (details?.option.inputValue) {
+            onSelectAddOption(details?.option.inputValue);
           } else {
             setValue(newValue);
-            setData((newValue as Option)[usedDataKey] as Data);
+
+            if (multiple) {
+              setData((newValue as Option[]).map((opt) => (
+                opt[usedDataKey as keyof T]
+              )) as Data);
+            } else {
+              setData((newValue as Option)[usedDataKey] as Data);
+            }
           }
         }
       }}
