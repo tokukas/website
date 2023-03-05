@@ -215,9 +215,7 @@ export default function AddBook({
             )}
             setData={(values) => setData('author_ids', values)}
             setValue={(values) => {
-              setAuthorValues(values.filter((v): v is AuthorOptionType => (
-                typeof v !== 'string' && v !== null
-              )));
+              setAuthorValues(values as AuthorOptionType[]);
             }}
             onSelectAddOption={(inputValue) => {
               setOptionDialog('author');

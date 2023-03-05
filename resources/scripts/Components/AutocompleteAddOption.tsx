@@ -201,53 +201,51 @@ export default function AutocompleteAddOption<
         }
 
         if (reason === 'createOption') {
-          /**
-           * TODO:
-           * IF multiple?: boolean is true
-           *  Remove last item of newValue: [] (because of equals to details?.option: string).
-           *   IF details?.option exists in options
-           *     Add the matched option to newValue.
-           *   ELSE
-           *     execute onSelectAddOption().
-           *   Set newValue as current value.
-           * ELSE
-           *   IF newValue: string is exists in options,
-           *     Set the matched option as current value.
-           *   ELSE
-           *     execute onSelectAddOption().
-           * return;
-           */
-          if (multiple) {
-            // ...
-          } else {
-            const option = options.find((opt) => (
-              matchOptionWithInput(opt, newValue as string)
-            ));
+          // In create option, details?.option always be a string.
+          const option = options.find((opt) => (
+            matchOptionWithInput(opt, details?.option as unknown as string)
+          ));
 
-            if (option) {
-              setValue(option as Value);
-              setData(option[usedDataKey] as Data);
-            } else {
-              onSelectAddOption(newValue as string);
+          if (option) {
+            event.preventDefault();
+
+            if (multiple) {
+              const newValues = newValue as Option[];
+              newValues.pop();
+              newValues.push(option);
+
+              setValue(newValues as Value);
+
+              setData(newValues.map((opt) => (
+                opt[usedDataKey as keyof T]
+              )) as Data);
+
+              return;
             }
+
+            setValue(option as Value);
+            setData(option[usedDataKey] as Data);
+            return;
           }
 
+          onSelectAddOption(details?.option as unknown as string);
           return;
         }
 
         if (reason === 'selectOption') {
           if (details?.option.inputValue) {
             onSelectAddOption(details?.option.inputValue);
-          } else {
-            setValue(newValue);
+            return;
+          }
 
-            if (multiple) {
-              setData((newValue as Option[]).map((opt) => (
-                opt[usedDataKey as keyof T]
-              )) as Data);
-            } else {
-              setData((newValue as Option)[usedDataKey] as Data);
-            }
+          setValue(newValue);
+
+          if (multiple) {
+            setData((newValue as Option[]).map((opt) => (
+              opt[usedDataKey as keyof T]
+            )) as Data);
+          } else {
+            setData((newValue as Option)[usedDataKey] as Data);
           }
         }
       }}
