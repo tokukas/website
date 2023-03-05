@@ -189,7 +189,14 @@ export default function AutocompleteAddOption<
 
         // Only if Multiple extends true.
         if (reason === 'removeOption') {
-          //
+          setValue(newValue);
+
+          setData((newValue as Option[]).map((opt) => (
+            opt[usedDataKey as keyof T]
+          )).filter((data) => (
+            data !== details?.option[usedDataKey as keyof T]
+          )) as Data);
+
           return;
         }
 
