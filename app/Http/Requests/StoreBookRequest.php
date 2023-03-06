@@ -33,6 +33,8 @@ class StoreBookRequest extends FormRequest
             'category_id' => ['nullable', 'string', 'exists:categories,id'],
             'isbn' => ['nullable', 'string', 'size:13', 'unique:App\Models\Book,isbn'],
             'description' => ['nullable', 'string', 'max:255'],
+            'author_ids' => ['nullable', 'array'],
+            'author_ids.*' => ['required', 'string', 'exists:App\Models\Author,id'],
         ];
     }
 
@@ -55,6 +57,7 @@ class StoreBookRequest extends FormRequest
             'category_id' => 'category',
             'isbn' => 'ISBN',
             'description' => 'description',
+            'author_ids' => 'authors',
         ];
     }
 }

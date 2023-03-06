@@ -44,6 +44,7 @@ class BookController extends Controller
     {
         $validated = $request->validated();
         $book = Book::create($validated);
+        $book->authors()->sync($validated['author_ids'] ?? []);
 
         if ($book) {
             // TODO: redirect to detail book page.
