@@ -84,6 +84,8 @@ export type TPropsAutocompleteAddOption<
   ) => void;
   /**
    * Handle action to set the value.
+   *
+   * @deprecated
    */
   setValue: (value: FreeSoloAutocompleteValue<
     TOption<O, L>, Multiple>) => void;
@@ -127,6 +129,10 @@ export default function AutocompleteAddOption<
 
   const filterOptions = createFilterOptions(filterConfig);
 
+  const [currentValue, setCurrentValue] = React.useState<Value>(
+    multiple ? [] as unknown as Value : null as Value,
+  );
+
   const matchOptionWithInput = (option: Option, input: string) => {
     let o: string = option[labelKey];
     let i: string = input;
@@ -151,7 +157,7 @@ export default function AutocompleteAddOption<
       freeSolo
       clearOnBlur
       multiple={multiple}
-      value={value}
+      value={currentValue}
       options={options}
       getOptionLabel={(option) => (typeof option === 'string'
         ? option
@@ -178,7 +184,7 @@ export default function AutocompleteAddOption<
       ))}
       onChange={(event, newValue, reason, details) => {
         if (reason === 'clear') {
-          setValue(multiple
+          setCurrentValue(multiple
             ? [] as unknown as Value
             : null as Value);
           setData(multiple
@@ -189,7 +195,7 @@ export default function AutocompleteAddOption<
 
         // Only if Multiple extends true.
         if (reason === 'removeOption') {
-          setValue(newValue);
+          setCurrentValue(newValue);
 
           setData((newValue as Option[]).map((opt) => (
             opt[usedDataKey as keyof T]
@@ -214,7 +220,7 @@ export default function AutocompleteAddOption<
               newValues.pop();
               newValues.push(option);
 
-              setValue(newValues as Value);
+              setCurrentValue(newValues as Value);
 
               setData(newValues.map((opt) => (
                 opt[usedDataKey as keyof T]
@@ -223,7 +229,7 @@ export default function AutocompleteAddOption<
               return;
             }
 
-            setValue(option as Value);
+            setCurrentValue(option as Value);
             setData(option[usedDataKey] as Data);
             return;
           }
@@ -238,7 +244,7 @@ export default function AutocompleteAddOption<
             return;
           }
 
-          setValue(newValue);
+          setCurrentValue(newValue);
 
           if (multiple) {
             setData((newValue as Option[]).map((opt) => (
