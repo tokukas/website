@@ -1,3 +1,4 @@
+import { Author } from './Author';
 import { Publisher } from './Publisher';
 
 export type Book = {
@@ -16,4 +17,5 @@ export type Book = {
   created_at: string;
   updated_at: string;
   publisher?: Publisher;
+  authors?: Author[];
 }
