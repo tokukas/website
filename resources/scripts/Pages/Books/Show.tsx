@@ -1,13 +1,15 @@
 import AppHead from '@/Components/AppHead';
 import Link from '@/Components/Link';
+import VerticalTable from '@/Components/VerticalTable';
 import { Book } from '@/Entities/Book';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import Language from '@/Utils/Language';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 import route from 'ziggy-js';
-import VerticalTable from '@/Components/VerticalTable';
 
 type TPropsShowBook = {
   book: Book;
@@ -33,6 +35,20 @@ export default function ShowBook({ book }: TPropsShowBook) {
         {book.title}
       </Typography>
 
+      {Boolean(book.authors?.length) && (
+        <Stack direction="row" rowGap={0.5} columnGap={1} flexWrap="wrap">
+          <Typography>By:</Typography>
+          {book.authors?.map((author) => (
+            <Chip
+              key={author.id}
+              label={author.name}
+              size="small"
+              variant="outlined"
+            />
+          ))}
+        </Stack>
+      )}
+
       <VerticalTable
         data={[
           { label: 'Year', value: book.year_published },
@@ -46,6 +62,7 @@ export default function ShowBook({ book }: TPropsShowBook) {
           { label: 'Weight', value: `${book.weight.toFixed(2)} gram` },
           { label: 'Number of Pages', value: book.num_of_pages },
           { label: 'ISBN', value: book.isbn },
+          { label: 'Category', value: book.category?.name },
           { label: 'Description', value: book.description },
         ]}
       />
