@@ -75,7 +75,7 @@ export default function VerticalTable({
           <Grid item xs={12} sm={7} md={8} lg={9}>
             {disabledDataStyle ? value : (
               <Data empty={!value}>
-                {value ?? placeholder ?? rowPlaceholder ?? 'None'}
+                {value || (placeholder ?? rowPlaceholder ?? 'None')}
               </Data>
             )}
           </Grid>
