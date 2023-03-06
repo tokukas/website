@@ -7,4 +7,8 @@ export type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType>({ user: null });
 
+if (import.meta.env.DEV) {
+  AuthContext.displayName = 'AuthContext';
+}
+
 export default AuthContext;

@@ -3,7 +3,9 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "lint": "eslint .",
+        "lint:fix": "eslint --fix ."
     },
     "devDependencies": {
         "@types/lodash": "^4.14.191",
@@ -31,9 +33,13 @@
         "@inertiajs/react": "^1.0.2",
         "@mui/icons-material": "^5.11.9",
         "@mui/material": "^5.11.10",
+        "@mui/x-data-grid": "^5.17.24",
+        "@mui/x-date-pickers": "^5.0.19",
         "@tailwindcss/forms": "^0.5.3",
         "@vitejs/plugin-react": "^3.1.0",
         "axios": "^1.1.3",
+        "countries-list": "^2.6.1",
+        "dayjs": "^1.11.7",
         "laravel-vite-plugin": "^0.7.4",
         "lodash": "^4.17.21",
         "notistack": "^2.0.8",

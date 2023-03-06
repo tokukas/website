@@ -1,5 +1,7 @@
 import AuthContext, { AuthContextType } from '@/Utils/AuthContext';
 import { usePage } from '@inertiajs/react';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React from 'react';
 
 type TPropsBaseLayout = {
@@ -11,7 +13,9 @@ export default function BaseLayout({ children }: TPropsBaseLayout) {
     <AuthContext.Provider
       value={usePage().props.auth as AuthContextType}
     >
-      {children}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        {children}
+      </LocalizationProvider>
     </AuthContext.Provider>
   );
 }

@@ -16,8 +16,11 @@ class PublisherFactory extends Factory
      */
     public function definition()
     {
+        $name = fake()->company();
+
         return [
-            'name' => fake()->company(),
+            'name' => $name,
+            'slug' => str()->slug($name),
         ];
     }
 }

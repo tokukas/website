@@ -2,7 +2,7 @@ import AppConfig from '@/Config/App';
 import { Head } from '@inertiajs/react';
 import React from 'react';
 
-type TPropsAppHead = {
+export type TPropsAppHead = {
   /**
    * The title of the page.
    */

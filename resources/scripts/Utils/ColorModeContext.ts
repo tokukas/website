@@ -12,4 +12,8 @@ type ColorModeContextType = {
  */
 const ColorModeContext = createContext({} as ColorModeContextType);
 
+if (import.meta.env.DEV) {
+  ColorModeContext.displayName = 'ColorModeContext';
+}
+
 export default ColorModeContext;

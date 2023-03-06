@@ -73,6 +73,21 @@ class Book extends Model
     }
 
     /**
+     * Interacts with the book's language code.
+     *
+     * Sets the language code to lowercase.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute.
+     */
+    protected function languageCode(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => str()->upper($value),
+            get: fn ($value) => str()->upper($value),
+        );
+    }
+
+    /**
      * The book publisher.
      *
      * @param \Illuminate\Database\Eloquent\Relations\BelongsTo

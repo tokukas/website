@@ -28,6 +28,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('admin-only')->group(function () {
         Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
             ->name('dashboard');
+
+        Route::resource('books', 'App\Http\Controllers\BookController');
+
+        Route::resource('publishers', 'App\Http\Controllers\PublisherController')
+            ->only(['store']);
+
+        Route::resource('categories', 'App\Http\Controllers\CategoryController')
+            ->only(['store']);
+
+        Route::resource('authors', 'App\Http\Controllers\AuthorController')
+            ->only(['store']);
     });
 
     Route::get('/settings', fn () => Inertia::render('Settings'))
