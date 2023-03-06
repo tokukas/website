@@ -409,7 +409,7 @@ export default function AddBook({
           title="Add Author"
           values={authorDialogValue}
           method="post"
-          route=""
+          route={route('authors.store')}
           formFields={[{
             name: 'name',
             label: 'Author Name',
