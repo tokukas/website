@@ -1,8 +1,9 @@
-import { RequiredFor } from '@/Utils/Types';
 import Autocomplete, {
   AutocompleteProps, createFilterOptions,
 } from '@mui/material/Autocomplete';
-import { CreateFilterOptionsConfig } from '@mui/material/useAutocomplete';
+import {
+  AutocompleteValue, CreateFilterOptionsConfig,
+} from '@mui/material/useAutocomplete';
 import React from 'react';
 
 /**
@@ -11,7 +12,7 @@ import React from 'react';
  * - `Label` is a key that used as labelKey.
  */
 export type TOption<
-  Option extends Record<string, string | undefined>,
+  Option extends Record<string, unknown>,
   Label extends keyof Option,
 > = Option & {
   [key in Label]: string;
@@ -20,25 +21,32 @@ export type TOption<
 };
 
 export type FreeSoloAutocompleteProps<
-  T, Multiple extends boolean | undefined
+  T, Multiple extends boolean | undefined = false
 > = Omit<AutocompleteProps<T, Multiple, false, true>,
   'freeSolo' | 'disableClearable' | 'clearOnBlur'
-  | 'getOptionLabel' | 'filterOptions' | 'onChange'
+  | 'getOptionLabel' | 'filterOptions' | 'onChange' | 'value'
 >;
 
+type FreeSoloAutocompleteValue<
+  T, Multiple extends boolean | undefined = false
+> = AutocompleteValue<T, Multiple, false, true>;
+
+type FreeSoloAutocompleteData<
+  T,
+  K extends keyof T,
+  Multiple extends boolean | undefined = false
+> = Multiple extends true ? Array<T[K]> : T[K];
+
 export type TPropsAutocompleteAddOption<
-  O extends Record<string, string | undefined>,
+  O extends Record<string, unknown>,
   L extends keyof O,
-  Multiple extends boolean | undefined,
-> = RequiredFor<
-  FreeSoloAutocompleteProps<TOption<O, L>, Multiple>, 'value'
-> & {
+  DataKey extends keyof O = L,
+  Multiple extends boolean | undefined = false,
+> = FreeSoloAutocompleteProps<TOption<O, L>, Multiple> & {
   /**
    * Determine which prop that used as the data.
-   *
-   * @default labelKey - Same as `labelKey` value.
    */
-  dataKey?: keyof O;
+  dataKey?: DataKey;
   /**
    * The config to filter the options.
    *
@@ -64,18 +72,13 @@ export type TPropsAutocompleteAddOption<
   /**
    * Handle action when Add Option is selected.
    */
-  onSelectAddOption: () => void;
+  onSelectAddOption: (inputValue: string) => void;
   /**
    * Handle action to set the data.
-   *
-   * @param key Equals to `dataKey` (or `labelKey`)
-   * @param value The data value.
    */
-  setData: <K extends keyof O | L>(key: K, value: O[K]) => void;
-  /**
-   * Handle action to set the value.
-   */
-  setValue: <Option extends TOption<O, L>>(value: Option | null) => void;
+  setData: (
+    data: FreeSoloAutocompleteData<TOption<O, L>, DataKey | L, Multiple>
+  ) => void;
 };
 
 /**
@@ -91,26 +94,32 @@ export type TPropsAutocompleteAddOption<
  * - [`FreeSoloCreateOptionDialog` in MUI GitHub](https://github.com/mui/material-ui/blob/v5.11.11/docs/data/material/components/autocomplete/FreeSoloCreateOptionDialog.tsx)
  */
 export default function AutocompleteAddOption<
-  T extends Record<string, string | undefined>,
+  T extends Record<string, unknown>,
   K extends keyof T,
+  DataKey extends keyof T = K,
   Multiple extends boolean | undefined = false,
 >({
   dataKey,
   filterConfig,
   labelKey,
+  multiple,
   onSelectAddOption,
   options,
   setData,
-  setValue,
   renderOption,
-  value,
   ...otherProps
-}: TPropsAutocompleteAddOption<T, K, Multiple>) {
+}: TPropsAutocompleteAddOption<T, K, DataKey, Multiple>) {
   type Option = TOption<T, K>;
+  type Value = FreeSoloAutocompleteValue<Option, Multiple>;
+  type Data = FreeSoloAutocompleteData<Option, DataKey | K, Multiple>;
 
   const usedDataKey = dataKey ?? labelKey;
 
   const filterOptions = createFilterOptions(filterConfig);
+
+  const [currentValue, setCurrentValue] = React.useState<Value>(
+    multiple ? [] as unknown as Value : null as Value,
+  );
 
   const matchOptionWithInput = (option: Option, input: string) => {
     let o: string = option[labelKey];
@@ -129,42 +138,14 @@ export default function AutocompleteAddOption<
     return o === i;
   };
 
-  const handleOnChangeValueString = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: string,
-  ) => {
-    const option = options.find((opt) => matchOptionWithInput(opt, newValue));
-
-    if (option) {
-      event.preventDefault();
-      setValue(option);
-      setData(usedDataKey, option[usedDataKey]);
-    } else {
-      setValue({ [labelKey]: newValue } as Option);
-      onSelectAddOption();
-    }
-  };
-
-  const handleOnChangeValueObject = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: Option,
-  ) => {
-    if (newValue.inputValue) {
-      setValue({ [labelKey]: newValue.inputValue } as Option);
-      onSelectAddOption();
-    } else {
-      setValue(newValue);
-      setData(usedDataKey, newValue[usedDataKey]);
-    }
-  };
-
   return (
     <Autocomplete
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...otherProps}
       freeSolo
       clearOnBlur
-      value={value}
+      multiple={multiple}
+      value={currentValue}
       options={options}
       getOptionLabel={(option) => (typeof option === 'string'
         ? option
@@ -189,20 +170,77 @@ export default function AutocompleteAddOption<
         // eslint-disable-next-line react/jsx-props-no-spreading
         <li {...props}>{option[labelKey]}</li>
       ))}
-      onChange={(event, newValue) => {
-        if (Array.isArray(newValue)) {
-          // When the `Multiple` is `true`, `newValue` will be an array.
-          // TODO: handle this
-        } else if (typeof newValue === 'string') {
-          // If value selected with enter, `newValue` will be a string.
-          handleOnChangeValueString(event, newValue);
-        } else if (!newValue) {
-          // When the value is cleared, `newValue` will be `null`.
-          setValue(null);
-          setData(usedDataKey, '' as T[keyof T]);
-        } else {
-          // If value is selected for option, `newValue` will be an object.
-          handleOnChangeValueObject(event, newValue as Option);
+      onChange={(event, newValue, reason, details) => {
+        if (reason === 'clear') {
+          setCurrentValue(multiple
+            ? [] as unknown as Value
+            : null as Value);
+          setData(multiple
+            ? [] as unknown as Data
+            : undefined as unknown as Data);
+          return;
+        }
+
+        // Only if Multiple extends true.
+        if (reason === 'removeOption') {
+          setCurrentValue(newValue);
+
+          setData((newValue as Option[]).map((opt) => (
+            opt[usedDataKey as keyof T]
+          )).filter((data) => (
+            data !== details?.option[usedDataKey as keyof T]
+          )) as Data);
+
+          return;
+        }
+
+        if (reason === 'createOption') {
+          // In create option, details?.option always be a string.
+          const option = options.find((opt) => (
+            matchOptionWithInput(opt, details?.option as unknown as string)
+          ));
+
+          if (option) {
+            event.preventDefault();
+
+            if (multiple) {
+              const newValues = newValue as Option[];
+              newValues.pop();
+              newValues.push(option);
+
+              setCurrentValue(newValues as Value);
+
+              setData(newValues.map((opt) => (
+                opt[usedDataKey as keyof T]
+              )) as Data);
+
+              return;
+            }
+
+            setCurrentValue(option as Value);
+            setData(option[usedDataKey] as Data);
+            return;
+          }
+
+          onSelectAddOption(details?.option as unknown as string);
+          return;
+        }
+
+        if (reason === 'selectOption') {
+          if (details?.option.inputValue) {
+            onSelectAddOption(details?.option.inputValue);
+            return;
+          }
+
+          setCurrentValue(newValue);
+
+          if (multiple) {
+            setData((newValue as Option[]).map((opt) => (
+              opt[usedDataKey as keyof T]
+            )) as Data);
+          } else {
+            setData((newValue as Option)[usedDataKey] as Data);
+          }
         }
       }}
     />

@@ -1,13 +1,15 @@
-import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
+import AutocompleteAddOption, {
+  TOption,
+} from '@/Components/AutocompleteAddOption';
 import FieldSection from '@/Components/FieldSection';
 import FormDialog from '@/Components/FormDialog';
 import Link from '@/Components/Link';
+import { Author } from '@/Entities/Author';
 import { Book } from '@/Entities/Book';
 import { Category } from '@/Entities/Category';
 import { Publisher } from '@/Entities/Publisher';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import Language from '@/Utils/Language';
-import { OptionalExceptFor } from '@/Utils/Types';
 import { useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
 import HelpIcon from '@mui/icons-material/Help';
@@ -25,18 +27,26 @@ import React from 'react';
 import route from 'ziggy-js';
 
 export type TPropsAddBook = {
-  publishers: readonly Publisher[];
+  authors: readonly Author[];
   categories: readonly Category[];
+  publishers: readonly Publisher[];
 }
 
 type AddBookFields = Omit<Book,
   'id' | 'created_at' | 'updated_at' | 'publisher'
->;
+> & {
+  author_ids: string[];
+};
 
-type PublisherOptionType = OptionalExceptFor<Publisher, 'name'>;
-type CategoryOptionType = OptionalExceptFor<Category, 'name'>;
+type AuthorOptionType = TOption<Author, 'name'>;
+type CategoryOptionType = TOption<Category, 'name'>;
+type PublisherOptionType = TOption<Publisher, 'name'>;
 
-export default function AddBook({ publishers, categories }: TPropsAddBook) {
+export default function AddBook({
+  authors,
+  categories,
+  publishers,
+}: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
 
   const { post, setData, errors } = useForm<AddBookFields>();
@@ -54,13 +64,16 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
   };
 
   const [optionDialog, setOptionDialog] = React.useState<
-    'publisher' | 'category' | null>(null);
+    'publisher' | 'category' | 'author' | null>(null);
 
-  const [publisherValue, setPublisherValue] = React.useState<
-    PublisherOptionType | null>(null);
+  const [categoryDialogValue, setCategoryDialogValue] = React.useState<
+    Pick<Category, 'name'> | null>(null);
 
-  const [categoryValue, setCategoryValue] = React.useState<
-    CategoryOptionType | null>(null);
+  const [publisherDialogValue, setPublisherDialogValue] = React.useState<
+    Pick<Partial<Publisher>, 'name' | 'slug'> | null>(null);
+
+  const [authorDialogValue, setAuthorDialogValue] = React.useState<
+    Pick<Author, 'name'> | null>(null);
 
   return (
     <>
@@ -120,7 +133,6 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             options={publishers as readonly PublisherOptionType[]}
             dataKey="id"
             labelKey="name"
-            value={publisherValue}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -132,9 +144,11 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 helperText={errors.publisher_id ?? 'The publisher of the book'}
               />
             )}
-            setData={(key, value) => setData('publisher_id', value ?? '')}
-            setValue={setPublisherValue}
-            onSelectAddOption={() => setOptionDialog('publisher')}
+            setData={(value) => setData('publisher_id', value ?? '')}
+            onSelectAddOption={(inputValue) => {
+              setOptionDialog('publisher');
+              setPublisherDialogValue({ name: inputValue });
+            }}
           />
 
           <DatePicker
@@ -168,6 +182,30 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             helperText={errors.isbn ?? 'International Standard Book Number'}
             onChange={handleInputChange}
           />
+
+          <AutocompleteAddOption
+            multiple
+            options={authors as readonly AuthorOptionType[]}
+            dataKey="id"
+            labelKey="name"
+            renderInput={(params) => (
+              <TextField
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...params}
+                label="Authors"
+                name="authors"
+                placeholder="Select authors"
+                error={Boolean(errors.author_ids)}
+                helperText={errors.author_ids ?? 'The authors of the book'}
+              />
+            )}
+            setData={(values) => setData('author_ids', values)}
+            onSelectAddOption={(inputValue) => {
+              setOptionDialog('author');
+              setAuthorDialogValue({ name: inputValue });
+            }}
+          />
+
         </FieldSection>
 
         <FieldSection title="Physical Information">
@@ -263,7 +301,6 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
             options={categories as readonly CategoryOptionType[]}
             dataKey="id"
             labelKey="name"
-            value={categoryValue}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -275,9 +312,11 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
                 helperText={errors.category_id ?? 'What kind of book is this?'}
               />
             )}
-            setData={(key, value) => setData('category_id', value ?? '')}
-            setValue={setCategoryValue}
-            onSelectAddOption={() => setOptionDialog('category')}
+            setData={(value) => setData('category_id', value ?? '')}
+            onSelectAddOption={(inputValue) => {
+              setOptionDialog('category');
+              setCategoryDialogValue({ name: inputValue });
+            }}
           />
 
           <TextField
@@ -317,7 +356,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
         <FormDialog
           open
           title="Add Publisher"
-          values={publisherValue}
+          values={publisherDialogValue}
           method="post"
           route={route('publishers.store')}
           formFields={[{
@@ -329,7 +368,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
           }]}
           onClose={() => {
             setOptionDialog(null);
-            setPublisherValue(null);
+            setPublisherDialogValue(null);
             setData('publisher_id', '');
           }}
           submitButtonName="Add"
@@ -343,7 +382,7 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
         <FormDialog
           open
           title="Add Category"
-          values={categoryValue}
+          values={categoryDialogValue}
           method="post"
           route={route('categories.store')}
           formFields={[{
@@ -354,13 +393,37 @@ export default function AddBook({ publishers, categories }: TPropsAddBook) {
           }]}
           onClose={() => {
             setOptionDialog(null);
-            setCategoryValue(null);
+            setCategoryDialogValue(null);
             setData('category_id', '');
           }}
           submitButtonName="Add"
           messageOnSuccess="Category successfully added"
           description="Fill this form to add a new category.
             Please don't add the category that already exist."
+        />
+      )}
+
+      {optionDialog === 'author' && (
+        <FormDialog
+          open
+          title="Add Author"
+          values={authorDialogValue}
+          method="post"
+          route=""
+          formFields={[{
+            name: 'name',
+            label: 'Author Name',
+            required: true,
+            placeholder: 'e.g. "John Doe"',
+          }]}
+          onClose={() => {
+            setOptionDialog(null);
+            setAuthorDialogValue(null);
+          }}
+          submitButtonName="Add"
+          messageOnSuccess="Author successfully added"
+          description="Fill this form to add a new author.
+            Please don't add the author that already exist."
         />
       )}
     </>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookRequest;
+use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Publisher;
@@ -32,6 +33,7 @@ class BookController extends Controller
         return Inertia::render('Books/Create', [
             'publishers' => Publisher::all(),
             'categories' => Category::all(),
+            'authors' => Author::all(),
         ]);
     }
 
