@@ -26,7 +26,20 @@ type TBookColumns = Omit<Book,
 export default function Books({ books }: TPropsBooks) {
   const bookColumns: GridColDef<TBookColumns>[] = [
     { field: 'id', headerName: 'ID', width: 80 },
-    { field: 'title', headerName: 'Title', width: 240 },
+    {
+      field: 'title',
+      headerName: 'Title',
+      width: 240,
+      renderCell: (params) => (
+        <Link
+          href={route('books.show', params.id)}
+          underline="hover"
+          color="inherit"
+        >
+          {params.value}
+        </Link>
+      ),
+    },
     { field: 'publisher_name', headerName: 'Publisher', width: 160 },
     { field: 'year_published', headerName: 'Year Published', width: 80 },
     { field: 'language', headerName: 'Language', width: 120 },
