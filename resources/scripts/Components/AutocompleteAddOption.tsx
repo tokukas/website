@@ -1,4 +1,3 @@
-import { RequiredFor } from '@/Utils/Types';
 import Autocomplete, {
   AutocompleteProps, createFilterOptions,
 } from '@mui/material/Autocomplete';
@@ -25,7 +24,7 @@ export type FreeSoloAutocompleteProps<
   T, Multiple extends boolean | undefined = false
 > = Omit<AutocompleteProps<T, Multiple, false, true>,
   'freeSolo' | 'disableClearable' | 'clearOnBlur'
-  | 'getOptionLabel' | 'filterOptions' | 'onChange'
+  | 'getOptionLabel' | 'filterOptions' | 'onChange' | 'value'
 >;
 
 type FreeSoloAutocompleteValue<
@@ -43,9 +42,7 @@ export type TPropsAutocompleteAddOption<
   L extends keyof O,
   DataKey extends keyof O = L,
   Multiple extends boolean | undefined = false,
-> = RequiredFor<
-  FreeSoloAutocompleteProps<TOption<O, L>, Multiple>, 'value'
-> & {
+> = FreeSoloAutocompleteProps<TOption<O, L>, Multiple> & {
   /**
    * Determine which prop that used as the data.
    */
@@ -82,13 +79,6 @@ export type TPropsAutocompleteAddOption<
   setData: (
     data: FreeSoloAutocompleteData<TOption<O, L>, DataKey | L, Multiple>
   ) => void;
-  /**
-   * Handle action to set the value.
-   *
-   * @deprecated
-   */
-  setValue: (value: FreeSoloAutocompleteValue<
-    TOption<O, L>, Multiple>) => void;
 };
 
 /**
@@ -116,9 +106,7 @@ export default function AutocompleteAddOption<
   onSelectAddOption,
   options,
   setData,
-  setValue,
   renderOption,
-  value,
   ...otherProps
 }: TPropsAutocompleteAddOption<T, K, DataKey, Multiple>) {
   type Option = TOption<T, K>;

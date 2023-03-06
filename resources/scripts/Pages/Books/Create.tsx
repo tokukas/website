@@ -66,15 +66,6 @@ export default function AddBook({
   const [optionDialog, setOptionDialog] = React.useState<
     'publisher' | 'category' | 'author' | null>(null);
 
-  const [publisherValue, setPublisherValue] = React.useState<
-    PublisherOptionType | null>(null);
-
-  const [categoryValue, setCategoryValue] = React.useState<
-    CategoryOptionType | null>(null);
-
-  const [authorValues, setAuthorValues] = React.useState<
-    AuthorOptionType[]>([]);
-
   const [categoryDialogValue, setCategoryDialogValue] = React.useState<
     Pick<Category, 'name'> | null>(null);
 
@@ -142,7 +133,6 @@ export default function AddBook({
             options={publishers as readonly PublisherOptionType[]}
             dataKey="id"
             labelKey="name"
-            value={publisherValue}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -155,9 +145,6 @@ export default function AddBook({
               />
             )}
             setData={(value) => setData('publisher_id', value ?? '')}
-            setValue={(value) => setPublisherValue(
-              typeof value !== 'string' ? value : null,
-            )}
             onSelectAddOption={(inputValue) => {
               setOptionDialog('publisher');
               setPublisherDialogValue({ name: inputValue });
@@ -201,7 +188,6 @@ export default function AddBook({
             options={authors as readonly AuthorOptionType[]}
             dataKey="id"
             labelKey="name"
-            value={authorValues}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -214,9 +200,6 @@ export default function AddBook({
               />
             )}
             setData={(values) => setData('author_ids', values)}
-            setValue={(values) => {
-              setAuthorValues(values as AuthorOptionType[]);
-            }}
             onSelectAddOption={(inputValue) => {
               setOptionDialog('author');
               setAuthorDialogValue({ name: inputValue });
@@ -318,7 +301,6 @@ export default function AddBook({
             options={categories as readonly CategoryOptionType[]}
             dataKey="id"
             labelKey="name"
-            value={categoryValue}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -331,9 +313,6 @@ export default function AddBook({
               />
             )}
             setData={(value) => setData('category_id', value ?? '')}
-            setValue={(value) => setCategoryValue(
-              typeof value !== 'string' ? value : null,
-            )}
             onSelectAddOption={(inputValue) => {
               setOptionDialog('category');
               setCategoryDialogValue({ name: inputValue });
