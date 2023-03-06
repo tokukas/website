@@ -8,6 +8,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import dayjs from 'dayjs';
 import React from 'react';
 import route from 'ziggy-js';
 
@@ -64,6 +65,8 @@ export default function ShowBook({ book }: TPropsShowBook) {
           { label: 'ISBN', value: book.isbn },
           { label: 'Category', value: book.category?.name },
           { label: 'Description', value: book.description },
+          { label: 'Date Creation', value: dayjs(book.created_at).toString() },
+          { label: 'Last Update', value: dayjs(book.updated_at).toString() },
         ]}
       />
     </>
