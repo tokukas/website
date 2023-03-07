@@ -49,9 +49,12 @@ export default function AddBook({
 }: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
 
-  const { post, setData, errors } = useForm<AddBookFields>();
+  const {
+    clearErrors, errors, post, setData,
+  } = useForm<AddBookFields>();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    clearErrors(event.target.name as keyof AddBookFields);
     setData(
       event.target.name as keyof AddBookFields,
       event.target.value,
@@ -100,7 +103,6 @@ export default function AddBook({
           <TextField
             label="Title"
             name="title"
-            required
             placeholder='e.g. "The Lord of the Rings"'
             onChange={handleInputChange}
             error={Boolean(errors.title)}
@@ -118,13 +120,13 @@ export default function AddBook({
                 {...params}
                 label="Language"
                 name="language_code"
-                required
                 placeholder="Select a language"
                 error={Boolean(errors.language_code)}
                 helperText={errors.language_code}
               />
             )}
             onChange={(event, newValue) => {
+              clearErrors('language_code');
               setData('language_code', newValue?.code ?? '');
             }}
           />
@@ -137,7 +139,7 @@ export default function AddBook({
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
-                label="Publisher"
+                label="Publisher (optional)"
                 name="publisher_id"
                 placeholder="Select a publisher"
                 error={Boolean(errors.publisher_id)}
@@ -146,6 +148,7 @@ export default function AddBook({
             )}
             setData={(value) => setData('publisher_id', value ?? '')}
             onSelectAddOption={(inputValue) => {
+              clearErrors('publisher_id');
               setOptionDialog('publisher');
               setPublisherDialogValue({ name: inputValue });
             }}
@@ -158,6 +161,7 @@ export default function AddBook({
             value={dayjsValue}
             maxDate={dayjs()}
             onChange={(newValue) => {
+              clearErrors('year_published');
               setDayjs(newValue);
               setData('year_published', newValue?.year() ?? 0);
             }}
@@ -165,7 +169,6 @@ export default function AddBook({
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...props}
-                required
                 name="year_published"
                 error={Boolean(errors.year_published)}
                 helperText={errors.year_published
@@ -175,7 +178,7 @@ export default function AddBook({
           />
 
           <TextField
-            label="ISBN"
+            label="ISBN (optional)"
             name="isbn"
             placeholder='e.g. "978-3-16-148410-0"'
             error={Boolean(errors.isbn)}
@@ -192,7 +195,7 @@ export default function AddBook({
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
-                label="Authors"
+                label="Authors (optional)"
                 name="authors"
                 placeholder="Select authors"
                 error={Boolean(errors.author_ids)}
@@ -201,6 +204,7 @@ export default function AddBook({
             )}
             setData={(values) => setData('author_ids', values)}
             onSelectAddOption={(inputValue) => {
+              clearErrors('author_ids');
               setOptionDialog('author');
               setAuthorDialogValue({ name: inputValue });
             }}
@@ -213,7 +217,6 @@ export default function AddBook({
             type="number"
             label="Number of Pages"
             name="num_of_pages"
-            required
             placeholder="0"
             error={Boolean(errors.num_of_pages)}
             helperText={errors.num_of_pages
@@ -244,7 +247,6 @@ export default function AddBook({
             type="number"
             label="Weight"
             name="weight"
-            required
             placeholder="0.0"
             error={Boolean(errors.weight)}
             helperText={errors.weight ?? 'The weight of the book in grams'}
@@ -262,7 +264,6 @@ export default function AddBook({
             type="number"
             label="Width"
             name="width"
-            required
             placeholder="0.0"
             error={Boolean(errors.width)}
             helperText={errors.width ?? 'The width of the book in centimeters'}
@@ -280,7 +281,6 @@ export default function AddBook({
             type="number"
             label="Height"
             name="height"
-            required
             placeholder="0.0"
             error={Boolean(errors.height)}
             helperText={errors.height
@@ -305,7 +305,7 @@ export default function AddBook({
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
-                label="Category"
+                label="Category (optional)"
                 name="category_id"
                 placeholder="Select a category"
                 error={Boolean(errors.category_id)}
@@ -314,13 +314,14 @@ export default function AddBook({
             )}
             setData={(value) => setData('category_id', value ?? '')}
             onSelectAddOption={(inputValue) => {
+              clearErrors('category_id');
               setOptionDialog('category');
               setCategoryDialogValue({ name: inputValue });
             }}
           />
 
           <TextField
-            label="Description"
+            label="Description (optional)"
             name="description"
             multiline
             minRows={2}
@@ -363,7 +364,6 @@ export default function AddBook({
             name: 'name',
             validationKey: 'slug',
             label: 'Publisher Name',
-            required: true,
             placeholder: 'e.g. "Oxford University Press"',
           }]}
           onClose={() => {
@@ -388,7 +388,6 @@ export default function AddBook({
           formFields={[{
             name: 'name',
             label: 'Category Name',
-            required: true,
             placeholder: 'e.g. "Science Fiction"',
           }]}
           onClose={() => {
@@ -413,7 +412,6 @@ export default function AddBook({
           formFields={[{
             name: 'name',
             label: 'Author Name',
-            required: true,
             placeholder: 'e.g. "John Doe"',
           }]}
           onClose={() => {
