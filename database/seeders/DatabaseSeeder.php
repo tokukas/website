@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
         $this->seedCategories();
         $this->seedAuthors();
         $this->seedBooks();
+        $this->seedProducts();
     }
 
     /**
@@ -87,5 +88,13 @@ class DatabaseSeeder extends Seeder
     private function seedAuthors()
     {
         $this->call(AuthorSeeder::class);
+    }
+
+    /**
+     * Seed the products.
+     */
+    private function seedProducts()
+    {
+        $this->call(ProductSeeder::class);
     }
 }
