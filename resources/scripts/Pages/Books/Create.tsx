@@ -29,6 +29,7 @@ import route from 'ziggy-js';
 export type TPropsAddBook = {
   authors: readonly Author[];
   categories: readonly Category[];
+  data: Record<keyof Book, unknown>;
   publishers: readonly Publisher[];
 }
 
@@ -45,6 +46,7 @@ type PublisherOptionType = TOption<Publisher, 'name'>;
 export default function AddBook({
   authors,
   categories,
+  data,
   publishers,
 }: TPropsAddBook) {
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
@@ -98,9 +100,11 @@ export default function AddBook({
       >
         <FieldSection title="Basic Information">
           <TextField
+            autoFocus
             label="Title"
             name="title"
             required
+            defaultValue={data.title}
             placeholder='e.g. "The Lord of the Rings"'
             onChange={handleInputChange}
             error={Boolean(errors.title)}

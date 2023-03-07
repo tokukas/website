@@ -81,15 +81,17 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
             renderOption={(props, option) => (
               // eslint-disable-next-line react/jsx-props-no-spreading
               <li {...props}>
-                {`${option.title} (${option.year_published})`}
+                {option.inputValue ? option.title : (
+                  `${option.title} (${option.year_published})`
+                )}
               </li>
             )}
             setData={(id) => {
               clearErrors('book_id');
               setData('book_id', id ?? '');
             }}
-            onSelectAddOption={() => {
-              router.get(route('books.create'));
+            onSelectAddOption={(title) => {
+              router.get(route('books.create'), { title });
             }}
           />
 
