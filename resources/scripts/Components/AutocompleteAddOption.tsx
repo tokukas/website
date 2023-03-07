@@ -35,7 +35,7 @@ type FreeSoloAutocompleteData<
   T,
   K extends keyof T,
   Multiple extends boolean | undefined = false
-> = Multiple extends true ? Array<T[K]> : T[K];
+> = Multiple extends true ? Array<T[K]> : T[K] | null;
 
 export type TPropsAutocompleteAddOption<
   O extends Record<string, unknown>,
@@ -177,7 +177,7 @@ export default function AutocompleteAddOption<
             : null as Value);
           setData(multiple
             ? [] as unknown as Data
-            : undefined as unknown as Data);
+            : null as Data);
           return;
         }
 

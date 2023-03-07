@@ -28,12 +28,15 @@ class BookController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): InertiaResponse
+    public function create(Request $request): InertiaResponse
     {
         return Inertia::render('Books/Create', [
-            'publishers' => Publisher::all(),
-            'categories' => Category::all(),
             'authors' => Author::all(),
+            'categories' => Category::all(),
+            'data' => [
+                'title' => $request->input('title')
+            ],
+            'publishers' => Publisher::all(),
         ]);
     }
 
