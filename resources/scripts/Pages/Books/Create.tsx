@@ -53,7 +53,9 @@ export default function AddBook({
 
   const {
     clearErrors, errors, post, processing, setData,
-  } = useForm<AddBookFields>();
+  } = useForm<AddBookFields>({
+    title: data.title ?? '',
+  } as AddBookFields);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     clearErrors(event.target.name as keyof AddBookFields);
