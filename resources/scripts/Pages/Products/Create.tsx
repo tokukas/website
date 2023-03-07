@@ -134,7 +134,7 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
 
           <TextField
             name="description"
-            label="Description (Optional)"
+            label="Description (optional)"
             error={Boolean(errors.description)}
             helperText={errors.description}
             onChange={handleInputChange}
