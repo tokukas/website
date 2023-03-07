@@ -1,10 +1,14 @@
-import Grid from '@mui/material/Grid';
 import Box, { BoxProps } from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import React from 'react';
-import Label from './Label';
 import Data from './Data';
+import Label from './Label';
 
 export type TData = {
+  /**
+   * If set, the data will not rendered inside `Data` component.
+   */
+  disabledDataStyle?: boolean;
   /**
    * If not set, the key will same as `label`.
    */
@@ -13,10 +17,6 @@ export type TData = {
    * The label.
    */
   label: string;
-  /**
-   * If set, the data will not rendered inside `Data` component.
-   */
-  disabledDataStyle?: boolean;
   /**
    * Set the placeholder if data is empty.
    *
@@ -54,12 +54,12 @@ export default function VerticalTable({
       sx={{ mt: 2, ...sx }}
     >
       {data.map(({
+        disabledDataStyle,
         key,
         label,
-        value,
-        disabledDataStyle,
         placeholder: rowPlaceholder,
         renderLabel,
+        value,
       }) => (
         <Grid
           container
