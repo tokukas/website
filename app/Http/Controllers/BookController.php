@@ -47,8 +47,7 @@ class BookController extends Controller
         $book->authors()->sync($validated['author_ids'] ?? []);
 
         if ($book) {
-            // TODO: redirect to detail book page.
-            return redirect()->route('books.index');
+            return redirect()->intended(route('books.show', [$book]));
         }
 
         return back()->withErrors([
