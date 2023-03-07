@@ -146,9 +146,11 @@ export default function AddBook({
                 helperText={errors.publisher_id ?? 'The publisher of the book'}
               />
             )}
-            setData={(value) => setData('publisher_id', value ?? '')}
-            onSelectAddOption={(inputValue) => {
+            setData={(value) => {
               clearErrors('publisher_id');
+              setData('publisher_id', value ?? '');
+            }}
+            onSelectAddOption={(inputValue) => {
               setOptionDialog('publisher');
               setPublisherDialogValue({ name: inputValue });
             }}
@@ -202,9 +204,11 @@ export default function AddBook({
                 helperText={errors.author_ids ?? 'The authors of the book'}
               />
             )}
-            setData={(values) => setData('author_ids', values)}
-            onSelectAddOption={(inputValue) => {
+            setData={(values) => {
               clearErrors('author_ids');
+              setData('author_ids', values);
+            }}
+            onSelectAddOption={(inputValue) => {
               setOptionDialog('author');
               setAuthorDialogValue({ name: inputValue });
             }}
@@ -312,9 +316,11 @@ export default function AddBook({
                 helperText={errors.category_id ?? 'What kind of book is this?'}
               />
             )}
-            setData={(value) => setData('category_id', value ?? '')}
-            onSelectAddOption={(inputValue) => {
+            setData={(value) => {
               clearErrors('category_id');
+              setData('category_id', value ?? '');
+            }}
+            onSelectAddOption={(inputValue) => {
               setOptionDialog('category');
               setCategoryDialogValue({ name: inputValue });
             }}
