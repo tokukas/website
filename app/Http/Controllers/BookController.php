@@ -56,13 +56,15 @@ class BookController extends Controller
         ]);
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  */
-    // public function show(Book $book): Response
-    // {
-    //     //
-    // }
+    /**
+     * Display the specified resource.
+     */
+    public function show(Book $book): InertiaResponse
+    {
+        return Inertia::render('Books/Show', [
+            'book' => $book->load('publisher', 'authors', 'category'),
+        ]);
+    }
 
     // /**
     //  * Show the form for editing the specified resource.
