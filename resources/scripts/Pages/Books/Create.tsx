@@ -50,7 +50,7 @@ export default function AddBook({
   const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
 
   const {
-    clearErrors, errors, post, setData,
+    clearErrors, errors, post, processing, setData,
   } = useForm<AddBookFields>();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -350,6 +350,7 @@ export default function AddBook({
             variant="contained"
             type="submit"
             startIcon={<AddIcon />}
+            disabled={processing}
             sx={{
               width: { xs: '100%', sm: 'auto' },
             }}
