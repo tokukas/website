@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Book;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
@@ -22,21 +23,33 @@ class ProductController extends Controller
         ]);
     }
 
-    // /**
-    //  * Show the form for creating a new resource.
-    //  */
-    // public function create(): Response
-    // {
-    //     //
-    // }
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(): InertiaResponse
+    {
+        return Inertia::render('Products/Create', [
+            'books' => Book::all(),
+        ]);
+    }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  */
-    // public function store(StoreProductRequest $request): RedirectResponse
-    // {
-    //     //
-    // }
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreProductRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+        $product = Product::create($validated);
+        
+        if ($product) {
+            // TODO: redirect to detail product page.
+            return redirect()->route('products.index');
+        }
+
+        return back()->withErrors([
+            'error' => 'Error creating product',
+        ]);
+    }
 
     // /**
     //  * Display the specified resource.
