@@ -247,7 +247,7 @@ export default function AddBook({
             type="number"
             label="Weight"
             name="weight"
-            placeholder="0.0"
+            placeholder="0.00"
             error={Boolean(errors.weight)}
             helperText={errors.weight ?? 'The weight of the book in grams'}
             onChange={handleInputChange}
@@ -255,7 +255,7 @@ export default function AddBook({
               endAdornment: <InputAdornment position="end">gr</InputAdornment>,
               inputProps: {
                 min: 0,
-                step: 0.1,
+                step: 0.01,
               },
             }}
           />
@@ -264,7 +264,7 @@ export default function AddBook({
             type="number"
             label="Width"
             name="width"
-            placeholder="0.0"
+            placeholder="0.00"
             error={Boolean(errors.width)}
             helperText={errors.width ?? 'The width of the book in centimeters'}
             onChange={handleInputChange}
@@ -272,7 +272,7 @@ export default function AddBook({
               endAdornment: <InputAdornment position="end">cm</InputAdornment>,
               inputProps: {
                 min: 0,
-                step: 0.1,
+                step: 0.01,
               },
             }}
           />
@@ -281,7 +281,7 @@ export default function AddBook({
             type="number"
             label="Height"
             name="height"
-            placeholder="0.0"
+            placeholder="0.00"
             error={Boolean(errors.height)}
             helperText={errors.height
               ?? 'The height of the book in centimeters'}
@@ -290,7 +290,7 @@ export default function AddBook({
               endAdornment: <InputAdornment position="end">cm</InputAdornment>,
               inputProps: {
                 min: 0,
-                step: 0.1,
+                step: 0.01,
               },
             }}
           />
