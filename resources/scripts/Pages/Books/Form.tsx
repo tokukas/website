@@ -1,3 +1,4 @@
+import AppHead from '@/Components/AppHead';
 import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
 import FieldSection from '@/Components/FieldSection';
 import FormDialog from '@/Components/FormDialog';
@@ -102,6 +103,13 @@ export default function FormBook({
 
   return (
     <>
+      <AppHead
+        title={pageTitle}
+        description={bookToEdit
+          ? `Edit "${bookToEdit.title}" book`
+          : 'Add new book'}
+      />
+
       <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
         <Link
           href={route('books.index')}
@@ -481,11 +489,7 @@ FormBook.defaultProps = {
  * @see https://inertiajs.com/pages#persistent-layouts
  */
 FormBook.layout = (children: React.ReactNode) => (
-  <DashboardLayout
-    title="Book Form"
-    description="Tokukas's Books Data"
-    activeSidebarKey="books"
-  >
+  <DashboardLayout activeSidebarKey="books">
     {children}
   </DashboardLayout>
 );
