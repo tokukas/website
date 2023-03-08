@@ -4,8 +4,10 @@ import VerticalTable from '@/Components/VerticalTable';
 import { Book } from '@/Entities/Book';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import Language from '@/Utils/Language';
+import EditIcon from '@mui/icons-material/Edit';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Chip from '@mui/material/Chip';
+import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
@@ -69,6 +71,22 @@ export default function ShowBook({ book }: TPropsShowBook) {
           { label: 'Last Update', value: dayjs(book.updated_at).toString() },
         ]}
       />
+
+      <Link
+        href={route('books.edit', { book: book.id })}
+        sx={{
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+        }}
+      >
+        <Fab
+          aria-label="Edit"
+          color="primary"
+        >
+          <EditIcon />
+        </Fab>
+      </Link>
     </>
   );
 }
