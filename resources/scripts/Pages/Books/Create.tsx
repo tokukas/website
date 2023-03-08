@@ -1,6 +1,4 @@
-import AutocompleteAddOption, {
-  TOption,
-} from '@/Components/AutocompleteAddOption';
+import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
 import FieldSection from '@/Components/FieldSection';
 import FormDialog from '@/Components/FormDialog';
 import Link from '@/Components/Link';
@@ -12,6 +10,7 @@ import DashboardLayout from '@/Layouts/DashboardLayout';
 import Language from '@/Utils/Language';
 import { useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import HelpIcon from '@mui/icons-material/Help';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
@@ -26,48 +25,67 @@ import dayjs, { Dayjs } from 'dayjs';
 import React from 'react';
 import route from 'ziggy-js';
 
-export type TPropsAddBook = {
+export type TPropsFormBook = {
   authors: readonly Author[];
+  bookToEdit?: Book;
   categories: readonly Category[];
-  data: Record<keyof Book, unknown>;
+  data?: Record<keyof Book, unknown>;
   publishers: readonly Publisher[];
 }
 
-type AddBookFields = Omit<Book,
+type BookFields = Omit<Book,
   'id' | 'created_at' | 'updated_at' | 'publisher'
 > & {
   author_ids: string[];
 };
 
-type AuthorOptionType = TOption<Author, 'name'>;
-type CategoryOptionType = TOption<Category, 'name'>;
-type PublisherOptionType = TOption<Publisher, 'name'>;
-
-export default function AddBook({
+export default function FormBook({
   authors,
+  bookToEdit,
   categories,
   data,
   publishers,
-}: TPropsAddBook) {
-  const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(null);
+}: TPropsFormBook) {
+  const pageTitle = `${bookToEdit ? 'Edit' : 'Add'} Book`;
+
+  const [dayjsValue, setDayjs] = React.useState<Dayjs | null>(
+    bookToEdit ? dayjs().set('year', bookToEdit.year_published) : null,
+  );
+
+  const initialValues: BookFields = {
+    author_ids: bookToEdit?.authors?.map((author) => author.id) ?? [],
+    category_id: bookToEdit?.category_id,
+    description: bookToEdit?.description,
+    height: bookToEdit?.height ?? 0,
+    isbn: bookToEdit?.isbn,
+    language_code: bookToEdit?.language_code ?? '',
+    num_of_pages: bookToEdit?.num_of_pages ?? 0,
+    publisher_id: bookToEdit?.publisher_id,
+    title: bookToEdit?.title ?? data?.title as string ?? '',
+    weight: bookToEdit?.weight ?? 0,
+    width: bookToEdit?.width ?? 0,
+    year_published: bookToEdit?.year_published ?? 0,
+  };
 
   const {
-    clearErrors, errors, post, processing, setData,
-  } = useForm<AddBookFields>({
-    title: data.title ?? '',
-  } as AddBookFields);
+    clearErrors, errors, patch, post, processing, setData,
+  } = useForm<BookFields>(initialValues);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    clearErrors(event.target.name as keyof AddBookFields);
+    clearErrors(event.target.name as keyof BookFields);
     setData(
-      event.target.name as keyof AddBookFields,
+      event.target.name as keyof BookFields,
       event.target.value,
     );
   };
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post(route('books.store'));
+    if (bookToEdit) {
+      patch(route('books.update', bookToEdit), { replace: true });
+    } else {
+      post(route('books.store'));
+    }
   };
 
   const [optionDialog, setOptionDialog] = React.useState<
@@ -92,11 +110,11 @@ export default function AddBook({
         >
           Books
         </Link>
-        <Typography color="text.primary">Add Book</Typography>
+        <Typography color="text.primary">{pageTitle}</Typography>
       </Breadcrumbs>
 
       <Typography variant="h4" component="h1" gutterBottom>
-        Add Book
+        {pageTitle}
       </Typography>
 
       <Box
@@ -108,7 +126,7 @@ export default function AddBook({
             autoFocus
             label="Title"
             name="title"
-            defaultValue={data.title}
+            defaultValue={bookToEdit?.title ?? data?.title}
             placeholder='e.g. "The Lord of the Rings"'
             onChange={handleInputChange}
             error={Boolean(errors.title)}
@@ -120,6 +138,8 @@ export default function AddBook({
             options={Language.getAllLanguages()}
             getOptionLabel={(option) => `${option.name} - ${option.native}`}
             isOptionEqualToValue={(option, value) => option.code === value.code}
+            defaultValue={Language
+              .getLanguageByCode(bookToEdit?.language_code ?? '')}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -138,9 +158,10 @@ export default function AddBook({
           />
 
           <AutocompleteAddOption
-            options={publishers as readonly PublisherOptionType[]}
+            options={publishers}
             dataKey="id"
             labelKey="name"
+            defaultValue={bookToEdit?.publisher}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -188,6 +209,7 @@ export default function AddBook({
           <TextField
             label="ISBN (optional)"
             name="isbn"
+            defaultValue={bookToEdit?.isbn}
             placeholder='e.g. "978-3-16-148410-0"'
             error={Boolean(errors.isbn)}
             helperText={errors.isbn ?? 'International Standard Book Number'}
@@ -196,9 +218,10 @@ export default function AddBook({
 
           <AutocompleteAddOption
             multiple
-            options={authors as readonly AuthorOptionType[]}
+            options={authors}
             dataKey="id"
             labelKey="name"
+            defaultValue={bookToEdit?.authors ?? []}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -227,6 +250,7 @@ export default function AddBook({
             type="number"
             label="Number of Pages"
             name="num_of_pages"
+            defaultValue={bookToEdit?.num_of_pages}
             placeholder="0"
             error={Boolean(errors.num_of_pages)}
             helperText={errors.num_of_pages
@@ -257,6 +281,7 @@ export default function AddBook({
             type="number"
             label="Weight"
             name="weight"
+            defaultValue={bookToEdit?.weight}
             placeholder="0.00"
             error={Boolean(errors.weight)}
             helperText={errors.weight ?? 'The weight of the book in grams'}
@@ -274,6 +299,7 @@ export default function AddBook({
             type="number"
             label="Width"
             name="width"
+            defaultValue={bookToEdit?.width}
             placeholder="0.00"
             error={Boolean(errors.width)}
             helperText={errors.width ?? 'The width of the book in centimeters'}
@@ -291,6 +317,7 @@ export default function AddBook({
             type="number"
             label="Height"
             name="height"
+            defaultValue={bookToEdit?.height}
             placeholder="0.00"
             error={Boolean(errors.height)}
             helperText={errors.height
@@ -308,9 +335,10 @@ export default function AddBook({
 
         <FieldSection title="Additional Information">
           <AutocompleteAddOption
-            options={categories as readonly CategoryOptionType[]}
+            options={categories}
             dataKey="id"
             labelKey="name"
+            defaultValue={bookToEdit?.category}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -338,6 +366,7 @@ export default function AddBook({
             multiline
             minRows={2}
             maxRows={6}
+            defaultValue={bookToEdit?.description}
             onChange={handleInputChange}
             placeholder="Write a short description of the book..."
             error={Boolean(errors.description)}
@@ -355,13 +384,13 @@ export default function AddBook({
           <Button
             variant="contained"
             type="submit"
-            startIcon={<AddIcon />}
+            startIcon={bookToEdit ? <EditIcon /> : <AddIcon />}
             disabled={processing}
             sx={{
               width: { xs: '100%', sm: 'auto' },
             }}
           >
-            Add Book
+            {pageTitle}
           </Button>
         </Box>
       </Box>
@@ -441,14 +470,19 @@ export default function AddBook({
   );
 }
 
+FormBook.defaultProps = {
+  bookToEdit: undefined,
+  data: undefined,
+};
+
 /**
  * Set the parent layout for this page.
  *
  * @see https://inertiajs.com/pages#persistent-layouts
  */
-AddBook.layout = (children: React.ReactNode) => (
+FormBook.layout = (children: React.ReactNode) => (
   <DashboardLayout
-    title="Add Book"
+    title="Book Form"
     description="Tokukas's Books Data"
     activeSidebarKey="books"
   >
