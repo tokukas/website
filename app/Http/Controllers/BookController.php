@@ -39,7 +39,7 @@ class BookController extends Controller
      */
     public function create(Request $request): InertiaResponse
     {
-        return Inertia::render('Books/Create', [
+        return Inertia::render('Books/Form', [
             'authors' => Author::all(),
             'categories' => Category::all(),
             'data' => [
@@ -82,7 +82,7 @@ class BookController extends Controller
      */
     public function edit(Request $request, Book $book): InertiaResponse
     {
-        return Inertia::render('Books/Create', [
+        return Inertia::render('Books/Form', [
             'authors' => Author::all(),
             'bookToEdit' => $book->load('publisher', 'authors', 'category'),
             'categories' => Category::all(),

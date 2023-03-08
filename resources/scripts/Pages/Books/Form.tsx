@@ -33,7 +33,7 @@ export type TPropsFormBook = {
   publishers: readonly Publisher[];
 }
 
-type BookFields = Omit<Book,
+type BookFields = Omit<Partial<Book>,
   'id' | 'created_at' | 'updated_at' | 'publisher'
 > & {
   author_ids: string[];
@@ -56,15 +56,15 @@ export default function FormBook({
     author_ids: bookToEdit?.authors?.map((author) => author.id) ?? [],
     category_id: bookToEdit?.category_id,
     description: bookToEdit?.description,
-    height: bookToEdit?.height ?? 0,
+    height: bookToEdit?.height,
     isbn: bookToEdit?.isbn,
-    language_code: bookToEdit?.language_code ?? '',
-    num_of_pages: bookToEdit?.num_of_pages ?? 0,
+    language_code: bookToEdit?.language_code,
+    num_of_pages: bookToEdit?.num_of_pages,
     publisher_id: bookToEdit?.publisher_id,
-    title: bookToEdit?.title ?? data?.title as string ?? '',
-    weight: bookToEdit?.weight ?? 0,
-    width: bookToEdit?.width ?? 0,
-    year_published: bookToEdit?.year_published ?? 0,
+    title: bookToEdit?.title ?? data?.title as string,
+    weight: bookToEdit?.weight,
+    width: bookToEdit?.width,
+    year_published: bookToEdit?.year_published,
   };
 
   const {
