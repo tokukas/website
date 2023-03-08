@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function index(): InertiaResponse
     {
         return Inertia::render('Products/Index', [
-            // 
+            'products' => Product::all()->load('book'),
         ]);
     }
 
@@ -40,7 +40,7 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
         $product = Product::create($validated);
-        
+
         if ($product) {
             // TODO: redirect to detail product page.
             return redirect()->route('products.index');
