@@ -91,7 +91,9 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
               setData('book_id', id ?? '');
             }}
             onSelectAddOption={(title) => {
-              router.get(route('books.create'), { title });
+              router.get(route('books.create'), { title, to: 'back' }, {
+                replace: true,
+              });
             }}
           />
 

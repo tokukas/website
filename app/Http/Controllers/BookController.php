@@ -16,6 +16,14 @@ use Inertia\Response as InertiaResponse;
 class BookController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('to')->only('create');
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(): InertiaResponse
