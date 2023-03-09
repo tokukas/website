@@ -42,8 +42,7 @@ class ProductController extends Controller
         $product = Product::create($validated);
 
         if ($product) {
-            // TODO: redirect to detail product page.
-            return redirect()->route('products.index');
+            return redirect()->intended(route('products.show', $product));
         }
 
         return back()->withErrors([
