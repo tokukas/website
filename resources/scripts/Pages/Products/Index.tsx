@@ -37,10 +37,19 @@ export default function Products({ products }: TPropsProducts) {
       ),
     },
     {
-      field: 'book_title',
-      headerName: 'Book Title',
+      field: 'book',
+      headerName: 'Book',
       width: 200,
       valueGetter: (params) => params.row.book.title,
+      renderCell: (params) => (
+        <Link
+          href={route('books.show', params.row.book.id)}
+          underline="hover"
+          color="inherit"
+        >
+          {params.value}
+        </Link>
+      ),
     },
     { field: 'price', headerName: 'Price', width: 120 },
     {
