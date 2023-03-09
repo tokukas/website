@@ -1,6 +1,7 @@
 import AppHead from '@/Components/AppHead';
 import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
 import FieldSection from '@/Components/FieldSection';
+import FileInput from '@/Components/FileInput';
 import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
 import { Product } from '@/Entities/Product';
@@ -59,6 +60,8 @@ export default function FormProduct({
       post(route('products.store'));
     }
   };
+
+  const [file, setFile] = React.useState<File | null>(null);
 
   return (
     <>
@@ -177,6 +180,15 @@ export default function FormProduct({
             onChange={handleInputChange}
             multiline
             minRows={2}
+          />
+
+          <FileInput
+            label="Photo"
+            placeholder="Select image file (max. 2MB)"
+            value={file}
+            onChange={(newFile) => {
+              setFile(newFile);
+            }}
           />
         </FieldSection>
 
