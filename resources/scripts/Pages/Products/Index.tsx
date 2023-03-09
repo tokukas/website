@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import dayjs from 'dayjs';
 import React from 'react';
 import route from 'ziggy-js';
 
@@ -42,8 +43,18 @@ export default function Products({ products }: TPropsProducts) {
       valueGetter: (params) => params.row.book.title,
     },
     { field: 'price', headerName: 'Price', width: 120 },
-    { field: 'created_at', headerName: 'Created At' },
-    { field: 'updated_at', headerName: 'Updated At' },
+    {
+      field: 'created_at',
+      headerName: 'Created At',
+      width: 200,
+      valueGetter: (params) => dayjs(params.row.created_at),
+    },
+    {
+      field: 'updated_at',
+      headerName: 'Updated At',
+      width: 200,
+      valueGetter: (params) => dayjs(params.row.updated_at),
+    },
   ];
 
   return (
