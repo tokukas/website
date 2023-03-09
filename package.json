@@ -42,6 +42,7 @@
         "dayjs": "^1.11.7",
         "laravel-vite-plugin": "^0.7.4",
         "lodash": "^4.17.21",
+        "mui-file-input": "^2.0.0",
         "notistack": "^2.0.8",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
