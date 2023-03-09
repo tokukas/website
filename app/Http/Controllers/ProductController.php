@@ -28,7 +28,7 @@ class ProductController extends Controller
      */
     public function create(): InertiaResponse
     {
-        return Inertia::render('Products/Create', [
+        return Inertia::render('Products/Form', [
             'books' => Book::all(),
         ]);
     }
@@ -60,21 +60,32 @@ class ProductController extends Controller
         ]);
     }
 
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  */
-    // public function edit(Product $product): Response
-    // {
-    //     //
-    // }
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Product $product): InertiaResponse
+    {
+        return Inertia::render('Products/Form', [
+            'books' => Book::all(),
+            'productToEdit' => $product->load('book'),
+        ]);
+    }
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  */
-    // public function update(UpdateProductRequest $request, Product $product): RedirectResponse
-    // {
-    //     //
-    // }
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        if ($product->update($validated)) {
+            return redirect()->intended(route('products.show', $product));
+        }
+
+        return back()->withErrors([
+            'error' => 'Error updating product',
+        ]);
+    }
 
     // /**
     //  * Remove the specified resource from storage.
