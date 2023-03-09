@@ -40,7 +40,9 @@ export default function Products({ products }: TPropsProducts) {
       field: 'book',
       headerName: 'Book',
       width: 200,
-      valueGetter: (params) => params.row.book.title,
+      valueGetter: ({ row }) => (
+        `${row.book.title} (${row.book.year_published})`
+      ),
       renderCell: (params) => (
         <Link
           href={route('books.show', params.row.book.id)}
