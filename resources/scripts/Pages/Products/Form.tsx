@@ -1,3 +1,4 @@
+import AppHead from '@/Components/AppHead';
 import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
 import FieldSection from '@/Components/FieldSection';
 import Link from '@/Components/Link';
@@ -15,34 +16,59 @@ import Typography from '@mui/material/Typography';
 import React from 'react';
 import route from 'ziggy-js';
 
-export type TPropsAddProduct = {
+export type TPropsFormProduct = {
   books: readonly Book[];
+  productToEdit?: Product;
 }
 
-type AddProductFields = Omit<Product,
+type ProductFields = Omit<Partial<Product>,
   'id' | 'created_at' | 'updated_at' | 'book'
 >;
 
-export default function CreateProduct({ books }: TPropsAddProduct) {
+export default function FormProduct({
+  books,
+  productToEdit,
+}: TPropsFormProduct) {
+  const pageTitle = `${productToEdit ? 'Edit' : 'Add'} Product`;
+
+  const initialValues: ProductFields = {
+    book_id: productToEdit?.book_id,
+    name: productToEdit?.name,
+    sku: productToEdit?.sku,
+    price: productToEdit?.price,
+    description: productToEdit?.description,
+  };
+
   const {
-    clearErrors, errors, post, processing, setData,
-  } = useForm<AddProductFields>();
+    clearErrors, errors, patch, post, processing, setData,
+  } = useForm<ProductFields>(initialValues);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    clearErrors(event.target.name as keyof AddProductFields);
+    clearErrors(event.target.name as keyof ProductFields);
     setData(
-      event.target.name as keyof AddProductFields,
+      event.target.name as keyof ProductFields,
       event.target.value,
     );
   };
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post(route('products.store'));
+    if (productToEdit) {
+      patch(route('products.update', productToEdit), { replace: true });
+    } else {
+      post(route('products.store'));
+    }
   };
 
   return (
     <>
+      <AppHead
+        title={pageTitle}
+        description={productToEdit
+          ? `Edit product "${productToEdit.name}"`
+          : 'Add new product'}
+      />
+
       <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
         <Link
           href={route('products.index')}
@@ -51,11 +77,11 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
         >
           Products
         </Link>
-        <Typography color="text.primary">Add Product</Typography>
+        <Typography color="text.primary">{pageTitle}</Typography>
       </Breadcrumbs>
 
       <Typography variant="h4" component="h1" gutterBottom>
-        Add Product
+        {pageTitle}
       </Typography>
 
       <Box
@@ -67,10 +93,12 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
             labelKey="title"
             dataKey="id"
             options={books}
+            defaultValue={productToEdit?.book}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
+                autoFocus
                 name="book_id"
                 label="Book"
                 placeholder="Select Book"
@@ -103,6 +131,7 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
           <TextField
             name="name"
             label="Name"
+            defaultValue={productToEdit?.name}
             placeholder='e.g. "The Lord of the Rings"'
             error={Boolean(errors.name)}
             helperText={errors.name ?? 'Max. 70 characters'}
@@ -112,6 +141,7 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
           <TextField
             name="sku"
             label="SKU"
+            defaultValue={productToEdit?.sku}
             placeholder='e.g. "LOTR-001"'
             error={Boolean(errors.sku)}
             helperText={errors.sku ?? 'Stock Keeping Unit'}
@@ -122,6 +152,7 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
             name="price"
             label="Price"
             type="number"
+            defaultValue={productToEdit?.price}
             placeholder="0"
             error={Boolean(errors.price)}
             helperText={errors.price}
@@ -140,6 +171,7 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
           <TextField
             name="description"
             label="Description (optional)"
+            defaultValue={productToEdit?.description}
             error={Boolean(errors.description)}
             helperText={errors.description}
             onChange={handleInputChange}
@@ -164,7 +196,7 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
               width: { xs: '100%', sm: 'auto' },
             }}
           >
-            Add Product
+            {pageTitle}
           </Button>
         </Box>
       </Box>
@@ -172,17 +204,17 @@ export default function CreateProduct({ books }: TPropsAddProduct) {
   );
 }
 
+FormProduct.defaultProps = {
+  productToEdit: undefined,
+};
+
 /**
  * Set the parent layout for this page.
  *
  * @see https://inertiajs.com/pages#persistent-layouts
  */
-CreateProduct.layout = (children: React.ReactNode) => (
-  <DashboardLayout
-    title="Create Product"
-    description="Tokukas's Product Data"
-    activeSidebarKey="products"
-  >
+FormProduct.layout = (children: React.ReactNode) => (
+  <DashboardLayout activeSidebarKey="products">
     {children}
   </DashboardLayout>
 );

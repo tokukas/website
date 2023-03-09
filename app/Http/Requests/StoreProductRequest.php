@@ -41,6 +41,16 @@ class StoreProductRequest extends FormRequest
     }
 
     /**
+     * Get custom attributes for validator errors.
+     */
+    public function attributes(): array
+    {
+        return [
+            'book_id' => 'book',
+        ];
+    }
+
+    /**
      * Get the error messages for the defined validation rules.
      *
      * @return array<string, string>
