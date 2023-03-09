@@ -42,8 +42,7 @@ class ProductController extends Controller
         $product = Product::create($validated);
 
         if ($product) {
-            // TODO: redirect to detail product page.
-            return redirect()->route('products.index');
+            return redirect()->intended(route('products.show', $product));
         }
 
         return back()->withErrors([
@@ -51,13 +50,15 @@ class ProductController extends Controller
         ]);
     }
 
-    // /**
-    //  * Display the specified resource.
-    //  */
-    // public function show(Product $product): Response
-    // {
-    //     //
-    // }
+    /**
+     * Display the specified resource.
+     */
+    public function show(Product $product): InertiaResponse
+    {
+        return Inertia::render('Products/Show', [
+            'product' => $product->load('book'),
+        ]);
+    }
 
     // /**
     //  * Show the form for editing the specified resource.
