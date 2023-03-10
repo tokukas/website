@@ -29,7 +29,7 @@
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
         "@fontsource/quicksand": "^4.5.12",
-        "@headlessui/react": "^1.7.11",
+        "@headlessui/react": "^1.7.13",
         "@inertiajs/react": "^1.0.2",
         "@mui/icons-material": "^5.11.9",
         "@mui/material": "^5.11.10",
