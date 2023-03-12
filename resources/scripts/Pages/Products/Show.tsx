@@ -4,8 +4,11 @@ import VerticalTable from '@/Components/VerticalTable';
 import { Product } from '@/Entities/Product';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import EditIcon from '@mui/icons-material/Edit';
+import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Fab from '@mui/material/Fab';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import React from 'react';
@@ -34,6 +37,27 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
       <Typography variant="h4" component="h1" gutterBottom>
         {product.name}
       </Typography>
+
+      {product?.photos && !!product.photos.length && (
+        <Box
+          sx={{
+            height: { sm: 'auto', md: 420 },
+            overflowY: 'scroll',
+          }}
+        >
+          <ImageList gap={8}>
+            {product.photos.map((photo) => (
+              <ImageListItem key={photo.id}>
+                <img
+                  src={photo.url}
+                  alt={photo.caption}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Box>
+      )}
 
       <VerticalTable
         data={[

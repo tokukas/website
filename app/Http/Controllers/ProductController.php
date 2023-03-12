@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Book;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
@@ -62,7 +63,9 @@ class ProductController extends Controller
     public function show(Product $product): InertiaResponse
     {
         return Inertia::render('Products/Show', [
-            'product' => $product->load('book'),
+            'product' => ProductResource::make(
+                $product->load('book', 'photos'),
+            ),
         ]);
     }
 
@@ -73,7 +76,9 @@ class ProductController extends Controller
     {
         return Inertia::render('Products/Form', [
             'books' => Book::all(),
-            'productToEdit' => $product->load('book'),
+            'productToEdit' => ProductResource::make(
+                $product->load('book', 'photos'),
+            ),
         ]);
     }
 

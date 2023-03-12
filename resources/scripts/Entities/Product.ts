@@ -1,4 +1,5 @@
 import { Book } from './Book';
+import { Image } from './Image';
 
 export type Product = {
   book: Book;
@@ -7,6 +8,7 @@ export type Product = {
   description?: string;
   id: string;
   name: string;
+  photos?: Image[];
   price: number;
   sku: string;
   updated_at?: string;
