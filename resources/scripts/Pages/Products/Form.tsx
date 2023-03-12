@@ -24,7 +24,7 @@ export type TPropsFormProduct = {
 }
 
 type ProductFields = Omit<Partial<Product>,
-  'id' | 'created_at' | 'updated_at' | 'book'
+  'id' | 'created_at' | 'updated_at' | 'book' | 'photos'
 > & {
   _method?: string;
   photos: File[];
