@@ -83,8 +83,13 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         $validated = $request->validated();
+        $success = $product->update($validated);
 
-        if ($product->update($validated)) {
+        if ($success && $validated['photos']) {
+            $success = $this->uploadPhotos($product, $validated['photos']);
+        }
+
+        if ($success) {
             return redirect()->intended(route('products.show', $product));
         }
 

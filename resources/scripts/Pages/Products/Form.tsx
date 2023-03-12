@@ -26,6 +26,7 @@ export type TPropsFormProduct = {
 type ProductFields = Omit<Partial<Product>,
   'id' | 'created_at' | 'updated_at' | 'book'
 > & {
+  _method?: string;
   photos: File[];
 };
 
@@ -36,6 +37,7 @@ export default function FormProduct({
   const pageTitle = `${productToEdit ? 'Edit' : 'Add'} Product`;
 
   const initialValues: ProductFields = {
+    _method: productToEdit ? 'patch' : undefined,
     book_id: productToEdit?.book_id,
     name: productToEdit?.name,
     sku: productToEdit?.sku,
@@ -45,7 +47,7 @@ export default function FormProduct({
   };
 
   const {
-    clearErrors, data, errors, patch, post, processing, setData,
+    clearErrors, data, errors, post, processing, setData,
   } = useForm<ProductFields>(initialValues);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +61,7 @@ export default function FormProduct({
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (productToEdit) {
-      patch(route('products.update', productToEdit), { replace: true });
+      post(route('products.update', productToEdit), { replace: true });
     } else {
       post(route('products.store'));
     }
@@ -209,7 +211,7 @@ export default function FormProduct({
 
           <FileInput
             multiple
-            label="Photos"
+            label={`Photos${productToEdit ? ' (optional)' : ''}`}
             value={data.photos}
             placeholder="Select product photo(s)"
             error={Boolean(photosError?.error)}
