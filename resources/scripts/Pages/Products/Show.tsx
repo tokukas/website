@@ -72,7 +72,6 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
         )}
 
         <VerticalTable
-          sx={{ mt: 0 }}
           data={[
             {
               label: 'Book',
