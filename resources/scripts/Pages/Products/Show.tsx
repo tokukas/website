@@ -7,11 +7,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Fab from '@mui/material/Fab';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import React from 'react';
+import Carousel from 'react-material-ui-carousel';
 import route from 'ziggy-js';
 
 type TPropsShowProduct = {
@@ -38,54 +37,69 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
         {product.name}
       </Typography>
 
-      {product?.photos && !!product.photos.length && (
-        <Box
-          sx={{
-            height: { sm: 'auto', md: 420 },
-            overflowY: 'scroll',
-          }}
-        >
-          <ImageList gap={8}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: '1fr 1fr',
+            md: '1fr 2fr',
+          },
+          gap: {
+            sm: 3,
+            md: 4,
+          },
+        }}
+      >
+        {product?.photos && !!product.photos.length && (
+          <Carousel
+            animation="slide"
+            indicators={false}
+          >
             {product.photos.map((photo) => (
-              <ImageListItem key={photo.id}>
-                <img
-                  src={photo.url}
-                  alt={photo.caption}
-                  loading="lazy"
-                />
-              </ImageListItem>
+              <img
+                key={photo.id}
+                src={photo.url}
+                alt={photo.caption}
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  objectFit: 'cover',
+                }}
+              />
             ))}
-          </ImageList>
-        </Box>
-      )}
+          </Carousel>
+        )}
 
-      <VerticalTable
-        data={[
-          {
-            label: 'Book',
-            disabledDataStyle: true,
-            value: (
-              <Link
-                href={route('books.show', { book: product.book_id })}
-                fontWeight="bold"
-              >
-                {`${product.book.title} (${product.book.year_published})`}
-              </Link>
-            ),
-          },
-          { label: 'SKU', value: product.sku },
-          { label: 'Price', value: `Rp${product.price}` },
-          { label: 'Description', value: product.description },
-          {
-            label: 'Date Creation',
-            value: dayjs(product.created_at).toString(),
-          },
-          {
-            label: 'Last Update',
-            value: dayjs(product.updated_at).toString(),
-          },
-        ]}
-      />
+        <VerticalTable
+          sx={{ mt: 0 }}
+          data={[
+            {
+              label: 'Book',
+              disabledDataStyle: true,
+              value: (
+                <Link
+                  href={route('books.show', { book: product.book_id })}
+                  fontWeight="bold"
+                >
+                  {`${product.book.title} (${product.book.year_published})`}
+                </Link>
+              ),
+            },
+            { label: 'SKU', value: product.sku },
+            { label: 'Price', value: `Rp${product.price}` },
+            { label: 'Description', value: product.description },
+            {
+              label: 'Date Creation',
+              value: dayjs(product.created_at).toString(),
+            },
+            {
+              label: 'Last Update',
+              value: dayjs(product.updated_at).toString(),
+            },
+          ]}
+        />
+      </Box>
 
       <Link
         href={route('products.edit', { product })}
