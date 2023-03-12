@@ -8,6 +8,8 @@ use App\Models\Book;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
@@ -41,7 +43,11 @@ class ProductController extends Controller
         $validated = $request->validated();
         $product = Product::create($validated);
 
-        if ($product) {
+        if (
+            $product
+            && $validated['photos']
+            && $this->uploadPhotos($product, $validated['photos'])
+        ) {
             return redirect()->intended(route('products.show', $product));
         }
 
@@ -94,4 +100,37 @@ class ProductController extends Controller
     // {
     //     //
     // }
+
+    /**
+     * Upload the product's photo(s).
+     *
+     * @param Product $product
+     * @param UploadedFile[] $photos
+     * @return bool True if all photos were saved successfully, false otherwise.
+     */
+    protected function uploadPhotos(Product $product, array $photos): bool
+    {
+        $statuses = array_map(function (UploadedFile $photo) use ($product) {
+            // Save the photo file into images folder.
+            $path = Storage::putFile('images', $photo);
+
+            if (!$path) {
+                return false;
+            }
+
+            // Create a new photo record in the database.
+            $photoProduct = $product->photos()->create([
+                'path' => $path,
+                'caption' => $photo->getClientOriginalName(),
+            ]);
+
+            if (!$photoProduct) {
+                return false;
+            }
+
+            return true;
+        }, $photos);
+
+        return !in_array(false, $statuses);
+    }
 }
