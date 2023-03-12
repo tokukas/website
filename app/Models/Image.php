@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Image extends Model
 {
+    use HasUlids;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -35,18 +38,6 @@ class Image extends Model
     {
         return Attribute::make(
             set: fn ($value) => str()->ucfirst($value),
-        );
-    }
-
-    /**
-     * Interacts with the image's path.
-     *
-     * Sets the path to lowercase.
-     */
-    protected function path(): Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => str()->lower($value),
         );
     }
 }
