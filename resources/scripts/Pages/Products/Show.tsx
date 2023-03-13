@@ -18,6 +18,14 @@ type TPropsShowProduct = {
 }
 
 export default function ShowProduct({ product }: TPropsShowProduct) {
+  const isPhotosExists = React.useMemo<boolean>(() => {
+    if (!product?.photos) {
+      return false;
+    }
+
+    return !!product.photos.length;
+  }, [product]);
+
   return (
     <>
       <AppHead title={product.name} />
@@ -42,21 +50,26 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
           display: 'grid',
           gridTemplateColumns: {
             xs: '1fr',
-            sm: '1fr 1fr',
-            md: '1fr 2fr',
+            ...(isPhotosExists && {
+              sm: '1fr 1fr',
+              md: '1fr 2fr',
+            }),
           },
           gap: {
-            sm: 3,
-            md: 4,
+            xs: 0,
+            ...(isPhotosExists && {
+              sm: 3,
+              md: 4,
+            }),
           },
         }}
       >
-        {product?.photos && !!product.photos.length && (
+        {isPhotosExists && (
           <Carousel
             animation="slide"
             indicators={false}
           >
-            {product.photos.map((photo) => (
+            {product.photos?.map((photo) => (
               <img
                 key={photo.id}
                 src={photo.url}
