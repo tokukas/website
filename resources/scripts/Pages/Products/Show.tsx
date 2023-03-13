@@ -1,9 +1,11 @@
 import AppHead from '@/Components/AppHead';
+import DismissSnackbarAction from '@/Components/DismissSnackbarAction';
 import Link from '@/Components/Link';
 import VerticalTable from '@/Components/VerticalTable';
 import { Image } from '@/Entities/Image';
 import { Product } from '@/Entities/Product';
 import DashboardLayout from '@/Layouts/DashboardLayout';
+import { router } from '@inertiajs/react';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -11,6 +13,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Fab from '@mui/material/Fab';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -20,6 +28,7 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
+import { useSnackbar } from 'notistack';
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import route from 'ziggy-js';
@@ -34,6 +43,9 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
   const [anchorElOptions,
     setAnchorElOptions] = React.useState<null | HTMLElement>(null);
 
+  const [openDeleteDialog,
+    setOpenDeleteDialog] = React.useState<boolean>(false);
+
   const isPhotosExists = React.useMemo<boolean>(() => {
     if (!product?.photos) {
       return false;
@@ -41,6 +53,38 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
 
     return !!product.photos.length;
   }, [product]);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const deletePhoto = (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    if (photoBackdrop) {
+      router.post(route('images.destroy', photoBackdrop), {
+        _method: 'delete',
+      }, {
+        onFinish: () => {
+          setOpenDeleteDialog(false);
+          setAnchorElOptions(null);
+          setPhotoBackdrop(null);
+        },
+        onError: () => {
+          enqueueSnackbar('Failed to delete the photo.', {
+            variant: 'error',
+            action: DismissSnackbarAction,
+            preventDuplicate: true,
+          });
+        },
+        onSuccess: () => {
+          enqueueSnackbar('Photo deleted successfully.', {
+            variant: 'success',
+            action: DismissSnackbarAction,
+            preventDuplicate: true,
+          });
+        },
+      });
+    }
+  };
 
   return (
     <>
@@ -207,8 +251,12 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
                 'aria-labelledby': 'options-menu',
               }}
             >
-              {/* TODO: handle delete action */}
-              <MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setOpenDeleteDialog(true);
+                  setAnchorElOptions(null);
+                }}
+              >
                 <ListItemIcon>
                   <DeleteIcon fontSize="small" />
                 </ListItemIcon>
@@ -220,6 +268,36 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
           </Box>
         )}
       </Backdrop>
+
+      {photoBackdrop && (
+        <Dialog
+          open={openDeleteDialog}
+          aria-labelledby="alertDialogDeleteTitle"
+          aria-describedby="alertDialogDeleteDesc"
+        >
+          <DialogTitle id="alertDialogDeleteTitle">
+            Delete this photo?
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alertDialogDeleteDesc">
+              Are you sure you want to delete this photo?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              autoFocus
+              onClick={() => setOpenDeleteDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={deletePhoto}
+            >
+              Yes, Delete It
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
 
       <Link
         href={route('products.edit', { product })}
