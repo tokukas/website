@@ -51,7 +51,14 @@ export default function DashboardLayout({
           items={dashboardSidebarItems}
           selectedItem={activeSidebarKey}
         />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box
+          component="main"
+          sx={{
+            p: 3,
+            flexGrow: 1,
+            maxWidth: 'calc(100vw - 64px)',
+          }}
+        >
           {children}
         </Box>
       </Box>
