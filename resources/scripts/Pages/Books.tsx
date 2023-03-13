@@ -89,10 +89,16 @@ export default function Books({ books }: TPropsBooks) {
         <DataGrid
           columns={bookColumns}
           rows={bookRows}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          pageSizeOptions={[5, 10, 20]}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
           checkboxSelection
-          disableSelectionOnClick
+          disableRowSelectionOnClick
         />
       </Paper>
     </>

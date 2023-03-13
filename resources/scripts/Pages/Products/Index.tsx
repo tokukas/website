@@ -90,16 +90,22 @@ export default function Products({ products }: TPropsProducts) {
             <AddIcon fontSize="large" />
           </IconButton>
         </Tooltip>
-
       </Box>
+
       <Paper sx={{ height: 380, width: '100%' }}>
         <DataGrid
           columns={productColumns}
           rows={products}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          pageSizeOptions={[5, 10, 20]}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
           checkboxSelection
-          disableSelectionOnClick
+          disableRowSelectionOnClick
         />
       </Paper>
     </>
