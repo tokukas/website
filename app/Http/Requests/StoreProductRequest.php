@@ -25,6 +25,8 @@ class StoreProductRequest extends FormRequest
             'book_id' => ['required', 'exists:\App\Models\Book,id'],
             'name' => ['required', 'string', 'max:70'],
             'sku' => ['required', 'string', 'max:22', 'unique:\App\Models\Product,sku'],
+            'photos' => ['required', 'array', 'max:5'],
+            'photos.*' => ['required', 'image', 'max:2048'],
             'price' => ['required', 'numeric', 'min:0'],
             'description' => ['nullable', 'string'],
         ];
@@ -47,6 +49,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'book_id' => 'book',
+            'photos.*' => 'photo',
         ];
     }
 

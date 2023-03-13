@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Product extends Model
 {
@@ -76,5 +77,13 @@ class Product extends Model
     public function book(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Book::class);
+    }
+
+    /**
+     * Get all product's photos.
+     */
+    public function photos(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

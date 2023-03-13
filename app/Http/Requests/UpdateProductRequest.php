@@ -22,6 +22,7 @@ class UpdateProductRequest extends StoreProductRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
+            'photos' => ['nullable', 'array', 'max:5'],
             'sku' => ['required', 'string', 'max:22', 'unique:\App\Models\Product,sku,' . $this->product->id],
         ]);
     }

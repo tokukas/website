@@ -1,10 +1,12 @@
 import AppHead from '@/Components/AppHead';
 import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
 import FieldSection from '@/Components/FieldSection';
+import FileInput from '@/Components/FileInput';
 import Link from '@/Components/Link';
 import { Book } from '@/Entities/Book';
 import { Product } from '@/Entities/Product';
 import DashboardLayout from '@/Layouts/DashboardLayout';
+import FileValidator from '@/Utils/FileValidator';
 import { router, useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
@@ -22,8 +24,11 @@ export type TPropsFormProduct = {
 }
 
 type ProductFields = Omit<Partial<Product>,
-  'id' | 'created_at' | 'updated_at' | 'book'
->;
+  'id' | 'created_at' | 'updated_at' | 'book' | 'photos'
+> & {
+  _method?: string;
+  photos: File[];
+};
 
 export default function FormProduct({
   books,
@@ -32,15 +37,17 @@ export default function FormProduct({
   const pageTitle = `${productToEdit ? 'Edit' : 'Add'} Product`;
 
   const initialValues: ProductFields = {
+    _method: productToEdit ? 'patch' : undefined,
     book_id: productToEdit?.book_id,
     name: productToEdit?.name,
     sku: productToEdit?.sku,
+    photos: [],
     price: productToEdit?.price,
     description: productToEdit?.description,
   };
 
   const {
-    clearErrors, errors, patch, post, processing, setData,
+    clearErrors, data, errors, post, processing, setData,
   } = useForm<ProductFields>(initialValues);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +61,34 @@ export default function FormProduct({
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (productToEdit) {
-      patch(route('products.update', productToEdit), { replace: true });
+      post(route('products.update', productToEdit), { replace: true });
     } else {
       post(route('products.store'));
     }
   };
+
+  const photosValidator = new FileValidator<true>({
+    maxSize: 2 * 1024 * 1024, // 2 MB
+    allowedTypes: ['image/jpeg', 'image/png', 'image/webp'],
+  });
+
+  const [photosError, setPhotosError] = React.useState<{
+    error?: string | null;
+    key: string;
+  } | undefined>(undefined);
+
+  React.useEffect(() => {
+    if (errors.photos) {
+      setPhotosError({ error: errors.photos, key: 'photos' });
+      return;
+    }
+
+    // Get photos.* error if exists (photos.0, photos.1, etc.)
+    setPhotosError(Object.keys(errors)
+      .filter((key) => key.startsWith('photos.'))
+      .map((key) => ({ key, error: errors[key as keyof ProductFields] }))
+      .at(0));
+  }, [errors]);
 
   return (
     <>
@@ -177,6 +207,29 @@ export default function FormProduct({
             onChange={handleInputChange}
             multiline
             minRows={2}
+          />
+
+          <FileInput
+            multiple
+            label={`Photos${productToEdit ? ' (optional)' : ''}`}
+            value={data.photos}
+            placeholder="Select product photo(s)"
+            error={Boolean(photosError?.error)}
+            helperText={photosError?.error
+              ?? 'Max. 5 photos with max. 2MB each'}
+            onChange={(newPhotos) => {
+              if (photosValidator.validate(newPhotos)) {
+                if (photosError) {
+                  clearErrors(photosError.key as keyof ProductFields);
+                }
+                setData('photos', newPhotos);
+              } else {
+                setPhotosError({
+                  key: 'photos',
+                  error: photosValidator.getError(),
+                });
+              }
+            }}
           />
         </FieldSection>
 
