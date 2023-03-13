@@ -33,7 +33,7 @@
         "@inertiajs/react": "^1.0.2",
         "@mui/icons-material": "^5.11.9",
         "@mui/material": "^5.11.12",
-        "@mui/x-data-grid": "^5.17.24",
+        "@mui/x-data-grid": "^6.0.1",
         "@mui/x-date-pickers": "^6.0.1",
         "@tailwindcss/forms": "^0.5.3",
         "@vitejs/plugin-react": "^3.1.0",
