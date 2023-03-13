@@ -97,7 +97,7 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
         <Typography color="text.primary">{product.name}</Typography>
       </Breadcrumbs>
 
-      <Typography variant="h4" component="h1" gutterBottom mb={3}>
+      <Typography variant="h4" component="h1" gutterBottom>
         {product.name}
       </Typography>
 
@@ -116,6 +116,12 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
             ...(isPhotosExists && {
               sm: 3,
               md: 4,
+            }),
+          },
+          mt: {
+            xs: 0,
+            ...(isPhotosExists && {
+              xs: 3,
             }),
           },
         }}
