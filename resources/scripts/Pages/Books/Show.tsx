@@ -39,7 +39,13 @@ export default function ShowBook({ book }: TPropsShowBook) {
       </Typography>
 
       {Boolean(book.authors?.length) && (
-        <Stack direction="row" rowGap={0.5} columnGap={1} flexWrap="wrap">
+        <Stack
+          direction="row"
+          rowGap={0.5}
+          columnGap={1}
+          flexWrap="wrap"
+          mb={2.5}
+        >
           <Typography>By:</Typography>
           {book.authors?.map((author) => (
             <Chip

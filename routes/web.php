@@ -41,6 +41,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->only(['store']);
 
         Route::resource('products', 'App\Http\Controllers\ProductController');
+
+        Route::resource('images', 'App\Http\Controllers\ImageController');
     });
 
     Route::get('/settings', fn () => Inertia::render('Settings'))

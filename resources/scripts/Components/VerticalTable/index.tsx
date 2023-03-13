@@ -44,14 +44,12 @@ export type VerticalTableProps = BoxProps & {
 export default function VerticalTable({
   data,
   placeholder,
-  sx,
   ...tableParams
 }: VerticalTableProps) {
   return (
     <Box
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...tableParams}
-      sx={{ mt: 2, ...sx }}
     >
       {data.map(({
         disabledDataStyle,
