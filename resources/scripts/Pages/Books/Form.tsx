@@ -202,16 +202,14 @@ export default function FormBook({
               setDayjs(newValue);
               setData('year_published', newValue?.year() ?? 0);
             }}
-            renderInput={(props) => (
-              <TextField
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                {...props}
-                name="year_published"
-                error={Boolean(errors.year_published)}
-                helperText={errors.year_published
-                  ?? 'The year this book was published'}
-              />
-            )}
+            slotProps={{
+              textField: {
+                name: 'year_published',
+                error: Boolean(errors.year_published),
+                helperText: errors.year_published
+                  ?? 'The year this book was published',
+              },
+            }}
           />
 
           <TextField
