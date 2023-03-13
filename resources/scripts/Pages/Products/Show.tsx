@@ -97,7 +97,7 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
         <Typography color="text.primary">{product.name}</Typography>
       </Breadcrumbs>
 
-      <Typography variant="h4" component="h1" gutterBottom>
+      <Typography variant="h4" component="h1" gutterBottom mb={3}>
         {product.name}
       </Typography>
 
