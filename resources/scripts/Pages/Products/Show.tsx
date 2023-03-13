@@ -46,13 +46,9 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
   const [openDeleteDialog,
     setOpenDeleteDialog] = React.useState<boolean>(false);
 
-  const isPhotosExists = React.useMemo<boolean>(() => {
-    if (!product?.photos) {
-      return false;
-    }
-
-    return !!product.photos.length;
-  }, [product]);
+  const isPhotosExists = React.useMemo<boolean>(() => (
+    !!product?.photos && !!product.photos.length
+  ), [product]);
 
   const { enqueueSnackbar } = useSnackbar();
 
