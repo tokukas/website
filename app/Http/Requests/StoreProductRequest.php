@@ -27,6 +27,7 @@ class StoreProductRequest extends FormRequest
             'sku' => ['required', 'string', 'max:22', 'unique:\App\Models\Product,sku'],
             'photos' => ['required', 'array', 'max:5'],
             'photos.*' => ['required', 'image', 'max:2048'],
+            'stock' => ['required', 'integer', 'min:0'],
             'price' => ['required', 'numeric', 'min:0'],
             'description' => ['nullable', 'string'],
         ];

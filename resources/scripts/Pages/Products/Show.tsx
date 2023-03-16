@@ -167,6 +167,7 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
               ),
             },
             { label: 'SKU', value: product.sku },
+            { label: 'Stock', disabledDataStyle: true, value: product.stock },
             { label: 'Price', value: `Rp${product.price}` },
             { label: 'Description', value: product.description },
             {
