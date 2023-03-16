@@ -161,11 +161,11 @@ export default function FormDialog<Field extends TField>({
               onChange={(event) => {
                 setData(
                   event.target.name,
-                    event.target.value as Field[keyof Field],
+                  event.target.value as Field[keyof Field],
                 );
               }}
               value={data[name] ?? values?.[name] ?? ''}
-              error={Boolean(errors[validationKey ?? name])}
+              error={!!errors[validationKey ?? name]}
               helperText={errors[validationKey ?? name]}
             />
           ))}

@@ -38,7 +38,7 @@ export default function ShowBook({ book }: TPropsShowBook) {
         {book.title}
       </Typography>
 
-      {Boolean(book.authors?.length) && (
+      {!!book.authors?.length && (
         <Stack
           direction="row"
           rowGap={0.5}

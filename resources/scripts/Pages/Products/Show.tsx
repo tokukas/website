@@ -186,7 +186,7 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
           zIndex: (theme) => theme.zIndex.drawer + 1,
           backgroundColor: 'rgba(0, 0, 0, 0.8)',
         }}
-        open={Boolean(photoBackdrop)}
+        open={!!photoBackdrop}
       >
         {photoBackdrop && (
           <Box
@@ -247,7 +247,7 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
             <Menu
               id="options-menu"
               anchorEl={anchorElOptions}
-              open={Boolean(anchorElOptions)}
+              open={!!anchorElOptions}
               onClose={() => setAnchorElOptions(null)}
               MenuListProps={{
                 'aria-labelledby': 'options-menu',

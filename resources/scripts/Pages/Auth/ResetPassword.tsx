@@ -55,12 +55,12 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
           value={data.email}
           autoComplete="email"
           onChange={onHandleChange}
-          error={Boolean(errors.email)}
+          error={!!errors.email}
           helperText={errors.email}
           required
           variant="outlined"
           fullWidth
-          disabled={Boolean(data.email)}
+          disabled={!!data.email}
         />
 
         <TextField
@@ -71,7 +71,7 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
           value={data.password}
           autoComplete="new-password"
           onChange={onHandleChange}
-          error={Boolean(errors.password)}
+          error={!!errors.password}
           helperText={errors.password}
           required
           variant="outlined"
@@ -88,7 +88,7 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
           value={data.password_confirmation}
           autoComplete="new-password"
           onChange={onHandleChange}
-          error={Boolean(errors.password_confirmation)}
+          error={!!errors.password_confirmation}
           helperText={errors.password_confirmation}
           disabled={!data.password}
           required

@@ -100,7 +100,7 @@ export default function Navbar({
     };
 
     const mainUserMenus = setMainUserMenus
-      ? setMainUserMenus(Boolean(user)) : [];
+      ? setMainUserMenus(!!user) : [];
 
     setUserMenus(user
       ? [
@@ -164,7 +164,7 @@ export default function Navbar({
                 vertical: 'top',
                 horizontal: 'left',
               }}
-              open={Boolean(anchorElNav)}
+              open={!!anchorElNav}
               onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: 'block', md: 'none' },
@@ -254,7 +254,7 @@ export default function Navbar({
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={Boolean(anchorElUser)}
+              open={!!anchorElUser}
               onClose={handleCloseUserMenu}
             >
               {userMenus.map((menu, i) => {

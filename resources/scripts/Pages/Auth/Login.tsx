@@ -74,7 +74,7 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
           autoFocus
           autoComplete="email"
           onChange={onHandleChange}
-          error={Boolean(errors.email)}
+          error={!!errors.email}
           helperText={errors.email}
         />
 
@@ -88,7 +88,7 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
           type="password"
           autoComplete="current-password"
           onChange={onHandleChange}
-          error={Boolean(errors.password)}
+          error={!!errors.password}
           helperText={errors.password}
           sx={{ mt: 2.4 }}
         />

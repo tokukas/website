@@ -47,7 +47,7 @@ export default function ConfirmPassword() {
           value={data.password}
           autoComplete="current-password"
           onChange={onHandleChange}
-          error={Boolean(errors.password)}
+          error={!!errors.password}
           helperText={errors.password}
           required
           autoFocus

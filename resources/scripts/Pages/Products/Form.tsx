@@ -132,7 +132,7 @@ export default function FormProduct({
                 name="book_id"
                 label="Book"
                 placeholder="Select Book"
-                error={Boolean(errors.book_id)}
+                error={!!errors.book_id}
                 helperText={errors.book_id}
               />
             )}
@@ -163,7 +163,7 @@ export default function FormProduct({
             label="Name"
             defaultValue={productToEdit?.name}
             placeholder='e.g. "The Lord of the Rings"'
-            error={Boolean(errors.name)}
+            error={!!errors.name}
             helperText={errors.name ?? 'Max. 70 characters'}
             onChange={handleInputChange}
           />
@@ -173,7 +173,7 @@ export default function FormProduct({
             label="SKU"
             defaultValue={productToEdit?.sku}
             placeholder='e.g. "LOTR-001"'
-            error={Boolean(errors.sku)}
+            error={!!errors.sku}
             helperText={errors.sku ?? 'Stock Keeping Unit'}
             onChange={handleInputChange}
           />
@@ -184,7 +184,7 @@ export default function FormProduct({
             type="number"
             defaultValue={productToEdit?.price}
             placeholder="0"
-            error={Boolean(errors.price)}
+            error={!!errors.price}
             helperText={errors.price}
             onChange={handleInputChange}
             InputProps={{
@@ -202,7 +202,7 @@ export default function FormProduct({
             name="description"
             label="Description (optional)"
             defaultValue={productToEdit?.description}
-            error={Boolean(errors.description)}
+            error={!!errors.description}
             helperText={errors.description}
             onChange={handleInputChange}
             multiline
@@ -214,7 +214,7 @@ export default function FormProduct({
             label={`Photos${productToEdit ? ' (optional)' : ''}`}
             value={data.photos}
             placeholder="Select product photo(s)"
-            error={Boolean(photosError?.error)}
+            error={!!photosError?.error}
             helperText={photosError?.error
               ?? 'Max. 5 photos with max. 2MB each'}
             onChange={(newPhotos) => {

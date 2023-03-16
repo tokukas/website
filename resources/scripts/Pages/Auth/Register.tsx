@@ -55,7 +55,7 @@ export default function Register() {
           autoFocus
           autoComplete="name"
           required
-          error={Boolean(errors.name)}
+          error={!!errors.name}
           helperText={errors.name}
         />
 
@@ -69,7 +69,7 @@ export default function Register() {
           fullWidth
           autoComplete="email"
           required
-          error={Boolean(errors.email)}
+          error={!!errors.email}
           helperText={errors.email}
           sx={{ mt: 2.4 }}
         />
@@ -85,7 +85,7 @@ export default function Register() {
           type="password"
           autoComplete="new-password"
           required
-          error={Boolean(errors.password)}
+          error={!!errors.password}
           helperText={errors.password}
           sx={{ mt: 2.4 }}
         />
@@ -101,7 +101,7 @@ export default function Register() {
           type="password"
           autoComplete="new-password"
           required
-          error={Boolean(errors.password_confirmation)}
+          error={!!errors.password_confirmation}
           helperText={errors.password_confirmation}
           sx={{ mt: 2.4 }}
           disabled={!data.password}

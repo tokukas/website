@@ -78,7 +78,7 @@ export default function ForgotPassword({ status }: TPropsForgotPassword) {
           autoFocus
           autoComplete="email"
           required
-          error={Boolean(errors.email)}
+          error={!!errors.email}
           helperText={errors.email}
           sx={{ my: 3.2 }}
         />

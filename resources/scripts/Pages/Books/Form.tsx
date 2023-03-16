@@ -137,7 +137,7 @@ export default function FormBook({
             defaultValue={bookToEdit?.title ?? data?.title}
             placeholder='e.g. "The Lord of the Rings"'
             onChange={handleInputChange}
-            error={Boolean(errors.title)}
+            error={!!errors.title}
             helperText={errors.title}
           />
 
@@ -155,7 +155,7 @@ export default function FormBook({
                 label="Language"
                 name="language_code"
                 placeholder="Select a language"
-                error={Boolean(errors.language_code)}
+                error={!!errors.language_code}
                 helperText={errors.language_code}
               />
             )}
@@ -177,7 +177,7 @@ export default function FormBook({
                 label="Publisher (optional)"
                 name="publisher_id"
                 placeholder="Select a publisher"
-                error={Boolean(errors.publisher_id)}
+                error={!!errors.publisher_id}
                 helperText={errors.publisher_id ?? 'The publisher of the book'}
               />
             )}
@@ -205,7 +205,7 @@ export default function FormBook({
             slotProps={{
               textField: {
                 name: 'year_published',
-                error: Boolean(errors.year_published),
+                error: !!errors.year_published,
                 helperText: errors.year_published
                   ?? 'The year this book was published',
               },
@@ -217,7 +217,7 @@ export default function FormBook({
             name="isbn"
             defaultValue={bookToEdit?.isbn}
             placeholder='e.g. "978-3-16-148410-0"'
-            error={Boolean(errors.isbn)}
+            error={!!errors.isbn}
             helperText={errors.isbn ?? 'International Standard Book Number'}
             onChange={handleInputChange}
           />
@@ -235,7 +235,7 @@ export default function FormBook({
                 label="Authors (optional)"
                 name="authors"
                 placeholder="Select authors"
-                error={Boolean(errors.author_ids)}
+                error={!!errors.author_ids}
                 helperText={errors.author_ids ?? 'The authors of the book'}
               />
             )}
@@ -258,7 +258,7 @@ export default function FormBook({
             name="num_of_pages"
             defaultValue={bookToEdit?.num_of_pages}
             placeholder="0"
-            error={Boolean(errors.num_of_pages)}
+            error={!!errors.num_of_pages}
             helperText={errors.num_of_pages
               ?? 'Counts from front cover to back cover'}
             onChange={handleInputChange}
@@ -289,7 +289,7 @@ export default function FormBook({
             name="weight"
             defaultValue={bookToEdit?.weight}
             placeholder="0.00"
-            error={Boolean(errors.weight)}
+            error={!!errors.weight}
             helperText={errors.weight ?? 'The weight of the book in grams'}
             onChange={handleInputChange}
             InputProps={{
@@ -307,7 +307,7 @@ export default function FormBook({
             name="width"
             defaultValue={bookToEdit?.width}
             placeholder="0.00"
-            error={Boolean(errors.width)}
+            error={!!errors.width}
             helperText={errors.width ?? 'The width of the book in centimeters'}
             onChange={handleInputChange}
             InputProps={{
@@ -325,7 +325,7 @@ export default function FormBook({
             name="height"
             defaultValue={bookToEdit?.height}
             placeholder="0.00"
-            error={Boolean(errors.height)}
+            error={!!errors.height}
             helperText={errors.height
               ?? 'The height of the book in centimeters'}
             onChange={handleInputChange}
@@ -352,7 +352,7 @@ export default function FormBook({
                 label="Category (optional)"
                 name="category_id"
                 placeholder="Select a category"
-                error={Boolean(errors.category_id)}
+                error={!!errors.category_id}
                 helperText={errors.category_id ?? 'What kind of book is this?'}
               />
             )}
@@ -375,7 +375,7 @@ export default function FormBook({
             defaultValue={bookToEdit?.description}
             onChange={handleInputChange}
             placeholder="Write a short description of the book..."
-            error={Boolean(errors.description)}
+            error={!!errors.description}
             helperText={errors.description}
           />
         </FieldSection>
