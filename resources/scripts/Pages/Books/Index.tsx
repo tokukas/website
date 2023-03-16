@@ -13,15 +13,10 @@ import React from 'react';
 import route from 'ziggy-js';
 
 export type TPropsBooks = {
-  books: Book[];
+  books: readonly Book[];
 }
 
-type TBookColumns = Omit<Book,
-  'language_code' | 'publisher'
-> & {
-  language: string;
-  publisher_name: string;
-};
+type TBookColumns = Omit<Book, 'publisher_id' | 'category_id'>;
 
 export default function Books({ books }: TPropsBooks) {
   const bookColumns: GridColDef<TBookColumns>[] = [
@@ -40,9 +35,20 @@ export default function Books({ books }: TPropsBooks) {
         </Link>
       ),
     },
-    { field: 'publisher_name', headerName: 'Publisher', width: 160 },
+    {
+      field: 'publisher',
+      headerName: 'Publisher',
+      width: 160,
+      valueGetter: ({ row }) => row.publisher?.name,
+    },
     { field: 'year_published', headerName: 'Year Published', width: 80 },
-    { field: 'language', headerName: 'Language', width: 120 },
+    {
+      field: 'language',
+      headerName: 'Language',
+      width: 120,
+      valueGetter: ({ row }) => Language
+        .getLanguageByCode(row.language_code)?.name,
+    },
     { field: 'width', headerName: 'Width', width: 80 },
     { field: 'height', headerName: 'Height', width: 80 },
     { field: 'weight', headerName: 'Weight', width: 80 },
@@ -52,14 +58,6 @@ export default function Books({ books }: TPropsBooks) {
     { field: 'created_at', headerName: 'Created At' },
     { field: 'updated_at', headerName: 'Updated At' },
   ];
-
-  const bookRows = books.map(({
-    language_code: langCode, publisher, ...book
-  }) => ({
-    ...book,
-    language: Language.getLanguageByCode(langCode)?.name,
-    publisher_name: publisher?.name,
-  } as TBookColumns));
 
   return (
     <>
@@ -88,11 +86,17 @@ export default function Books({ books }: TPropsBooks) {
       <Paper sx={{ height: 380, width: '100%' }}>
         <DataGrid
           columns={bookColumns}
-          rows={bookRows}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          rows={books}
+          pageSizeOptions={[5, 10, 20]}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
           checkboxSelection
-          disableSelectionOnClick
+          disableRowSelectionOnClick
         />
       </Paper>
     </>

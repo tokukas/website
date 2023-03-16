@@ -4,6 +4,7 @@ import Sidebar from '@/Components/Sidebar';
 import { TPropsSidebarItem } from '@/Components/SidebarItem';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import SellIcon from '@mui/icons-material/Sell';
 import Box from '@mui/material/Box';
 import * as React from 'react';
 import route from 'ziggy-js';
@@ -27,6 +28,12 @@ export const dashboardSidebarItems: TPropsSidebarItem[] = [
     icon: <LibraryBooksIcon />,
     href: route('books.index'),
   },
+  {
+    key: 'products',
+    name: 'Products',
+    icon: <SellIcon />,
+    href: route('products.index'),
+  },
 ];
 
 export default function DashboardLayout({
@@ -44,7 +51,14 @@ export default function DashboardLayout({
           items={dashboardSidebarItems}
           selectedItem={activeSidebarKey}
         />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Box
+          component="main"
+          sx={{
+            p: 3,
+            flexGrow: 1,
+            maxWidth: 'calc(100vw - 64px)',
+          }}
+        >
           {children}
         </Box>
       </Box>

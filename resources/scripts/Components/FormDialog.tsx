@@ -101,7 +101,7 @@ export default function FormDialog<Field extends TField>({
     onClose(event, reason);
   };
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+  const handleSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
     inertiaForm[method](route);
   };
@@ -134,61 +134,60 @@ export default function FormDialog<Field extends TField>({
       {...props}
       onClose={handleClose}
     >
-      <form onSubmit={handleSubmit}>
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
-          {description && (
-            <DialogContentText sx={{ mb: 3 }}>
-              {description}
-            </DialogContentText>
-          )}
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        {description && (
+        <DialogContentText sx={{ mb: 3 }}>
+          {description}
+        </DialogContentText>
+        )}
 
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2,
-            }}
-          >
-            {formFields.map(({
-              id, name, validationKey, ...fieldProps
-            }) => (
-              <TextField
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          {formFields.map(({
+            id, name, validationKey, ...fieldProps
+          }) => (
+            <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                {...fieldProps}
-                id={id}
-                key={id ?? name}
-                name={name}
-                onChange={(event) => {
-                  setData(
-                    event.target.name,
-                    event.target.value as Field[keyof Field],
-                  );
-                }}
-                value={data[name] ?? values?.[name] ?? ''}
-                error={Boolean(errors[validationKey ?? name])}
-                helperText={errors[validationKey ?? name]}
-              />
-            ))}
-          </Box>
+              {...fieldProps}
+              id={id}
+              key={id ?? name}
+              name={name}
+              onChange={(event) => {
+                setData(
+                  event.target.name,
+                  event.target.value as Field[keyof Field],
+                );
+              }}
+              value={data[name] ?? values?.[name] ?? ''}
+              error={!!errors[validationKey ?? name]}
+              helperText={errors[validationKey ?? name]}
+            />
+          ))}
+        </Box>
 
-          {children}
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={(event) => handleClose(event, 'backdropClick')}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={processing}
-          >
-            {submitButtonName ?? title}
-          </Button>
-        </DialogActions>
-      </form>
+        {children}
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={(event) => handleClose(event, 'backdropClick')}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={processing}
+        >
+          {submitButtonName ?? title}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 }

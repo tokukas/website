@@ -23,7 +23,7 @@ export type TOption<
 export type FreeSoloAutocompleteProps<
   T, Multiple extends boolean | undefined = false
 > = Omit<AutocompleteProps<T, Multiple, false, true>,
-  'freeSolo' | 'disableClearable' | 'clearOnBlur'
+  'freeSolo' | 'disableClearable' | 'clearOnBlur' | 'isOptionEqualToValue'
   | 'getOptionLabel' | 'filterOptions' | 'onChange' | 'value'
 >;
 
@@ -35,7 +35,7 @@ type FreeSoloAutocompleteData<
   T,
   K extends keyof T,
   Multiple extends boolean | undefined = false
-> = Multiple extends true ? Array<T[K]> : T[K];
+> = Multiple extends true ? Array<T[K]> : T[K] | null;
 
 export type TPropsAutocompleteAddOption<
   O extends Record<string, unknown>,
@@ -100,6 +100,7 @@ export default function AutocompleteAddOption<
   Multiple extends boolean | undefined = false,
 >({
   dataKey,
+  defaultValue,
   filterConfig,
   labelKey,
   multiple,
@@ -118,7 +119,7 @@ export default function AutocompleteAddOption<
   const filterOptions = createFilterOptions(filterConfig);
 
   const [currentValue, setCurrentValue] = React.useState<Value>(
-    multiple ? [] as unknown as Value : null as Value,
+    defaultValue ?? (multiple ? [] as unknown as Value : null as Value),
   );
 
   const matchOptionWithInput = (option: Option, input: string) => {
@@ -151,6 +152,9 @@ export default function AutocompleteAddOption<
         ? option
         : option.inputValue ?? option[labelKey]
       )}
+      isOptionEqualToValue={(option, value) => (
+        option[usedDataKey] === value[usedDataKey]
+      )}
       filterOptions={(opts, state) => {
         const filtered = filterOptions(opts, state);
         const findOption = opts.find((opt) => (
@@ -177,7 +181,7 @@ export default function AutocompleteAddOption<
             : null as Value);
           setData(multiple
             ? [] as unknown as Data
-            : undefined as unknown as Data);
+            : null as Data);
           return;
         }
 
