@@ -29,7 +29,7 @@ class BookController extends Controller
      */
     public function index(): InertiaResponse
     {
-        return Inertia::render('Books', [
+        return Inertia::render('Books/Index', [
             'books' => Book::with('publisher')->get(),
         ]);
     }
