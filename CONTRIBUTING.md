@@ -10,6 +10,7 @@ Welcome to the Tokukas website repository on GitHub. Here you can browse the sou
 - [Code of Conduct](#code-of-conduct)
 - [Style Guide](#style-guide)
   - [Commit Message](#commit-message)
+  - [PHP Style Guide](#php-style-guide)
   - [JavaScript and TypeScript Style Guide](#javascript-and-typescript-style-guide)
 - [How to Contribute](#how-to-contribute)
   - [Reporting Bugs](#reporting-bugs)
@@ -52,6 +53,30 @@ All commit messages SHOULD adhere the [**Conventional Commits specification**](h
     -   `chore`: Other changes that don't modify src or test files. For example, updating build tasks, package manager configs, etc.
     -   `revert`: Reverts a previous commit.
 -   Use the body to explain what and why vs. how. In most cases, you can leave out details about how a change has been made.
+
+### PHP Style Guide
+
+All PHP code must adhere to [Laravel coding style](https://laravel.com/docs/10.x/pint#presets) with some exceptions and modifications that can be found in the `rules` section of the [`pint.json`](pint.json) file.
+
+You can run [Laravel Pint](https://laravel.com/docs/10.x/pint) to auto-fix the code styling:
+
+```bash
+./vendor/bin/pint
+
+# Run in Sail
+./vendor/bin/sail pint
+```
+
+> !!! Make sure your code **doesn't have any code styling error** before commit !!!
+
+Test your code with `--test` option:
+
+```bash
+./vendor/bin/pint --test
+
+# Run in Sail
+./vendor/bin/sail pint --test
+```
 
 ### JavaScript and TypeScript Style Guide
 
