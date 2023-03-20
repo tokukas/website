@@ -10,7 +10,6 @@ use App\Models\Category;
 use App\Models\Publisher;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
 
@@ -43,7 +42,7 @@ class BookController extends Controller
             'authors' => Author::all(),
             'categories' => Category::all(),
             'data' => [
-                'title' => $request->input('title')
+                'title' => $request->input('title'),
             ],
             'publishers' => Publisher::all(),
         ]);
@@ -99,6 +98,7 @@ class BookController extends Controller
 
         if ($book->update($validated)) {
             $book->authors()->sync($validated['author_ids'] ?? []);
+
             return redirect()->intended(route('books.show', [$book]));
         }
 

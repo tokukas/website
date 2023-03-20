@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
 class UpdateBookRequest extends StoreBookRequest
 {
     /**
@@ -22,7 +20,7 @@ class UpdateBookRequest extends StoreBookRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'isbn' => ['nullable', 'string', 'size:13', 'unique:App\Models\Book,isbn,' . request()->route('book')->id],
+            'isbn' => ['nullable', 'string', 'size:13', 'unique:App\Models\Book,isbn,'.request()->route('book')->id],
         ]);
     }
 }

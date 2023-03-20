@@ -44,7 +44,7 @@ class StoreAuthorRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.unique' => 'This author is already exists'
+            'name.unique' => 'This author is already exists',
         ];
     }
 }

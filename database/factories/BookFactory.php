@@ -31,6 +31,7 @@ class BookFactory extends Factory
             'description' => fake()->optional()->paragraph(fake()->numberBetween(0, 2)),
         ];
     }
+
     /**
      * Configure the model factory.
      */

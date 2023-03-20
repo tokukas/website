@@ -70,8 +70,6 @@ class User extends Authenticatable implements MustVerifyEmail
      * Interacts with the user's email address.
      *
      * Set the email address to lower case.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function email(): Attribute
     {
@@ -91,8 +89,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Check if a user has specific role.
      *
-     * @param string|null $role The role key.
-     * @return bool
+     * @param  string|null  $role The role key.
      */
     public function hasRole(string|null $role): bool
     {
@@ -101,8 +98,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Check if a user is an admin.
-     *
-     * @return bool
      */
     public function isAdmin(): bool
     {

@@ -26,6 +26,7 @@ class StorePublisherRequest extends FormRequest
             'slug' => ['unique:App\Models\Publisher,slug'],
         ];
     }
+
     /**
      * Prepare the data for validation.
      */
@@ -44,7 +45,7 @@ class StorePublisherRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'slug.unique' => 'This publisher is already exists'
+            'slug.unique' => 'This publisher is already exists',
         ];
     }
 }

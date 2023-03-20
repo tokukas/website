@@ -10,13 +10,13 @@ class OnlyForAdmins
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
     {
-        abort_if(!$request->user()?->isAdmin(), 401, 'This resource is for admin only');
+        abort_if(! $request->user()?->isAdmin(), 401, 'This resource is for admin only');
+
         return $next($request);
     }
 }

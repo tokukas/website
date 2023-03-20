@@ -44,4 +44,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('settings');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
