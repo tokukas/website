@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class HomeController extends Controller
@@ -18,7 +17,7 @@ class HomeController extends Controller
         $defaultProductPhoto = config('asset.default_product_photo');
 
         return Inertia::render('Home', [
-            'photoPlaceholder' => $defaultProductPhoto ? url('/images/' . $defaultProductPhoto) : null,
+            'photoPlaceholder' => $defaultProductPhoto ? url('/images/'.$defaultProductPhoto) : null,
             'products' => $products,
         ]);
     }
