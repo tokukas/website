@@ -61,7 +61,7 @@ class StoreProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'book_id.exists' => 'The selected book is not exists.'
+            'book_id.exists' => 'The selected book is not exists.',
         ];
     }
 }

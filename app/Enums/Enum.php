@@ -64,7 +64,7 @@ class Enum
     /**
      * Get the first enum key of the given value.
      *
-     * @param string|int|float|bool|null $value The enum value.
+     * @param  string|int|float|bool|null  $value The enum value.
      * @return string|null `null` if the key of given value is not exists.
      */
     public static function key(string|int|float|bool|null $value): ?string
@@ -75,8 +75,7 @@ class Enum
     /**
      * Check if the given key is exists in this enum.
      *
-     * @param string $key The enum key.
-     * @return bool
+     * @param  string  $key The enum key.
      */
     public static function hasKey(string $key): bool
     {
@@ -86,8 +85,7 @@ class Enum
     /**
      * Check if the given value is exists in this enum.
      *
-     * @param string|int|float|bool|null $value The enum value.
-     * @return bool
+     * @param  string|int|float|bool|null  $value The enum value.
      */
     public static function hasValue(string|int|float|bool|null $value): bool
     {

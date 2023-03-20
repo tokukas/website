@@ -44,7 +44,7 @@ class StoreCategoryRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.unique' => 'This category is already exists'
+            'name.unique' => 'This category is already exists',
         ];
     }
 }
