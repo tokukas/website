@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
 class UpdateProductRequest extends StoreProductRequest
 {
     /**
@@ -23,7 +21,7 @@ class UpdateProductRequest extends StoreProductRequest
     {
         return array_merge(parent::rules(), [
             'photos' => ['nullable', 'array', 'max:5'],
-            'sku' => ['required', 'string', 'max:22', 'unique:\App\Models\Product,sku,' . $this->product->id],
+            'sku' => ['required', 'string', 'max:22', 'unique:\App\Models\Product,sku,'.$this->product->id],
         ]);
     }
 }

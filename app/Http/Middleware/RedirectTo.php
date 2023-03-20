@@ -33,7 +33,7 @@ class RedirectTo
             } catch (\Throwable $th) {
                 if (Route::has($target)) {
                     $intendedUrl = route($target);
-                } else if ($target === 'back') {
+                } elseif ($target === 'back') {
                     $intendedUrl = url()->previous();
                 }
             }
