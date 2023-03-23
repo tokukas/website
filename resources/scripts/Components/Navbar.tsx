@@ -125,7 +125,6 @@ export default function Navbar({
 
   return (
     <AppBar
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
       <Container maxWidth="xl">
@@ -172,7 +171,6 @@ export default function Navbar({
             >
               {displayedNavItems.map((navItem) => (
                 <NavMenuItem
-                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...navItem}
                   key={navItem.name}
                   onClick={handleCloseNavMenu}
@@ -264,7 +262,6 @@ export default function Navbar({
                 }
                 return (
                   <NavMenuItem
-                    // eslint-disable-next-line react/jsx-props-no-spreading
                     {...menu}
                     key={menu.name}
                     onClick={(e) => {

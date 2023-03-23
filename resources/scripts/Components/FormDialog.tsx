@@ -130,7 +130,6 @@ export default function FormDialog<Field extends TField>({
 
   return (
     <Dialog
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       onClose={handleClose}
     >
@@ -153,7 +152,6 @@ export default function FormDialog<Field extends TField>({
             id, name, validationKey, ...fieldProps
           }) => (
             <TextField
-                // eslint-disable-next-line react/jsx-props-no-spreading
               {...fieldProps}
               id={id}
               key={id ?? name}

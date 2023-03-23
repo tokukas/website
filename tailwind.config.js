@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const defaultTheme = require('tailwindcss/defaultTheme');
 const tailwindcssForms = require('@tailwindcss/forms');

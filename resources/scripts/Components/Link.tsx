@@ -12,7 +12,6 @@ const Link = React.forwardRef((props: TPropsLink, ref) => (
   <MuiLink
     component={InertiaLink}
     ref={ref}
-    // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
   >
     {props.children}

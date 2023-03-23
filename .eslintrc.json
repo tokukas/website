@@ -37,7 +37,11 @@
         "max-len": [
             "error",
             {
-                "ignoreComments": true
+                "ignoreComments": true,
+                "ignoreStrings": true,
+                "ignoreTemplateLiterals": true,
+                "ignoreRegExpLiterals": true,
+                "ignoreUrls": true
             }
         ],
         "react/jsx-filename-extension": [
@@ -45,6 +49,16 @@
             {
                 "extensions": [
                     ".tsx"
+                ]
+            }
+        ],
+        "react/jsx-props-no-spreading": [
+            "error",
+            {
+                "html": "ignore",
+                "custom": "ignore",
+                "exceptions": [
+                    ""
                 ]
             }
         ],

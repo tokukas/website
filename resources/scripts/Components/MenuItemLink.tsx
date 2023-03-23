@@ -21,7 +21,6 @@ export default function MenuItemLink({
     <MenuItem
       href={href}
       component={href ? Link : 'li'}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
       {children}

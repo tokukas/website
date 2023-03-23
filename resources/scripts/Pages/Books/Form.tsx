@@ -150,7 +150,6 @@ export default function FormBook({
               .getLanguageByCode(bookToEdit?.language_code ?? '')}
             renderInput={(params) => (
               <TextField
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
                 label="Language"
                 name="language_code"
@@ -172,7 +171,6 @@ export default function FormBook({
             defaultValue={bookToEdit?.publisher}
             renderInput={(params) => (
               <TextField
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
                 label="Publisher (optional)"
                 name="publisher_id"
@@ -230,7 +228,6 @@ export default function FormBook({
             defaultValue={bookToEdit?.authors ?? []}
             renderInput={(params) => (
               <TextField
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
                 label="Authors (optional)"
                 name="authors"
@@ -347,7 +344,6 @@ export default function FormBook({
             defaultValue={bookToEdit?.category}
             renderInput={(params) => (
               <TextField
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
                 label="Category (optional)"
                 name="category_id"

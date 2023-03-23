@@ -32,9 +32,7 @@ export default function SidebarItem({
         ...sx,
       }}
       component={href ? Link : 'div'}
-        // eslint-disable-next-line react/jsx-props-no-spreading
       {...(href ? { href } : {})}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
       <ListItemIcon
