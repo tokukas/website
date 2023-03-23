@@ -1,5 +1,5 @@
 import AppHead from '@/Components/AppHead';
-import DashboardMenu from '@/Components/NavMenuItems/DashboardMenu';
+import DashboardMenu from '@/Components/Navbar/MenuItem/Items/DashboardMenu';
 import Navbar from '@/Components/Navbar';
 import BaseLayout from '@/Layouts/BaseLayout';
 import * as React from 'react';

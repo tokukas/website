@@ -1,4 +1,4 @@
-import { TPropsNavMenuItem } from '@/Components/NavMenuItem';
+import { TPropsNavMenuItem } from '@/Components/Navbar/MenuItem';
 import SettingsIcon from '@mui/icons-material/Settings';
 import * as React from 'react';
 import route from 'ziggy-js';

@@ -1,7 +1,7 @@
+import MenuItemLink, { TPropsMenuItemLink } from '@/Components/Menu/Item/Link';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
-import MenuItemLink, { TPropsMenuItemLink } from './MenuItemLink';
 
 export type TPropsNavMenuItem = TPropsMenuItemLink & {
   /** The name of menu item. */
