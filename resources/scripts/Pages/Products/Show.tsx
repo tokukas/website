@@ -1,6 +1,6 @@
 import AppHead from '@/Components/AppHead';
-import DismissSnackbarAction from '@/Components/DismissSnackbarAction';
 import Link from '@/Components/Link';
+import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import VerticalTable from '@/Components/VerticalTable';
 import { Image } from '@/Entities/Image';
 import { Product } from '@/Entities/Product';

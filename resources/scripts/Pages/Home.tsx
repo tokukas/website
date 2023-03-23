@@ -1,10 +1,10 @@
 import AppHead from '@/Components/AppHead';
 import Link from '@/Components/Link';
 import Navbar from '@/Components/Navbar';
-import DashboardMenu from '@/Components/NavMenuItems/DashboardMenu';
-import LoginMenu from '@/Components/NavMenuItems/LoginMenu';
-import RegisterMenu from '@/Components/NavMenuItems/RegisterMenu';
-import SettingsMenu from '@/Components/NavMenuItems/SettingsMenu';
+import DashboardMenu from '@/Components/Navbar/MenuItem/Items/DashboardMenu';
+import LoginMenu from '@/Components/Navbar/MenuItem/Items/LoginMenu';
+import RegisterMenu from '@/Components/Navbar/MenuItem/Items/RegisterMenu';
+import SettingsMenu from '@/Components/Navbar/MenuItem/Items/SettingsMenu';
 import { Product } from '@/Entities/Product';
 import BaseLayout from '@/Layouts/BaseLayout';
 import Box from '@mui/material/Box';

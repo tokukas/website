@@ -1,4 +1,4 @@
-import BrandLogo from '@/Components/BrandLogo';
+import BrandLogo from '@/Components/Logo/Brand';
 import Link from '@/Components/Link';
 import ColorModeContext from '@/Utils/ColorModeContext';
 import Brightness4 from '@mui/icons-material/Brightness4';

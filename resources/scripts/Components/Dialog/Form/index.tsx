@@ -1,3 +1,4 @@
+import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import { RequiredFor } from '@/Utils/Types';
 import { useForm } from '@inertiajs/react';
 import { ModalProps } from '@mui/material';
@@ -11,7 +12,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import DismissSnackbarAction from './DismissSnackbarAction';
 
 export type TField = Record<string, string | number>;
 

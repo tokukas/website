@@ -1,3 +1,5 @@
+import BrandLogo from '@/Components/Logo/Brand';
+import NavMenuItem, { TPropsNavMenuItem } from '@/Components/Navbar/MenuItem';
 import AppConfig from '@/Config/App';
 import AuthContext from '@/Utils/AuthContext';
 import ColorModeContext from '@/Utils/ColorModeContext';
@@ -19,9 +21,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import route from 'ziggy-js';
-import BrandLogo from './BrandLogo';
-import Link from './Link';
-import NavMenuItem, { TPropsNavMenuItem } from './NavMenuItem';
+import Link from '../Link';
 
 export type TPropsNavbar = AppBarProps & {
   /**

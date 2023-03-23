@@ -1,5 +1,5 @@
 import AppHead from '@/Components/AppHead';
-import DismissSnackbarAction from '@/Components/DismissSnackbarAction';
+import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { useForm } from '@inertiajs/react';
 import Box from '@mui/material/Box';

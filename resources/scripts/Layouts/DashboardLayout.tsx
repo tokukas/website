@@ -1,7 +1,7 @@
 import AppHead, { TPropsAppHead } from '@/Components/AppHead';
+import Sidebar from '@/Components/Drawer/Sidebar';
+import { TPropsSidebarItem } from '@/Components/Drawer/Sidebar/Item';
 import Navbar from '@/Components/Navbar';
-import Sidebar from '@/Components/Sidebar';
-import { TPropsSidebarItem } from '@/Components/SidebarItem';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import SellIcon from '@mui/icons-material/Sell';

@@ -1,6 +1,6 @@
+import Link from '@/Components/Link';
 import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
 import * as React from 'react';
-import Link from './Link';
 
 export type TPropsMenuItemLink = Omit<MenuItemProps<'a'>, 'component'>;
 
