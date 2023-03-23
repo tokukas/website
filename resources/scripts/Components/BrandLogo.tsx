@@ -28,7 +28,6 @@ export default function BrandLogo({
       viewBox="0 0 348.11548 196.5336"
       titleAccess={titleAccess ?? AppConfig.name}
       sx={{ width, height, ...sx }}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
       <path

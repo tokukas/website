@@ -127,7 +127,6 @@ export default function FormProduct({
             defaultValue={productToEdit?.book}
             renderInput={(params) => (
               <TextField
-                // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
                 autoFocus
                 name="book_id"
@@ -138,7 +137,6 @@ export default function FormProduct({
               />
             )}
             renderOption={(props, option) => (
-              // eslint-disable-next-line react/jsx-props-no-spreading
               <li {...props}>
                 {option.inputValue ? option.title : (
                   `${option.title} (${option.year_published})`

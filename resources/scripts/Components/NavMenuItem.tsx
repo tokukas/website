@@ -24,7 +24,6 @@ export default function NavMenuItem({
 }: TPropsNavMenuItem) {
   return (
     <MenuItemLink
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
       {icon && <ListItemIcon>{icon}</ListItemIcon>}

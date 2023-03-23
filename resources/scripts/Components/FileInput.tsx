@@ -20,7 +20,6 @@ export default function FileInput<T extends boolean = false>(
 
   return (
     <FixedMuiFileInput
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     />
   );

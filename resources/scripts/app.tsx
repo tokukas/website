@@ -34,7 +34,6 @@ const appName = AppConfig.name;
           <StyledEngineProvider injectFirst>
             <SnackbarProvider>
               <ThemeLayout>
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                 <App {...props} />
               </ThemeLayout>
             </SnackbarProvider>

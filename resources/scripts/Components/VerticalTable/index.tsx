@@ -48,7 +48,6 @@ export default function VerticalTable({
 }: VerticalTableProps) {
   return (
     <Box
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...tableParams}
     >
       {data.map(({

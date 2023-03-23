@@ -51,7 +51,6 @@ export default function Sidebar({
       <ExpandableDrawer
         variant="permanent"
         open={open}
-        // eslint-disable-next-line react/jsx-props-no-spreading
         {...props}
       >
         <List>
@@ -65,7 +64,6 @@ export default function Sidebar({
           <Divider />
           {items.map((item) => (
             <SidebarItem
-              // eslint-disable-next-line react/jsx-props-no-spreading
               {...item}
               key={item.key ?? item.name}
               selected={selectedItem && item.key

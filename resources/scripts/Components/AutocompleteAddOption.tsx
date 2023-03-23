@@ -141,7 +141,6 @@ export default function AutocompleteAddOption<
 
   return (
     <Autocomplete
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...otherProps}
       freeSolo
       clearOnBlur
@@ -171,7 +170,6 @@ export default function AutocompleteAddOption<
         return filtered;
       }}
       renderOption={renderOption ?? ((props, option) => (
-        // eslint-disable-next-line react/jsx-props-no-spreading
         <li {...props}>{option[labelKey]}</li>
       ))}
       onChange={(event, newValue, reason, details) => {
