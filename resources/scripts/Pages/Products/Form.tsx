@@ -246,6 +246,11 @@ export default function FormProduct({
                 });
               }
             }}
+            InputProps={{
+              inputProps: {
+                accept: 'image/*',
+              },
+            }}
           />
         </FieldSection>
 
