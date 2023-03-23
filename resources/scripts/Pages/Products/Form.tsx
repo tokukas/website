@@ -1,5 +1,5 @@
 import AppHead from '@/Components/AppHead';
-import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
+import AutocompleteAddOption from '@/Components/Autocomplete/AddOption';
 import FieldSection from '@/Components/Form/FieldSection';
 import FileInput from '@/Components/Form/FileInput';
 import Link from '@/Components/Link';
