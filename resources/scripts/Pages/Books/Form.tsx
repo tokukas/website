@@ -1,7 +1,7 @@
 import AppHead from '@/Components/AppHead';
 import AutocompleteAddOption from '@/Components/AutocompleteAddOption';
-import FieldSection from '@/Components/FieldSection';
-import FormDialog from '@/Components/FormDialog';
+import FormDialog from '@/Components/Dialog/Form';
+import FieldSection from '@/Components/Form/FieldSection';
 import Link from '@/Components/Link';
 import { Author } from '@/Entities/Author';
 import { Book } from '@/Entities/Book';
