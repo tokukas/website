@@ -35,10 +35,12 @@ class CategoryController extends Controller
         $category = Category::create($validated);
 
         if ($category) {
-            return back()->with('success', 'Category created successfully.');
+            $this->setFlashSuccess('Category added successfully');
+        } else {
+            $this->setFlashError('Failed to add the category');
         }
 
-        return back()->with('error', 'Category could not be created.');
+        return back();
     }
 
     // /**

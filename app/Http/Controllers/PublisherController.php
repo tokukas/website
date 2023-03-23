@@ -35,10 +35,12 @@ class PublisherController extends Controller
         $publisher = Publisher::create($validated);
 
         if ($publisher) {
-            return back()->with('success', 'Publisher created successfully.');
+            $this->setFlashSuccess('Publisher added successfully');
+        } else {
+            $this->setFlashError('Failed to add the publisher');
         }
 
-        return back()->with('error', 'Publisher could not be created.');
+        return back();
     }
 
     // /**
