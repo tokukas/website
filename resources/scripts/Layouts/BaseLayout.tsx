@@ -17,17 +17,17 @@ type TPropsFlash = {
 
 export default function BaseLayout({ children }: TPropsBaseLayout) {
   const { enqueueSnackbar } = useSnackbar();
-  const { message, status } = usePage().props.flash as TPropsFlash;
+  const flash = usePage().props.flash as TPropsFlash;
 
   React.useEffect(() => {
-    if (status) {
-      enqueueSnackbar(message ?? status, {
-        variant: status,
+    if (flash.status) {
+      enqueueSnackbar(flash.message ?? flash.status, {
+        variant: flash.status,
         action: DismissSnackbarAction,
         preventDuplicate: true,
       });
     }
-  }, [status, message]);
+  }, [flash]);
 
   return (
     <AuthContext.Provider
