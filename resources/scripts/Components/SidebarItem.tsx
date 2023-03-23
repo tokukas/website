@@ -7,7 +7,7 @@ import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
 import Link from './Link';
 
-export type TPropsSidebarItem = ListItemButtonProps & {
+export type TPropsSidebarItem = Omit<ListItemButtonProps, 'LinkComponent'> & {
   /** The name of sidebar item. */
   name: string;
 
@@ -19,7 +19,10 @@ export type TPropsSidebarItem = ListItemButtonProps & {
 };
 
 export default function SidebarItem({
-  name, icon, href, sx, ...props
+  icon,
+  name,
+  sx,
+  ...props
 }: TPropsSidebarItem) {
   const { open } = React.useContext(SidebarContext);
 
@@ -31,8 +34,7 @@ export default function SidebarItem({
         px: 2.5,
         ...sx,
       }}
-      component={href ? Link : 'div'}
-      {...(href ? { href } : {})}
+      LinkComponent={Link}
       {...props}
     >
       <ListItemIcon
