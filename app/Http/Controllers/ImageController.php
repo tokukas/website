@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
-use App\Traits\FlashStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,8 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
-    use FlashStatus;
-
     // /**
     //  * Display a listing of the resource.
     //  */
