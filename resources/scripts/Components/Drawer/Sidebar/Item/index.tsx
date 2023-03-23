@@ -1,11 +1,11 @@
-import SidebarContext from '@/Utils/SidebarContext';
+import SidebarContext from '@/Components/Drawer/Sidebar/context';
+import Link from '@/Components/Link';
 import ListItemButton, {
   ListItemButtonProps,
 } from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
-import Link from './Link';
 
 export type TPropsSidebarItem = Omit<ListItemButtonProps, 'LinkComponent'> & {
   /** The name of sidebar item. */
