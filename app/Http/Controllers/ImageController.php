@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Traits\FlashStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
+    use FlashStatus;
+
     // /**
     //  * Display a listing of the resource.
     //  */
@@ -67,11 +70,11 @@ class ImageController extends Controller
             $image->delete()
             && Storage::delete($image->path)
         ) {
-            return redirect()->back();
+            $this->setFlashSuccess('Image deleted successfully');
+        } else {
+            $this->setFlashError('Failed to delete the image');
         }
 
-        return back()->withErrors([
-            'error' => 'Error deleting image',
-        ]);
+        return back();
     }
 }

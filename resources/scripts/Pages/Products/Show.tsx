@@ -1,6 +1,5 @@
 import AppHead from '@/Components/AppHead';
 import Link from '@/Components/Link';
-import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import VerticalTable from '@/Components/VerticalTable';
 import { Image } from '@/Entities/Image';
 import { Product } from '@/Entities/Product';
@@ -28,7 +27,6 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
-import { useSnackbar } from 'notistack';
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import route from 'ziggy-js';
@@ -50,8 +48,6 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
     !!product?.photos && !!product.photos.length
   ), [product]);
 
-  const { enqueueSnackbar } = useSnackbar();
-
   const deletePhoto = (event: React.MouseEvent) => {
     event.preventDefault();
 
@@ -63,20 +59,6 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
           setOpenDeleteDialog(false);
           setAnchorElOptions(null);
           setPhotoBackdrop(null);
-        },
-        onError: () => {
-          enqueueSnackbar('Failed to delete the photo.', {
-            variant: 'error',
-            action: DismissSnackbarAction,
-            preventDuplicate: true,
-          });
-        },
-        onSuccess: () => {
-          enqueueSnackbar('Photo deleted successfully.', {
-            variant: 'success',
-            action: DismissSnackbarAction,
-            preventDuplicate: true,
-          });
         },
       });
     }
