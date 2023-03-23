@@ -48,12 +48,14 @@ class ProductController extends Controller
             && $validated['photos']
             && $this->uploadPhotos($product, $validated['photos'])
         ) {
+            $this->setFlashSuccess('Product added successfully');
+
             return redirect()->intended(route('products.show', $product));
         }
 
-        return back()->withErrors([
-            'error' => 'Error creating product',
-        ]);
+        $this->setFlashError('failed to add the product');
+
+        return back();
     }
 
     /**
@@ -94,12 +96,14 @@ class ProductController extends Controller
         }
 
         if ($success) {
+            $this->setFlashSuccess('Product updated successfully');
+
             return redirect()->intended(route('products.show', $product));
         }
 
-        return back()->withErrors([
-            'error' => 'Error updating product',
-        ]);
+        $this->setFlashError('Failed to update the product');
+
+        return back();
     }
 
     // /**
