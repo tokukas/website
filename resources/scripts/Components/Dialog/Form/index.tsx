@@ -1,4 +1,4 @@
-import DismissSnackbarAction from '@/Components/DismissSnackbarAction';
+import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import { RequiredFor } from '@/Utils/Types';
 import { useForm } from '@inertiajs/react';
 import { ModalProps } from '@mui/material';
