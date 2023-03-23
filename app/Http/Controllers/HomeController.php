@@ -10,7 +10,7 @@ class HomeController extends Controller
     public function index()
     {
         $products = ProductResource::collection(
-            \App\Models\Product::with('photos')->offset(0)->limit(10)->get()
+            \App\Models\Product::with('photos')->offset(0)->limit(12)->get()
         );
         $products->withoutWrapping();
 
