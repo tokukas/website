@@ -69,8 +69,8 @@ export default function FormProduct({
   };
 
   const photosValidator = new FileValidator<true>({
-    maxSize: 2 * 1024 * 1024, // 2 MB
-    allowedTypes: ['image/jpeg', 'image/png', 'image/webp'],
+    maxSize: 5 * 1024 * 1024, // 5 MB
+    allowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/heic'],
   });
 
   const [photosError, setPhotosError] = React.useState<{
@@ -232,7 +232,7 @@ export default function FormProduct({
             placeholder="Select product photo(s)"
             error={!!photosError?.error}
             helperText={photosError?.error
-              ?? 'Max. 5 photos with max. 2MB each'}
+              ?? 'Max. 5 photos with max. 5 MB each'}
             onChange={(newPhotos) => {
               if (photosValidator.validate(newPhotos)) {
                 if (photosError) {
@@ -245,6 +245,11 @@ export default function FormProduct({
                   error: photosValidator.getError(),
                 });
               }
+            }}
+            InputProps={{
+              inputProps: {
+                accept: 'image/*',
+              },
             }}
           />
         </FieldSection>
