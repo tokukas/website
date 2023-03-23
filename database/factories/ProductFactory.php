@@ -20,6 +20,7 @@ class ProductFactory extends Factory
             'book_id' => fake()->randomElement(\App\Models\Book::pluck('id')->toArray()),
             'sku' => fake()->unique()->ean13(),
             'name' => fake()->words(fake()->numberBetween(2, 5), true),
+            'stock' => fake()->numberBetween(0, 100),
             'price' => fake()->numberBetween(100, 10000),
             'description' => fake()->optional()->paragraph(fake()->numberBetween(0, 2)),
         ];

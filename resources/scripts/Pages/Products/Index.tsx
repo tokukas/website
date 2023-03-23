@@ -53,6 +53,7 @@ export default function Products({ products }: TPropsProducts) {
         </Link>
       ),
     },
+    { field: 'stock', headerName: 'Stock', width: 80 },
     { field: 'price', headerName: 'Price', width: 120 },
     {
       field: 'created_at',

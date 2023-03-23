@@ -22,6 +22,7 @@ class Product extends Model
         'book_id',
         'sku',
         'name',
+        'stock',
         'price',
         'description',
     ];

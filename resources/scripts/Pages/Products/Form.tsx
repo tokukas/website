@@ -41,6 +41,7 @@ export default function FormProduct({
     book_id: productToEdit?.book_id,
     name: productToEdit?.name,
     sku: productToEdit?.sku,
+    stock: productToEdit?.stock,
     photos: [],
     price: productToEdit?.price,
     description: productToEdit?.description,
@@ -176,6 +177,23 @@ export default function FormProduct({
             error={!!errors.sku}
             helperText={errors.sku ?? 'Stock Keeping Unit'}
             onChange={handleInputChange}
+          />
+
+          <TextField
+            name="stock"
+            label="Stock"
+            type="number"
+            defaultValue={productToEdit?.stock}
+            placeholder="0"
+            error={!!errors.stock}
+            helperText={errors.stock}
+            onChange={handleInputChange}
+            InputProps={{
+              inputProps: {
+                min: 0,
+                step: 1,
+              },
+            }}
           />
 
           <TextField
