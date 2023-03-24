@@ -9,11 +9,11 @@ use App\Http\Resources\ProductResource;
 use App\Models\Book;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -151,11 +151,25 @@ class ProductController extends Controller
     /**
      * Export the products to excel.
      */
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
-        return Excel::download(
-            new ProductsExport(Product::with('photos')->get()),
-            'products.xlsx'
-        );
+        $ids = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['required', 'string', 'exists:App\Models\Product,id'],
+        ])['ids'];
+
+        $products = Product::with('photos')->findMany($ids);
+        $fileName = 'products-'.time().'-'.($ids ? count($ids) : 'all').'.xlsx';
+
+        (new ProductsExport($products))->queue($fileName, 'public');
+
+        // Get exported file from public
+        if (Storage::disk('public')->exists($fileName)) {
+            return Inertia::location(url(Storage::url($fileName)));
+        }
+
+        $this->setFlashError('Failed to export products to excel');
+
+        return back();
     }
 }

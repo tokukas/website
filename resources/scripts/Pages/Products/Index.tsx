@@ -1,14 +1,20 @@
 import Link from '@/Components/Link';
+import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import { Product } from '@/Entities/Product';
 import DashboardLayout from '@/Layouts/DashboardLayout';
+import { useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
+import PublishIcon from '@mui/icons-material/Publish';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
+import { useSnackbar } from 'notistack';
 import React from 'react';
 import route from 'ziggy-js';
 
@@ -19,6 +25,21 @@ export type TPropsProducts = {
 type TProductColumns = Omit<Product, 'book_id'>;
 
 export default function Products({ products }: TPropsProducts) {
+  const {
+    data, errors, post, processing, setData,
+  } = useForm<{ids: string[]}>({ ids: [] });
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  React.useEffect(() => {
+    if (Object.keys(errors).length) {
+      enqueueSnackbar(errors.ids ?? 'Some product id is invalid', {
+        variant: 'error',
+        action: DismissSnackbarAction,
+      });
+    }
+  }, [errors]);
+
   const productColumns: GridColDef<TProductColumns>[] = [
     { field: 'id', headerName: 'ID', width: 80 },
     { field: 'sku', headerName: 'SKU', width: 80 },
@@ -82,15 +103,30 @@ export default function Products({ products }: TPropsProducts) {
         <Typography variant="h4" component="h1">
           Products
         </Typography>
-        <Tooltip title="Add Product">
-          <IconButton
-            component={Link}
-            href={route('products.create')}
-            size="large"
-          >
-            <AddIcon fontSize="large" />
-          </IconButton>
-        </Tooltip>
+
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Tooltip title="Add Product">
+            <IconButton
+              component={Link}
+              href={route('products.create')}
+              size="large"
+            >
+              <AddIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
+          {!!data.ids.length && (
+            <Button
+              startIcon={<PublishIcon />}
+              variant="contained"
+              disabled={processing}
+              onClick={() => {
+                post(route('products.export'));
+              }}
+            >
+              Excel
+            </Button>
+          )}
+        </Stack>
       </Box>
 
       <Paper sx={{ height: 380, width: '100%' }}>
@@ -107,6 +143,9 @@ export default function Products({ products }: TPropsProducts) {
           }}
           checkboxSelection
           disableRowSelectionOnClick
+          onRowSelectionModelChange={(rows) => {
+            setData('ids', rows.map((row) => row.toString()));
+          }}
         />
       </Paper>
     </>

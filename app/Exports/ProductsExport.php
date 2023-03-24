@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -15,6 +16,8 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class ProductsExport implements FromCollection, WithColumnFormatting, WithHeadings, WithMapping, WithStrictNullComparison
 {
+    use Exportable;
+
     private Collection $products;
 
     /**
