@@ -67,11 +67,11 @@ class ImageController extends Controller
             $image->delete()
             && Storage::delete($image->path)
         ) {
-            return redirect()->back();
+            $this->setFlashSuccess('Image deleted successfully');
+        } else {
+            $this->setFlashError('Failed to delete the image');
         }
 
-        return back()->withErrors([
-            'error' => 'Error deleting image',
-        ]);
+        return back();
     }
 }

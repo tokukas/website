@@ -416,7 +416,6 @@ export default function FormBook({
             setData('publisher_id', '');
           }}
           submitButtonName="Add"
-          messageOnSuccess="Publisher successfully added"
           description="Fill this form to add a new publisher.
             Please don't add the publisher that already exist."
         />
@@ -440,7 +439,6 @@ export default function FormBook({
             setData('category_id', '');
           }}
           submitButtonName="Add"
-          messageOnSuccess="Category successfully added"
           description="Fill this form to add a new category.
             Please don't add the category that already exist."
         />
@@ -463,7 +461,6 @@ export default function FormBook({
             setAuthorDialogValue(null);
           }}
           submitButtonName="Add"
-          messageOnSuccess="Author successfully added"
           description="Fill this form to add a new author.
             Please don't add the author that already exist."
         />

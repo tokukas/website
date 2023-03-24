@@ -58,12 +58,14 @@ class BookController extends Controller
         $book->authors()->sync($validated['author_ids'] ?? []);
 
         if ($book) {
+            $this->setFlashSuccess('Book added successfully');
+
             return redirect()->intended(route('books.show', [$book]));
         }
 
-        return back()->withErrors([
-            'error' => 'Error creating book',
-        ]);
+        $this->setFlashError('Failed to add the book');
+
+        return back();
     }
 
     /**
@@ -99,12 +101,14 @@ class BookController extends Controller
         if ($book->update($validated)) {
             $book->authors()->sync($validated['author_ids'] ?? []);
 
+            $this->setFlashSuccess('Book updated successfully');
+
             return redirect()->intended(route('books.show', [$book]));
         }
 
-        return back()->withErrors([
-            'error' => 'Error updating book',
-        ]);
+        $this->setFlashError('Failed updating book');
+
+        return back();
     }
 
     // /**

@@ -35,10 +35,12 @@ class AuthorController extends Controller
         $author = Author::create($validated);
 
         if ($author) {
-            return back()->with('success', 'Author created successfully.');
+            $this->setFlashSuccess('Author added successfully');
+        } else {
+            $this->setFlashError('Failed to add the author');
         }
 
-        return back()->with('error', 'Author could not be created.');
+        return back();
     }
 
     // /**
