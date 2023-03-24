@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductsExport;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
@@ -12,6 +13,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -144,5 +146,16 @@ class ProductController extends Controller
         }, $photos);
 
         return ! in_array(false, $statuses);
+    }
+
+    /**
+     * Export the products to excel.
+     */
+    public function exportExcel()
+    {
+        return Excel::download(
+            new ProductsExport(Product::with('photos')->get()),
+            'products.xlsx'
+        );
     }
 }
