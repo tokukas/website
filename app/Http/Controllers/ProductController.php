@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Products\ProductsExport;
 use App\Exports\Products\Shopee\Export as ProductsExportShopee;
+use App\Http\Requests\ExportProductRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
@@ -151,17 +153,23 @@ class ProductController extends Controller
     /**
      * Export the products to excel.
      */
-    public function exportExcel(Request $request)
+    public function exportExcel(ExportProductRequest $request)
     {
-        $ids = $request->validate([
-            'ids' => ['required', 'array'],
-            'ids.*' => ['required', 'string', 'exists:App\Models\Product,id'],
-        ])['ids'];
+        ['ids' => $ids, 'template' => $template] = $request->validated();
 
         $products = Product::with(['book', 'photos'])->findMany($ids);
-        $fileName = 'products-'.time().'-'.($ids ? count($ids) : 'all').'.xlsx';
+        $fileName = 'products-'.$template.'-'.time().'-'.($ids ? count($ids) : 'all').'.xlsx';
 
-        (new ProductsExportShopee($products))->queue($fileName, 'public');
+        switch ($template) {
+            case 'mass-upload-shopee':
+                $fileExport = new ProductsExportShopee($products);
+                break;
+            default:
+                $fileExport = new ProductsExport($products);
+                break;
+        }
+
+        $fileExport->queue($fileName, 'public');
 
         // Get exported file from public
         if (Storage::disk('public')->exists($fileName)) {

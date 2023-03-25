@@ -1,4 +1,5 @@
 import SplitButton from '@/Components/Button/Split';
+import BasicDialog from '@/Components/Dialog/Basic';
 import Link from '@/Components/Link';
 import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import { Product } from '@/Entities/Product';
@@ -8,7 +9,12 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -21,17 +27,26 @@ export type TPropsProducts = {
 }
 
 type TProductColumns = Omit<Product, 'book_id'>;
+type ExportTemplate = 'default' | 'mass-upload-shopee';
+type FormExportData = {
+  ids: string[];
+  template: ExportTemplate;
+};
 
 export default function Products({ products }: TPropsProducts) {
   const {
     data, errors, post, processing, setData,
-  } = useForm<{ids: string[]}>({ ids: [] });
+  } = useForm<FormExportData>({
+    ids: [],
+    template: 'default',
+  });
 
   const { enqueueSnackbar } = useSnackbar();
+  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (Object.keys(errors).length) {
-      enqueueSnackbar(errors.ids ?? 'Some product id is invalid', {
+      enqueueSnackbar(errors.ids ?? errors.template ?? 'Some product id is invalid', {
         variant: 'error',
         action: DismissSnackbarAction,
       });
@@ -119,9 +134,7 @@ export default function Products({ products }: TPropsProducts) {
               label: 'Export',
               startIcon: <PublishIcon />,
               disabled: !data.ids.length,
-              onClick: () => {
-                post(route('products.export'));
-              },
+              onClick: () => setOpenDialog(true),
             },
             {
               label: 'Delete',
@@ -152,6 +165,48 @@ export default function Products({ products }: TPropsProducts) {
           }}
         />
       </Paper>
+
+      <BasicDialog
+        open={openDialog}
+        title="Export to Excel"
+        description="Select one of the Excel template below!"
+        onClose={() => setOpenDialog(false)}
+        content={(
+          <FormControl fullWidth sx={{ width: 360, mt: 3 }}>
+            <InputLabel id="select-template-label">Template</InputLabel>
+            <Select
+              labelId="select-template-label"
+              id="select-template"
+              label="Template"
+              value={data.template}
+              onChange={(e) => {
+                setData('template', e.target.value as ExportTemplate);
+              }}
+            >
+              <MenuItem value="default" selected>Default</MenuItem>
+              <MenuItem value="mass-upload-shopee">
+                Mass Upload Shopee
+              </MenuItem>
+            </Select>
+          </FormControl>
+        )}
+        actions={(
+          <>
+            <Button onClick={() => setOpenDialog(false)}>
+              Cancel
+            </Button>
+            <Button
+              disabled={!data.template}
+              onClick={() => {
+                post(route('products.export'));
+                setOpenDialog(false);
+              }}
+            >
+              Export
+            </Button>
+          </>
+        )}
+      />
     </>
   );
 }
