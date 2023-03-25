@@ -157,7 +157,7 @@ class ProductController extends Controller
         ['ids' => $ids, 'template' => $template] = $request->validated();
 
         $products = Product::with(['book', 'photos'])->findMany($ids);
-        $fileName = 'products-'.$template.'-'.time().'-'.($ids ? count($ids) : 'all').'.xlsx';
+        $fileName = 'products-'.$template.'-'.time().'.xlsx';
 
         switch ($template) {
             case 'mass-upload-shopee':
