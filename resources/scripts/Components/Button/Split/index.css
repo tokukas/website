@@ -1,0 +1,15 @@
+.MuiButtonGroup-grouped:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right-color: transparent;
+}
+
+.MuiButtonGroup-grouped:first-child:hover {
+  border-right-color: currentColor;
+}
+
+.MuiButtonGroup-grouped:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -1px;
+}

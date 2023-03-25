@@ -37,6 +37,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('products', 'App\Http\Controllers\ProductController');
 
+        Route::post('products/export', ['App\Http\Controllers\ProductController', 'exportExcel'])
+            ->name('products.export');
+
         Route::resource('images', 'App\Http\Controllers\ImageController');
     });
 

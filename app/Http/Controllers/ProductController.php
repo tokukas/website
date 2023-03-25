@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Products\Default\Export as ProductsExport;
+use App\Exports\Products\Shopee\MassUploadExport as ShopeeMassUploadExport;
+use App\Exports\Products\Tokopedia\MassUploadExport as TokopediaMassUploadExport;
+use App\Http\Requests\ExportProductRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
@@ -144,5 +148,39 @@ class ProductController extends Controller
         }, $photos);
 
         return ! in_array(false, $statuses);
+    }
+
+    /**
+     * Export the products to excel.
+     */
+    public function exportExcel(ExportProductRequest $request)
+    {
+        ['ids' => $ids, 'template' => $template] = $request->validated();
+
+        $products = Product::with(['book', 'photos'])->findMany($ids);
+        $fileName = 'products-'.$template.'-'.time().'.xlsx';
+
+        switch ($template) {
+            case 'mass-upload-shopee':
+                $fileExport = new ShopeeMassUploadExport($products);
+                break;
+            case 'mass-upload-tokopedia':
+                $fileExport = new TokopediaMassUploadExport($products);
+                break;
+            default:
+                $fileExport = new ProductsExport($products);
+                break;
+        }
+
+        $fileExport->queue($fileName, 'public');
+
+        // Get exported file from public
+        if (Storage::disk('public')->exists($fileName)) {
+            return Inertia::location(url(Storage::url($fileName)));
+        }
+
+        $this->setFlashError('Failed to export products to excel');
+
+        return back();
     }
 }
