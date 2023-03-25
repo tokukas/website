@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports\Products\Templates\Shopee;
+namespace App\Exports\Products\Shopee;
 
 use App\Exports\BasicSheet;
 use App\Models\Image;

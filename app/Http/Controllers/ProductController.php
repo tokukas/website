@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\Products\Templates\Default\Export as ProductsExport;
-use App\Exports\Products\Templates\Shopee\MassUploadExport as ShopeeMassUploadExport;
+use App\Exports\Products\Default\Export as ProductsExport;
+use App\Exports\Products\Shopee\MassUploadExport as ShopeeMassUploadExport;
 use App\Http\Requests\ExportProductRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports\Products\Templates\Default;
+namespace App\Exports\Products\Default;
 
 use App\Exports\BasicExport;
 use Illuminate\Support\Collection;
