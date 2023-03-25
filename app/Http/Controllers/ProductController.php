@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\Products\ProductsExport;
 use App\Exports\Products\Shopee\Export as ProductsExportShopee;
+use App\Exports\Products\Templates\Default\Export as ProductsExport;
 use App\Http\Requests\ExportProductRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -11,7 +11,6 @@ use App\Http\Resources\ProductResource;
 use App\Models\Book;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
