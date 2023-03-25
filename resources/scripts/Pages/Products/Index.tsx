@@ -1,16 +1,14 @@
+import SplitButton from '@/Components/Button/Split';
 import Link from '@/Components/Link';
 import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import { Product } from '@/Entities/Product';
 import DashboardLayout from '@/Layouts/DashboardLayout';
 import { useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import PublishIcon from '@mui/icons-material/Publish';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -98,35 +96,41 @@ export default function Products({ products }: TPropsProducts) {
         alignItems: 'center',
         gap: 2,
         mb: 2,
+        flexWrap: 'wrap',
       }}
       >
         <Typography variant="h4" component="h1">
           Products
         </Typography>
 
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Tooltip title="Add Product">
-            <IconButton
-              component={Link}
-              href={route('products.create')}
-              size="large"
-            >
-              <AddIcon fontSize="large" />
-            </IconButton>
-          </Tooltip>
-          {!!data.ids.length && (
-            <Button
-              startIcon={<PublishIcon />}
-              variant="contained"
-              disabled={processing}
-              onClick={() => {
+        <SplitButton
+          defaultProp={{
+            size: 'small',
+            disabled: processing,
+          }}
+          buttons={[
+            {
+              label: 'Add',
+              startIcon: <AddIcon />,
+              LinkComponent: Link,
+              href: route('products.create'),
+            },
+            {
+              label: 'Export',
+              startIcon: <PublishIcon />,
+              disabled: !data.ids.length,
+              onClick: () => {
                 post(route('products.export'));
-              }}
-            >
-              Excel
-            </Button>
-          )}
-        </Stack>
+              },
+            },
+            {
+              label: 'Delete',
+              startIcon: <DeleteIcon />,
+              disabled: !data.ids.length,
+              // TODO: deleting onClicked
+            },
+          ]}
+        />
       </Box>
 
       <Paper sx={{ height: 380, width: '100%' }}>
