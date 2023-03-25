@@ -24,7 +24,7 @@ class ExportProductRequest extends FormRequest
         return [
             'ids' => ['required', 'array'],
             'ids.*' => ['required', 'string', 'exists:App\Models\Product,id'],
-            'template' => ['required', 'in:default,mass-upload-shopee'],
+            'template' => ['required', 'in:default,mass-upload-shopee,mass-upload-tokopedia'],
         ];
     }
 

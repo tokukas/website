@@ -27,7 +27,7 @@ export type TPropsProducts = {
 }
 
 type TProductColumns = Omit<Product, 'book_id'>;
-type ExportTemplate = 'default' | 'mass-upload-shopee';
+type ExportTemplate = 'default' | 'mass-upload-shopee' | 'mass-upload-tokopedia';
 type FormExportData = {
   ids: string[];
   template: ExportTemplate;
@@ -184,9 +184,8 @@ export default function Products({ products }: TPropsProducts) {
               }}
             >
               <MenuItem value="default" selected>Default</MenuItem>
-              <MenuItem value="mass-upload-shopee">
-                Mass Upload Shopee
-              </MenuItem>
+              <MenuItem value="mass-upload-shopee">Mass Upload Shopee</MenuItem>
+              <MenuItem value="mass-upload-tokopedia">Mass Upload Tokopedia</MenuItem>
             </Select>
           </FormControl>
         )}
