@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports\Products\Shopee\Sheets;
+namespace App\Exports\Products\Templates\Shopee;
 
 use App\Exports\BasicSheet;
 use App\Models\Image;
@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class TemplateSheet extends BasicSheet implements FromCollection, WithMapping, WithStyles
+class MassUploadTemplateSheet extends BasicSheet implements FromCollection, WithMapping, WithStyles
 {
     const columnKeys = [
         'ps_category',

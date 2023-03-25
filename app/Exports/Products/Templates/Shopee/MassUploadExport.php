@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Exports\Products\Shopee;
+namespace App\Exports\Products\Templates\Shopee;
 
 use App\Exports\BasicExport;
 use App\Exports\BasicSheet;
-use App\Exports\Products\Shopee\Sheets\TemplateSheet;
 use Illuminate\Support\Collection;
 
 /**
@@ -12,7 +11,7 @@ use Illuminate\Support\Collection;
  *
  * Required to load the book and photos relationship manually.
  */
-class Export extends BasicExport
+class MassUploadExport extends BasicExport
 {
     public function __construct(Collection $products)
     {
@@ -21,7 +20,7 @@ class Export extends BasicExport
                 ['<required-blank-row>'],
                 ['basic', '220309_sizechart'],
             ])),
-            new TemplateSheet($products),
+            new MassUploadTemplateSheet($products),
             new BasicSheet('required_blank_sheet'),
             new BasicSheet('required_sheet', collect([['mass_new_basic']])), // `mass_new_basic` is required key
         ];

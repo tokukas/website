@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\Products\Shopee\Export as ProductsExportShopee;
 use App\Exports\Products\Templates\Default\Export as ProductsExport;
+use App\Exports\Products\Templates\Shopee\MassUploadExport as ShopeeMassUploadExport;
 use App\Http\Requests\ExportProductRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -161,7 +161,7 @@ class ProductController extends Controller
 
         switch ($template) {
             case 'mass-upload-shopee':
-                $fileExport = new ProductsExportShopee($products);
+                $fileExport = new ShopeeMassUploadExport($products);
                 break;
             default:
                 $fileExport = new ProductsExport($products);
