@@ -96,9 +96,9 @@ class TemplateSheet extends BasicSheet implements FromCollection, WithMapping, W
         self::columnKeys,
         self::columnNames,
         // Add three blank rows
-        [''],
-        [''],
-        [''],
+        ['<required-blank-row>'],
+        ['<required-blank-row>'],
+        ['<required-blank-row>'],
     ];
 
     protected array $columnFormats = [

@@ -17,10 +17,13 @@ class Export extends BasicExport
     public function __construct(Collection $products)
     {
         $this->sheets = [
-            new BasicSheet('type', collect([[null], ['basic', '220309_sizechart']])),
+            new BasicSheet('type', collect([
+                ['<required-blank-row>'],
+                ['basic', '220309_sizechart'],
+            ])),
             new TemplateSheet($products),
             new BasicSheet('required_blank_sheet'),
-            new BasicSheet('pre_order', collect([['mass_new_basic']])), // `mass_new_basic` is required key
+            new BasicSheet('required_sheet', collect([['mass_new_basic']])), // `mass_new_basic` is required key
         ];
     }
 }
