@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\Products\ProductsExport;
-use App\Exports\Products\ProductsExportShopee;
+use App\Exports\Products\Shopee\Export as ProductsExportShopee;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
