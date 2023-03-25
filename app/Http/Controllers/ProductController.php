@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ProductsExport;
+use App\Exports\Products\ProductsExport;
+use App\Exports\Products\ProductsExportShopee;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
@@ -158,10 +159,10 @@ class ProductController extends Controller
             'ids.*' => ['required', 'string', 'exists:App\Models\Product,id'],
         ])['ids'];
 
-        $products = Product::with('photos')->findMany($ids);
+        $products = Product::with(['book', 'photos'])->findMany($ids);
         $fileName = 'products-'.time().'-'.($ids ? count($ids) : 'all').'.xlsx';
 
-        (new ProductsExport($products))->queue($fileName, 'public');
+        (new ProductsExportShopee($products))->queue($fileName, 'public');
 
         // Get exported file from public
         if (Storage::disk('public')->exists($fileName)) {
