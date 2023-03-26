@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Roles;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,10 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Create Roles if not exists.
-        if (\App\Models\Role::count() === 0) {
-            $this->seedRoles();
-        }
+        // Create Roles.
+        $this->seedRoles();
 
         $theTester = \App\Models\User::firstWhere('email', config('seeder.tester_email'));
 
@@ -44,7 +43,7 @@ class DatabaseSeeder extends Seeder
             'email' => config('seeder.tester_email'),
             'password' => Hash::make(config('seeder.tester_password')),
             'email_verified_at' => now(),
-            'role_key' => config('seeder.tester_is_admin') ? 'admin' : null,
+            'role_key' => config('seeder.tester_is_admin') ? Roles::ADMIN : null,
         ]);
     }
 
@@ -53,9 +52,7 @@ class DatabaseSeeder extends Seeder
      */
     private function seedRoles()
     {
-        \App\Models\Role::factory()->createMany([
-            ['key' => 'admin', 'name' => 'Administrator'],
-        ]);
+        $this->call(RoleSeeder::class);
     }
 
     /**
