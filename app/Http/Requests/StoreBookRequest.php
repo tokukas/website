@@ -31,7 +31,7 @@ class StoreBookRequest extends FormRequest
             'weight' => ['required', 'numeric', 'min:0'],
             'num_of_pages' => ['required', 'integer', 'min:0'],
             'category_id' => ['nullable', 'string', 'exists:categories,id'],
-            'isbn' => ['nullable', 'string', 'size:13', 'unique:App\Models\Book,isbn'],
+            'isbn' => ['nullable', 'alpha-dash', 'max:17', 'unique:App\Models\Book,isbn'],
             'description' => ['nullable', 'string', 'max:255'],
             'author_ids' => ['nullable', 'array'],
             'author_ids.*' => ['required', 'string', 'exists:App\Models\Author,id'],
