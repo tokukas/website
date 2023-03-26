@@ -3,10 +3,10 @@
 return [
     'product' => [
         'tokopedia' => [
-            'subject' => env('PRODUCT_TKPD_SUBJECT')
+            'subject' => env('PRODUCT_TKPD_SUBJECT'),
         ],
         'shopee' => [
             //
         ],
-    ]
+    ],
 ];
