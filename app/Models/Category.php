@@ -32,8 +32,8 @@ class Category extends Model
     protected function name(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => str($value)->lower()->kebab(),
-            get: fn ($value) => str($value)->replace('-', ' ')->title(),
+            set: fn ($value) => str($value)->lower()->snake(),
+            get: fn ($value) => str($value)->replace('_', ' ')->title(),
         );
     }
 

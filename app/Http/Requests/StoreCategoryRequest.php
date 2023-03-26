@@ -22,7 +22,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:App\Models\Category,name'],
+            'name' => ['required', 'alpha-dash', 'max:255', 'unique:App\Models\Category,name'],
         ];
     }
 
@@ -32,7 +32,7 @@ class StoreCategoryRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'name' => str($this->name)->lower()->kebab()->toString(),
+            'name' => str($this->name)->lower()->snake()->toString(),
         ]);
     }
 
