@@ -38,7 +38,6 @@
             "error",
             {
                 "ignoreComments": true,
-                "ignoreStrings": true,
                 "ignoreTemplateLiterals": true,
                 "ignoreRegExpLiterals": true,
                 "ignoreUrls": true
