@@ -3,6 +3,7 @@
 namespace App\Exports\AddBulkTemplate;
 
 use App\Exports\BasicExport;
+use App\Exports\Categories\CategoriesSheet;
 use App\Exports\Publishers\PublishersSheet;
 use Maatwebsite\Excel\Concerns\WithProperties;
 
@@ -13,7 +14,8 @@ class Export extends BasicExport implements WithProperties
         return [
             new ProductsSheet(),
             new BooksSheet(),
-            new PublishersSheet(true),
+            new PublishersSheet(),
+            new CategoriesSheet(),
         ];
     }
 
