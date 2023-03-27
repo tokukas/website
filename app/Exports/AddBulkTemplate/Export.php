@@ -11,6 +11,7 @@ class Export extends BasicExport implements WithProperties
     {
         return [
             new ProductsSheet(),
+            new BooksSheet(),
         ];
     }
 
