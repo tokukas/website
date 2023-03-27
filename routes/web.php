@@ -40,6 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('products/export', ['App\Http\Controllers\ProductController', 'exportExcel'])
             ->name('products.export');
 
+        Route::get('bulk/add/download', ['App\Http\Controllers\BulkController', 'downloadAddBulkTemplate'])
+            ->name('bulk.add.download');
+
         Route::resource('images', 'App\Http\Controllers\ImageController');
     });
 

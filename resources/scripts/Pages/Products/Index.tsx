@@ -1,5 +1,6 @@
 import SplitButton from '@/Components/Button/Split';
 import BasicDialog from '@/Components/Dialog/Basic';
+import FileInput from '@/Components/Form/FileInput';
 import Link from '@/Components/Link';
 import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import { Product } from '@/Entities/Product';
@@ -7,14 +8,18 @@ import DashboardLayout from '@/Layouts/DashboardLayout';
 import { useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import GetAppIcon from '@mui/icons-material/GetApp';
 import PublishIcon from '@mui/icons-material/Publish';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -43,7 +48,10 @@ export default function Products({ products }: TPropsProducts) {
   });
 
   const { enqueueSnackbar } = useSnackbar();
-  const [openDialog, setOpenDialog] = React.useState<boolean>(false);
+  const [openDialog, setOpenDialog] = React.useState<
+    'add-bulk' | 'export' | null
+  >(null);
+  const [addBulkFile, setAddBulkFile] = React.useState<File | null>(null);
 
   React.useEffect(() => {
     if (Object.keys(errors).length) {
@@ -135,10 +143,15 @@ export default function Products({ products }: TPropsProducts) {
               href: route('products.create'),
             },
             {
+              label: 'Add Bulk',
+              startIcon: <FileUploadIcon />,
+              onClick: () => setOpenDialog('add-bulk'),
+            },
+            {
               label: 'Export',
               startIcon: <PublishIcon />,
               disabled: !data.ids.length,
-              onClick: () => setOpenDialog(true),
+              onClick: () => setOpenDialog('export'),
             },
             {
               label: 'Delete',
@@ -171,10 +184,59 @@ export default function Products({ products }: TPropsProducts) {
       </Paper>
 
       <BasicDialog
-        open={openDialog}
+        open={openDialog === 'add-bulk'}
+        title="Add Bulk Products"
+        description="Download the template, fill the data, then upload it."
+        onClose={() => setOpenDialog(null)}
+        content={(
+          <Stack
+            spacing={2}
+            divider={<Divider />}
+            sx={{ mt: 3 }}
+          >
+            <Button
+              variant="outlined"
+              startIcon={<GetAppIcon />}
+              href={route('bulk.add.download')}
+            >
+              Download Template
+            </Button>
+
+            <FileInput
+              label="Upload File"
+              placeholder="Select filled template"
+              value={addBulkFile}
+              onChange={(file) => setAddBulkFile(file)}
+              InputProps={{
+                inputProps: {
+                  // eslint-disable-next-line max-len
+                  accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                },
+              }}
+            />
+          </Stack>
+        )}
+        actions={(
+          <>
+            <Button onClick={() => setOpenDialog(null)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                setOpenDialog(null);
+              }}
+            >
+              Upload File
+            </Button>
+          </>
+        )}
+      />
+
+      <BasicDialog
+        open={openDialog === 'export'}
         title="Export to Excel"
         description="Select one of the Excel template below!"
-        onClose={() => setOpenDialog(false)}
+        onClose={() => setOpenDialog(null)}
         content={(
           <FormControl fullWidth sx={{ width: 360, mt: 3 }}>
             <InputLabel id="select-template-label">Template</InputLabel>
@@ -197,14 +259,14 @@ export default function Products({ products }: TPropsProducts) {
         )}
         actions={(
           <>
-            <Button onClick={() => setOpenDialog(false)}>
+            <Button onClick={() => setOpenDialog(null)}>
               Cancel
             </Button>
             <Button
               disabled={!data.template}
               onClick={() => {
                 post(route('products.export'));
-                setOpenDialog(false);
+                setOpenDialog(null);
               }}
             >
               Export
