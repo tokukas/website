@@ -5,7 +5,7 @@ import Link from '@/Components/Link';
 import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import { Product } from '@/Entities/Product';
 import DashboardLayout from '@/Layouts/DashboardLayout';
-import { useForm } from '@inertiajs/react';
+import { router, useForm } from '@inertiajs/react';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -223,6 +223,9 @@ export default function Products({ products }: TPropsProducts) {
             </Button>
             <Button
               onClick={() => {
+                router.post(route('bulk.add.upload'), {
+                  template: addBulkFile,
+                });
                 setOpenDialog(null);
               }}
             >
