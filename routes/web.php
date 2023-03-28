@@ -43,6 +43,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('bulk/add/download', ['App\Http\Controllers\BulkController', 'downloadAddBulkTemplate'])
             ->name('bulk.add.download');
 
+        Route::post('bulk/add/upload', ['App\Http\Controllers\BulkController', 'uploadAddBulkTemplate'])
+            ->name('bulk.add.upload');
+
         Route::resource('images', 'App\Http\Controllers\ImageController');
     });
 
