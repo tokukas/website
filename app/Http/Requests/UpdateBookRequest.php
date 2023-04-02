@@ -20,7 +20,7 @@ class UpdateBookRequest extends StoreBookRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'isbn' => ['nullable', 'string', 'size:13', 'unique:App\Models\Book,isbn,'.request()->route('book')->id],
+            'isbn' => ['nullable', 'alpha-dash', 'max:17', 'unique:App\Models\Book,isbn,'.request()->route('book')->id],
         ]);
     }
 }
