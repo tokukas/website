@@ -56,9 +56,9 @@ All commit messages SHOULD adhere the [**Conventional Commits specification**](h
 
 ### PHP Style Guide
 
-All PHP code must adhere to [default Laravel Pint preset](https://laravel.com/docs/10.x/pint#presets) ([see the rules here](https://github.com/laravel/pint/blob/main/resources/presets/laravel.php)) with some exceptions and modifications that can be found in the `rules` section of the [`pint.json`](pint.json) file.
+All PHP code must adhere to [default Laravel Pint preset](https://laravel.com/docs/pint#presets) ([see the rules here](https://github.com/laravel/pint/blob/main/resources/presets/laravel.php)) with some exceptions and modifications that can be found in the `rules` section of the [`pint.json`](pint.json) file.
 
-You can run [Laravel Pint](https://laravel.com/docs/10.x/pint) to auto-fix the code styling:
+You can run [Laravel Pint](https://laravel.com/docs/pint) to auto-fix the code styling:
 
 ```bash
 ./vendor/bin/pint

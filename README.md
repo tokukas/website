@@ -6,7 +6,7 @@
 
 ## Detail Project
 
-**Tokukas** website is built using [Laravel 9](https://laravel.com/docs/9.x) and another package such as:
+**Tokukas** website is built using [Laravel](https://laravel.com/docs) and another package such as:
 
 - [Inertia.js](https://inertiajs.com)
 - [React](https://reactjs.org)
