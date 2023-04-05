@@ -35,14 +35,6 @@ class ImageController extends Controller
     // }
 
     // /**
-    //  * Display the specified resource.
-    //  */
-    // public function show(Image $image): Response
-    // {
-    //     //
-    // }
-
-    // /**
     //  * Show the form for editing the specified resource.
     //  */
     // public function edit(Image $image): Response

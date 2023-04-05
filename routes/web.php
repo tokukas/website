@@ -40,7 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('products/export', ['App\Http\Controllers\ProductController', 'exportExcel'])
             ->name('products.export');
 
-        Route::resource('images', 'App\Http\Controllers\ImageController');
+        Route::resource('images', 'App\Http\Controllers\ImageController')
+            ->only(['destroy']);
     });
 
     Route::get('/settings', fn () => Inertia::render('Settings'))
