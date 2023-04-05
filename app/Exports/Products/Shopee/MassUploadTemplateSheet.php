@@ -3,6 +3,7 @@
 namespace App\Exports\Products\Shopee;
 
 use App\Exports\BasicSheet;
+use App\Exports\Products\Utils;
 use App\Models\Image;
 use Exception;
 use Illuminate\Support\Collection;
@@ -119,7 +120,7 @@ class MassUploadTemplateSheet extends BasicSheet implements FromCollection, With
     }
 
     /**
-     * @param  Product  $product
+     * @param  \App\Models\Product  $product
      */
     public function map($product): array
     {
@@ -141,7 +142,7 @@ class MassUploadTemplateSheet extends BasicSheet implements FromCollection, With
         return [
             null, // kategori
             $product->name,
-            $product->description,
+            Utils::generateDescription($product),
             $product->sku,
             'No (ID)',
             null, // kode integrasi variasi
