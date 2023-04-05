@@ -9,20 +9,19 @@ class Utils
 {
     public static function generateDescription(Product $product): string
     {
-        $book = $product->book;
         $bookData = [
-            'title' => $book->title,
-            'author_names' => count($book->authors) > 0
-                ? Arr::join($book->authors->map(fn ($author) => $author->name)->toArray(), ', ')
+            'title' => $product->book->title,
+            'author_names' => count($product->book->authors) > 0
+                ? Arr::join($product->book->authors->map(fn ($author) => $author->name)->toArray(), ', ')
                 : '-',
-            'publisher' => $book->publisher->name ?? '-',
-            'year_published' => $book->year_published,
-            'language' => $book->language_code,
-            'width' => $book->width,
-            'height' => $book->height,
-            'num_of_pages' => $book->num_of_pages,
-            'isbn' => $book->isbn ?? '-',
-            'book_desc' => $book->description ?? '-',
+            'publisher' => $product->book->publisher->name ?? '-',
+            'year_published' => $product->book->year_published,
+            'language' => $product->book->language_code,
+            'width' => $product->book->width,
+            'height' => $product->book->height,
+            'num_of_pages' => $product->book->num_of_pages,
+            'isbn' => $product->book->isbn ?? '-',
+            'book_desc' => $product->book->description ?? '-',
         ];
 
         return <<<DESC
@@ -34,7 +33,7 @@ class Utils
         => Penerbit: {$bookData['publisher']}
         => Tahun Terbit: {$bookData['year_published']}
         => Bahasa: {$bookData['language']}
-        => Dimensi Buku: {$book->width} cm X {$book->height} cm
+        => Dimensi Buku: {$bookData['width']} cm X {$bookData['height']} cm
         => Tebal Buku: {$bookData['num_of_pages']} halaman
         => ISBN: {$bookData['isbn']}
         => Deskripsi Buku: {$bookData['book_desc']}
