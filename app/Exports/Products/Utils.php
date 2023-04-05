@@ -12,10 +12,9 @@ class Utils
         $book = $product->book;
         $bookData = [
             'title' => $book->title,
-            'author_names' => Arr::join(
-                $book->authors->map(fn ($author) => $author->name)->toArray(),
-                ', ',
-            ) ?? '-',
+            'author_names' => count($book->authors) > 0
+                ? Arr::join($book->authors->map(fn ($author) => $author->name)->toArray(), ', ')
+                : '-',
             'publisher' => $book->publisher->name ?? '-',
             'year_published' => $book->year_published,
             'language' => $book->language_code,
