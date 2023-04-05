@@ -3,6 +3,7 @@
 namespace App\Exports\Products\Tokopedia;
 
 use App\Exports\BasicSheet;
+use App\Exports\Products\Utils;
 use App\Models\Image;
 use Exception;
 use Illuminate\Support\Collection;
@@ -68,7 +69,7 @@ class MassUploadTemplateSheet extends BasicSheet implements FromCollection, With
     }
 
     /**
-     * @param  Product  $product
+     * @param  \App\Models\Product  $product
      */
     public function map($product): array
     {
@@ -90,7 +91,7 @@ class MassUploadTemplateSheet extends BasicSheet implements FromCollection, With
         return [
             null, // Pesan error
             $product->name,
-            $product->description,
+            Utils::generateDescription($product),
             null,
             $product->book->weight,
             1, // Minimum pemesanan
