@@ -75,14 +75,18 @@ class ProductController extends Controller
      */
     public function show(Product $product): InertiaResponse
     {
-        return Inertia::render(
-            request()->user()?->isAdmin() ? 'Products/Show' : 'Products/Public/Show',
-            [
-                'product' => ProductResource::make(
-                    $product->load('book', 'photos', 'book.authors'),
-                ),
-            ]
-        );
+        $page = request()->user()?->isAdmin() ? 'Products/Show' : 'Products/Public/Show';
+        $props = request()->user()?->isAdmin() ? [
+            'product' => ProductResource::make(
+                $product->load('book', 'photos'),
+            ),
+        ] : [
+            'product' => ProductResource::make(
+                $product->load('book', 'photos', 'book.authors', 'book.category', 'book.publisher'),
+            ),
+        ];
+
+        return Inertia::render($page, $props);
     }
 
     /**
