@@ -7,6 +7,8 @@ export type Product = {
   created_at?: string;
   description?: string;
   id: string;
+  link_shopee?: string;
+  link_tokopedia?: string;
   name: string;
   photos?: Image[];
   price: number;
