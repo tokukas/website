@@ -20,6 +20,14 @@ use Inertia\Response as InertiaResponse;
 class ProductController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified', 'admin-only'])->except('show');
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(): InertiaResponse
@@ -67,11 +75,14 @@ class ProductController extends Controller
      */
     public function show(Product $product): InertiaResponse
     {
-        return Inertia::render('Products/Show', [
-            'product' => ProductResource::make(
-                $product->load('book', 'photos'),
-            ),
-        ]);
+        return Inertia::render(
+            request()->user()?->isAdmin() ? 'Products/Show' : 'Products/Public/Show',
+            [
+                'product' => ProductResource::make(
+                    $product->load('book', 'photos', 'book.authors'),
+                ),
+            ]
+        );
     }
 
     /**

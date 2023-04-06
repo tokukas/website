@@ -19,6 +19,8 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
+Route::resource('products', 'App\Http\Controllers\ProductController');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('admin-only')->group(function () {
         Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
@@ -34,8 +36,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::resource('authors', 'App\Http\Controllers\AuthorController')
             ->only(['store']);
-
-        Route::resource('products', 'App\Http\Controllers\ProductController');
 
         Route::post('products/export', ['App\Http\Controllers\ProductController', 'exportExcel'])
             ->name('products.export');
