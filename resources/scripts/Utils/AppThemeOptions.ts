@@ -28,6 +28,14 @@ const AppThemeOptions = (colorMode: PaletteMode): ThemeOptions => ({
           dark: '#000099',
           contrastText: '#ffffff',
         },
+        shopee: {
+          main: '#ee4d2d',
+          contrastText: '#ffffff',
+        },
+        tokopedia: {
+          main: '#03ac0e',
+          contrastText: '#ffffff',
+        },
       }
       : {
         // palette values for dark mode
@@ -41,6 +49,14 @@ const AppThemeOptions = (colorMode: PaletteMode): ThemeOptions => ({
           main: '#6128e2',
           light: '#9a59ff',
           dark: '#1400af',
+          contrastText: '#ffffff',
+        },
+        shopee: {
+          main: '#ee4d2d',
+          contrastText: '#ffffff',
+        },
+        tokopedia: {
+          main: '#03ac0e',
           contrastText: '#ffffff',
         },
       }

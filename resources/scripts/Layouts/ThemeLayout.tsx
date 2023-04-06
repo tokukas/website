@@ -5,6 +5,26 @@ import {
 } from '@mui/material';
 import React from 'react';
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    shopee: Palette['primary'];
+    tokopedia: Palette['primary'];
+  }
+
+  interface PaletteOptions {
+    shopee: PaletteOptions['primary'];
+    tokopedia: PaletteOptions['primary'];
+  }
+}
+
+// Update the Button's color prop options
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    shopee: true;
+    tokopedia: true;
+  }
+}
+
 type TPropsThemeLayout = {
   children?: React.ReactNode;
 }
