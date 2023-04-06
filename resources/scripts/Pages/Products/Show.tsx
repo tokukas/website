@@ -157,8 +157,10 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
               disabledDataStyle: true,
               value: product.link_shopee ? (
                 <Typography
-                  component={Link}
+                  component="a"
                   href={product.link_shopee}
+                  target="_blank"
+                  color="primary"
                 >
                   {product.link_shopee}
                 </Typography>
@@ -171,8 +173,10 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
               disabledDataStyle: true,
               value: product.link_tokopedia ? (
                 <Typography
-                  component={Link}
+                  component="a"
                   href={product.link_tokopedia}
+                  target="_blank"
+                  color="primary"
                 >
                   {product.link_tokopedia}
                 </Typography>
