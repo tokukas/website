@@ -30,6 +30,8 @@ class StoreProductRequest extends FormRequest
             'stock' => ['required', 'integer', 'min:0'],
             'price' => ['required', 'numeric', 'min:0'],
             'description' => ['nullable', 'string'],
+            'link_shopee' => ['nullable', 'active_url'],
+            'link_tokopedia' => ['nullable', 'active_url'],
         ];
     }
 
@@ -51,6 +53,8 @@ class StoreProductRequest extends FormRequest
         return [
             'book_id' => 'book',
             'photos.*' => 'photo',
+            'link_shopee' => 'Shopee link',
+            'link_tokopedia' => 'Tokopedia link',
         ];
     }
 

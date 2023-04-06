@@ -1,21 +1,24 @@
 import AppHead from '@/Components/AppHead';
+import ShopeeLogo from '@/Components/Logo/Shopee';
+import TokopediaLogo from '@/Components/Logo/Tokopedia';
+import VerticalTable from '@/Components/VerticalTable';
+import Data from '@/Components/VerticalTable/Data';
 import { Image } from '@/Entities/Image';
 import { Product } from '@/Entities/Product';
 import DefaultLayout from '@/Layouts/DefaultLayout';
-import Backdrop from '@mui/material/Backdrop';
+import Language from '@/Utils/Language';
 import CloseIcon from '@mui/icons-material/Close';
+import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
-import Stack from '@mui/material/Stack';
-import VerticalTable from '@/Components/VerticalTable';
-import Divider from '@mui/material/Divider';
-import Chip from '@mui/material/Chip';
-import Language from '@/Utils/Language';
-import Data from '@/Components/VerticalTable/Data';
 
 type TPropsShowProduct = {
   product: Product;
@@ -100,7 +103,44 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
             {product.stock ? `${product.stock} tersisa` : 'Stok habis'}
           </Typography>
 
-          <Divider sx={{ mt: 2 }} />
+          <Box
+            sx={{
+              display: product.link_shopee || product.link_tokopedia
+                ? 'grid' : 'none',
+              gridTemplateColumns: {
+                sm: '1fr',
+                md: 'repeat(2, 1fr)',
+              },
+              gap: 1.5,
+              mt: 2,
+            }}
+          >
+            {product.link_shopee && (
+              <Button
+                variant="contained"
+                color="shopee"
+                href={product.link_shopee}
+                target="_blank"
+                endIcon={<ShopeeLogo className="w-14" variant="white" />}
+              >
+                Pesan via
+              </Button>
+            )}
+
+            {product.link_tokopedia && (
+              <Button
+                variant="contained"
+                color="tokopedia"
+                href={product.link_tokopedia}
+                target="_blank"
+                endIcon={<TokopediaLogo className="w-20" variant="white" />}
+              >
+                Pesan via
+              </Button>
+            )}
+          </Box>
+
+          <Divider sx={{ my: 3 }} />
 
           <VerticalTable
             placeholder="-"

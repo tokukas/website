@@ -25,6 +25,8 @@ class Product extends Model
         'stock',
         'price',
         'description',
+        'link_shopee',
+        'link_tokopedia',
     ];
 
     /**

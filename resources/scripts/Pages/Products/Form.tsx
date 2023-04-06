@@ -254,6 +254,28 @@ export default function FormProduct({
           />
         </FieldSection>
 
+        <FieldSection title="Links">
+          <TextField
+            name="link_shopee"
+            label="Link Shopee (optional)"
+            defaultValue={productToEdit?.link_shopee}
+            placeholder="https://shopee.co.id/..."
+            error={!!errors.link_shopee}
+            helperText={errors.link_shopee}
+            onChange={handleInputChange}
+          />
+
+          <TextField
+            name="link_tokopedia"
+            label="Link Tokopedia (optional)"
+            defaultValue={productToEdit?.link_tokopedia}
+            placeholder="https://www.tokopedia.com/..."
+            error={!!errors.link_tokopedia}
+            helperText={errors.link_tokopedia}
+            onChange={handleInputChange}
+          />
+        </FieldSection>
+
         <Box
           sx={{
             display: 'flex',
