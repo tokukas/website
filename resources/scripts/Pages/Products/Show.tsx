@@ -1,6 +1,7 @@
 import AppHead from '@/Components/AppHead';
 import Link from '@/Components/Link';
 import VerticalTable from '@/Components/VerticalTable';
+import Data from '@/Components/VerticalTable/Data';
 import { Image } from '@/Entities/Image';
 import { Product } from '@/Entities/Product';
 import DashboardLayout from '@/Layouts/DashboardLayout';
@@ -151,6 +152,34 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
             { label: 'SKU', value: product.sku },
             { label: 'Stock', disabledDataStyle: true, value: product.stock },
             { label: 'Price', value: `Rp${product.price}` },
+            {
+              label: 'Link Shopee',
+              disabledDataStyle: true,
+              value: product.link_shopee ? (
+                <Typography
+                  component={Link}
+                  href={product.link_shopee}
+                >
+                  {product.link_shopee}
+                </Typography>
+              ) : (
+                <Data empty>None</Data>
+              ),
+            },
+            {
+              label: 'Link Tokopedia',
+              disabledDataStyle: true,
+              value: product.link_tokopedia ? (
+                <Typography
+                  component={Link}
+                  href={product.link_tokopedia}
+                >
+                  {product.link_tokopedia}
+                </Typography>
+              ) : (
+                <Data empty>None</Data>
+              ),
+            },
             { label: 'Description', value: product.description },
             {
               label: 'Date Creation',
