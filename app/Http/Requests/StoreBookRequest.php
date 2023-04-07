@@ -46,18 +46,10 @@ class StoreBookRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'title' => 'title',
-            'publisher_id' => 'publisher',
-            'year_published' => 'year published',
-            'language_code' => 'language',
-            'width' => 'width',
-            'height' => 'height',
-            'weight' => 'weight',
-            'num_of_pages' => 'number of pages',
-            'category_id' => 'category',
-            'isbn' => 'ISBN',
-            'description' => 'description',
-            'author_ids' => 'authors',
+            'publisher_id' => __('validation.attributes.publisher'),
+            'language_code' => __('validation.attributes.language'),
+            'category_id' => __('validation.attributes.category'),
+            'author_ids' => __('validation.attributes.author'),
         ];
     }
 }

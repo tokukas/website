@@ -44,7 +44,7 @@ class StoreAuthorRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.unique' => 'This author is already exists',
+            'name.unique' => __('This :attribute is already exists.', ['attribute' => __('validation.attributes.author')]),
         ];
     }
 }

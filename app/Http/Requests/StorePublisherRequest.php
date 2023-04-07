@@ -45,7 +45,7 @@ class StorePublisherRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'slug.unique' => 'This publisher is already exists',
+            'slug.unique' => __('This :attribute is already exists.', ['attribute' => __('validation.attributes.publisher')]),
         ];
     }
 }

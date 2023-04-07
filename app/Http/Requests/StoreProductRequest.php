@@ -51,10 +51,9 @@ class StoreProductRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'book_id' => 'book',
-            'photos.*' => 'photo',
-            'link_shopee' => 'Shopee link',
-            'link_tokopedia' => 'Tokopedia link',
+            'book_id' => __('validation.attributes.book'),
+            'photos' => __('validation.attributes.photo'),
+            'photos.*' => __('validation.attributes.photo'),
         ];
     }
 
@@ -66,7 +65,9 @@ class StoreProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'book_id.exists' => 'The selected book is not exists.',
+            'book_id.exists' => __('The selected book is not exists.'),
+            'link_shopee.active_url' => __('The given :platform link is not a valid URL.', ['platform' => 'Shopee']),
+            'link_tokopedia.active_url' => __('The given :platform link is not a valid URL.', ['platform' => 'Tokopedia']),
         ];
     }
 }
