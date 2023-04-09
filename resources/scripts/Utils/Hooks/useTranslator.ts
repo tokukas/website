@@ -14,11 +14,21 @@ export type Translation = {
 export type Dictionary = readonly Translation[];
 
 export default function useTranslator(
+  /**
+   * An array of translation keys to be loaded on mount.
+   * You can also pass an object with a key and replace property.
+   */
   keys?: (Translation['key'] | Omit<Translation, 'translation'>)[],
 ) {
   const [cookies, setCookies] = useCookies(['dictionary']);
   const [error, setError] = useState<AxiosError<ApiResponse> | null>(null);
 
+  /**
+   * Fetch the translation from the API.
+   *
+   * @param key The translation key.
+   * @param replace The replace object.
+   */
   const fetchTranslation = async (
     key: Translation['key'],
     replace?: Translation['replace'],
@@ -31,6 +41,12 @@ export default function useTranslator(
     return response.data.data;
   };
 
+  /**
+   * Get a translation.
+   *
+   * @param key The translation key.
+   * @param replace The replace object.
+   */
   const get = (
     key: Translation['key'],
     replace?: Translation['replace'],
@@ -38,7 +54,13 @@ export default function useTranslator(
     item.key === key && isEqual(item.replace, replace)
   ));
 
-  const add = (
+  /**
+   * Load a translation.
+   *
+   * @param key The translation key.
+   * @param replace The replace object.
+   */
+  const load = (
     key: Translation['key'],
     replace?: Translation['replace'],
   ) => {
@@ -72,30 +94,40 @@ export default function useTranslator(
     })();
   };
 
-  const translate = (
-    key: Translation['key'],
-    replace?: Translation['replace'],
-  ) => {
-    const item = get(key, replace);
-    return item?.translation ?? key;
-  };
-
   // Adding translation on mount
   useEffect(() => {
     if (keys) {
       keys.forEach((item) => {
         if (typeof item === 'string') {
-          add(item);
+          load(item);
         } else {
-          add(item.key, item.replace);
+          load(item.key, item.replace);
         }
       });
     }
   }, [keys]);
 
   return {
-    add,
+    /**
+     * Load a translation by key and replace.
+     *
+     * @param key The translation key.
+     * @param replace The replace object.
+     */
+    load,
+    /**
+     * Get any error that occurred when loading a translation.
+     */
     error,
-    translate,
+    /**
+     * Translate the given message.
+     * If the translation doesn't exist, the key will be returned.
+     *
+     * @param key The translation key.
+     * @param replace The replace object.
+     */
+    __: (key: Translation['key'], replace?: Translation['replace']) => (
+      get(key, replace)?.translation ?? key
+    ),
   };
 }
