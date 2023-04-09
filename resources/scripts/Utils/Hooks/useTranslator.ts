@@ -54,13 +54,23 @@ export default function useTranslator(
     item.key === key && isEqual(item.replace, replace)
   ));
 
+  const saveTranslations = (translations: Translation[]) => {
+    const dictionary = <Dictionary>cookies.dictionary || [];
+
+    setCookies('dictionary', [...dictionary, ...translations], {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30, // 1 month
+      sameSite: 'lax',
+    });
+  };
+
   /**
    * Load a translation.
    *
    * @param key The translation key.
    * @param replace The replace object.
    */
-  const load = (
+  const load = async (
     key: Translation['key'],
     replace?: Translation['replace'],
   ) => {
@@ -68,40 +78,49 @@ export default function useTranslator(
       return;
     }
 
-    (async () => {
-      try {
-        const translation = await fetchTranslation(key, replace);
-        const dictionary = <Dictionary>cookies.dictionary || [];
-        const newTranslation = {
-          key,
-          replace,
-          translation,
-        };
+    const translation = await fetchTranslation(key, replace);
 
-        setCookies('dictionary', [...dictionary, newTranslation], {
-          path: '/',
-          maxAge: 60 * 60 * 24 * 30, // 1 month
-          sameSite: 'lax',
-        });
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          setError(err);
-        } else {
-          // eslint-disable-next-line no-console
-          console.error(err);
-        }
-      }
-    })();
+    if (translation) {
+      saveTranslations([{ key, replace, translation }]);
+    }
+  };
+
+  /**
+   * Load multiple translations.
+   *
+   * @param keysToLoad An array of keys and replaces.
+   */
+  const loadMany = async (
+    keysToLoad: Omit<Translation, 'translation'>[],
+  ) => {
+    // Get all keys that doesn't exist in the dictionary.
+    const unexistKeys = keysToLoad.filter((k) => (
+      !get(k.key, k.replace)
+    ));
+
+    // Fetch all translation.
+    const translations = await Promise.all(
+      unexistKeys.map((k) => fetchTranslation(k.key, k.replace)),
+    ) as string[];
+
+    // Save translations to the dictionary.
+    saveTranslations(translations.map((translation, index) => ({
+      ...unexistKeys[index],
+      translation,
+    })));
   };
 
   // Adding translation on mount
   useEffect(() => {
     if (keys) {
-      keys.forEach((item) => {
-        if (typeof item === 'string') {
-          load(item);
+      loadMany(keys.map((key) => (
+        typeof key === 'string' ? { key } : key
+      ))).catch((e) => {
+        if (e instanceof AxiosError) {
+          setError(e);
         } else {
-          load(item.key, item.replace);
+          // eslint-disable-next-line no-console
+          console.error(e);
         }
       });
     }
