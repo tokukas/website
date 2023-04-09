@@ -1,7 +1,7 @@
 import { ApiResponse } from '@/Types/ApiResponse';
 import { AxiosError } from 'axios';
 import { isEqual } from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import route from 'ziggy-js';
 
@@ -13,7 +13,9 @@ export type Translation = {
 
 export type Dictionary = readonly Translation[];
 
-export default function useTranslator() {
+export default function useTranslator(
+  keys?: (Translation['key'] | Omit<Translation, 'translation'>)[],
+) {
   const [cookies, setCookies] = useCookies(['dictionary']);
   const [error, setError] = useState<AxiosError<ApiResponse> | null>(null);
 
@@ -77,6 +79,19 @@ export default function useTranslator() {
     const item = get(key, replace);
     return item?.translation ?? key;
   };
+
+  // Adding translation on mount
+  useEffect(() => {
+    if (keys) {
+      keys.forEach((item) => {
+        if (typeof item === 'string') {
+          add(item);
+        } else {
+          add(item.key, item.replace);
+        }
+      });
+    }
+  }, [keys]);
 
   return {
     add,
