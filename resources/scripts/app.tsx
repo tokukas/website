@@ -7,11 +7,12 @@ import { StyledEngineProvider } from '@mui/material';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
+import { CookiesProvider } from 'react-cookie';
 import { createRoot } from 'react-dom/client';
 import '../styles/app.css';
-import './bootstrap';
 import AppConfig from './Config/App';
 import ThemeLayout from './Layouts/ThemeLayout';
+import './bootstrap';
 
 const appName = AppConfig.name;
 
@@ -33,9 +34,11 @@ const appName = AppConfig.name;
         <React.StrictMode>
           <StyledEngineProvider injectFirst>
             <SnackbarProvider>
-              <ThemeLayout>
-                <App {...props} />
-              </ThemeLayout>
+              <CookiesProvider>
+                <ThemeLayout>
+                  <App {...props} />
+                </ThemeLayout>
+              </CookiesProvider>
             </SnackbarProvider>
           </StyledEngineProvider>
         </React.StrictMode>,
