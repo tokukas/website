@@ -105,7 +105,7 @@ export default function useTranslator(
         }
       });
     }
-  }, [keys]);
+  }, []);
 
   return {
     /**
