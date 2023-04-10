@@ -21,6 +21,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import route from 'ziggy-js';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import Link from '../Link';
 
 export type TPropsNavbar = AppBarProps & {
@@ -52,11 +53,6 @@ export const MENU_ITEM_DIVIDER: TPropsNavMenuItem = {
   name: 'DIVIDER',
 };
 
-export const DEFAULT_NAV_ITEMS: TPropsNavMenuItem[] = [
-  { name: 'Tentang' },
-  { name: 'FAQ' },
-];
-
 /**
  * The Navbar component.
  */
@@ -67,6 +63,18 @@ export default function Navbar({
     setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser,
     setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+  const { __ } = useTranslator([
+    'About',
+    'Dark Mode',
+    'FAQ',
+    'Light Mode',
+  ]);
+
+  const defaultNavItems: TPropsNavMenuItem[] = [
+    { name: __('About') },
+    { name: __('FAQ') },
+  ];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -87,12 +95,12 @@ export default function Navbar({
   const [userMenus, setUserMenus] = React.useState<TPropsNavMenuItem[]>([]);
   const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
-  let displayedNavItems = navItems.length ? navItems : DEFAULT_NAV_ITEMS;
+  let displayedNavItems = navItems.length ? navItems : defaultNavItems;
   displayedNavItems = withoutNavItems ? [] : displayedNavItems;
 
   React.useEffect(() => {
     const themeMenu: TPropsNavMenuItem = {
-      name: colorMode === 'light' ? 'Dark Mode' : 'Light Mode',
+      name: colorMode === 'light' ? __('Dark Mode') : __('Light Mode'),
       icon: colorMode === 'light'
         ? <Brightness4Icon fontSize="small" />
         : <Brightness7Icon fontSize="small" />,

@@ -1,6 +1,7 @@
 import AppHead from '@/Components/AppHead';
 import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import GuestLayout from '@/Layouts/GuestLayout';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import { useForm } from '@inertiajs/react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -14,6 +15,14 @@ type TPropsForgotPassword = {
 }
 
 export default function ForgotPassword({ status }: TPropsForgotPassword) {
+  const { __ } = useTranslator([
+    'Email',
+    'Forgot your password?',
+    'No problem',
+    'view.auth.forgot_password.button_send',
+    'view.auth.forgot_password.description',
+  ]);
+
   const {
     data, setData, post, processing, errors,
   } = useForm({
@@ -45,10 +54,8 @@ export default function ForgotPassword({ status }: TPropsForgotPassword) {
   return (
     <GuestLayout>
       <AppHead
-        title="Lupa Kata Sandi"
-        description="Lupa kata sandi? Tidak masalah. Masukkan alamat email
-          Anda di bawah ini dan kami akan mengirimkan tautan untuk mengatur
-          ulang kata sandi Anda."
+        title={__('Forgot your password?')}
+        description={`${__('Forgot your password?')} ${__('view.auth.forgot_password.description')}`}
       />
 
       <Typography
@@ -56,20 +63,19 @@ export default function ForgotPassword({ status }: TPropsForgotPassword) {
         component="h1"
         sx={{ textAlign: 'center', mb: 3.2 }}
       >
-        Forgot your password?
+        {__('Forgot your password?')}
         <br />
-        No problem.
+        {__('No problem')}
       </Typography>
 
       <Typography>
-        Just let us know your email address and we will email you a password
-        reset link that will allow you to choose a new one.
+        {__('view.auth.forgot_password.description')}
       </Typography>
 
       <form onSubmit={submit}>
         <TextField
           id="email"
-          label="Email"
+          label={__('Email')}
           variant="outlined"
           name="email"
           value={data.email}
@@ -90,7 +96,7 @@ export default function ForgotPassword({ status }: TPropsForgotPassword) {
           disabled={processing}
           fullWidth
         >
-          Email Password Reset Link
+          {__('view.auth.forgot_password.button_send')}
         </Button>
       </form>
     </GuestLayout>

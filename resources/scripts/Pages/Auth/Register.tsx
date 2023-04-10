@@ -1,6 +1,7 @@
 import AppHead from '@/Components/AppHead';
 import Link from '@/Components/Link';
 import GuestLayout from '@/Layouts/GuestLayout';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import { useForm } from '@inertiajs/react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,6 +10,16 @@ import * as React from 'react';
 import route from 'ziggy-js';
 
 export default function Register() {
+  const { __ } = useTranslator([
+    'Already registered?',
+    'Confirm Password',
+    'Create your Tokukas account now to start transacting.',
+    'Email',
+    'Name',
+    'Password',
+    'Register',
+  ]);
+
   const {
     data, setData, post, processing, errors, reset,
   } = useForm({
@@ -39,14 +50,16 @@ export default function Register() {
   return (
     <GuestLayout>
       <AppHead
-        title="Daftar"
-        description="Buat akun Tokukas Anda sekarang untuk mulai bertransaksi."
+        title={__('Register')}
+        description={__(
+          'Create your Tokukas account now to start transacting.',
+        )}
       />
 
       <form onSubmit={submit}>
         <TextField
           id="name"
-          label="Name"
+          label={__('Name')}
           variant="outlined"
           name="name"
           value={data.name}
@@ -61,7 +74,7 @@ export default function Register() {
 
         <TextField
           id="email"
-          label="Email"
+          label={__('Email')}
           variant="outlined"
           name="email"
           value={data.email}
@@ -76,7 +89,7 @@ export default function Register() {
 
         <TextField
           id="password"
-          label="Password"
+          label={__('Password')}
           variant="outlined"
           name="password"
           value={data.password}
@@ -92,7 +105,7 @@ export default function Register() {
 
         <TextField
           id="password_confirmation"
-          label="Confirm Password"
+          label={__('Confirm Password')}
           variant="outlined"
           name="password_confirmation"
           value={data.password_confirmation}
@@ -127,10 +140,10 @@ export default function Register() {
             type="submit"
             disabled={processing}
           >
-            Register
+            {__('Register')}
           </Button>
           <Link href={route('login')}>
-            Already registered?
+            {__('Already registered?')}
           </Link>
         </Box>
       </form>
