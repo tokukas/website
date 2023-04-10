@@ -2,6 +2,7 @@ import { ApiResponse } from '@/Types/ApiResponse';
 import { Translation } from '@/Types/Dictionary';
 import { DictionaryContext } from '@/Utils/Providers/DictionaryProvider';
 import { AxiosError } from 'axios';
+import { isEqual } from 'lodash';
 import { useContext, useEffect, useState } from 'react';
 import route from 'ziggy-js';
 
@@ -12,7 +13,7 @@ export default function useTranslator(
    */
   keys?: (Translation['key'] | Omit<Translation, 'translation'>)[],
 ) {
-  const { getTranslation, saveTranslation } = useContext(DictionaryContext);
+  const { dictionary, saveTranslation } = useContext(DictionaryContext);
   const [error, setError] = useState<AxiosError<ApiResponse> | null>(null);
 
   /**
@@ -32,6 +33,14 @@ export default function useTranslator(
 
     return response.data.data;
   };
+
+  const getTranslation = (
+    key: Translation['key'],
+    replace?: Translation['replace'],
+  ) => dictionary.find((t) => (
+    t.key === key
+    && isEqual(t.replace, replace)
+  ));
 
   /**
    * Load a translation.
