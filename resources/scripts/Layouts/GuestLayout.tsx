@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import * as React from 'react';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import BaseLayout from './BaseLayout';
 
 export type TPropsGuestLayout = {
@@ -17,6 +18,10 @@ export type TPropsGuestLayout = {
 
 export default function GuestLayout({ children }: TPropsGuestLayout) {
   const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
+  const { __ } = useTranslator([
+    'Switch to dark mode',
+    'Switch to light mode',
+  ]);
 
   return (
     <Box
@@ -32,7 +37,7 @@ export default function GuestLayout({ children }: TPropsGuestLayout) {
       }}
     >
       <Tooltip
-        title={`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`}
+        title={__(`Switch to ${colorMode === 'light' ? 'dark' : 'light'} mode`)}
         placement="left"
       >
         <Zoom in>

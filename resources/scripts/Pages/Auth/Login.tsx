@@ -2,6 +2,7 @@ import AppHead from '@/Components/AppHead';
 import Link from '@/Components/Link';
 import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import GuestLayout from '@/Layouts/GuestLayout';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import { useForm } from '@inertiajs/react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -56,17 +57,27 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
     }
   }, [status]);
 
+  const { __ } = useTranslator([
+    'Email',
+    'Forgot your password?',
+    'Login',
+    'Login to your Tokukas account to start transaction.',
+    'Log in',
+    'Password',
+    'Remember me',
+  ]);
+
   return (
     <GuestLayout>
       <AppHead
-        title="Masuk"
-        description="Masuk ke akun Tokukas Anda untuk mulai bertransaksi."
+        title={__('Login')}
+        description={__('Login to your Tokukas account to start transaction.')}
       />
 
       <form onSubmit={submit}>
         <TextField
           id="email"
-          label="Email"
+          label={__('Email')}
           variant="outlined"
           name="email"
           value={data.email}
@@ -80,7 +91,7 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
 
         <TextField
           id="password"
-          label="Password"
+          label={__('Password')}
           variant="outlined"
           name="password"
           value={data.password}
@@ -94,7 +105,7 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
         />
 
         <FormControlLabel
-          label="Remember me"
+          label={__('Remember me')}
           control={(
             <Checkbox
               id="remember"
@@ -126,12 +137,12 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
             type="submit"
             disabled={processing}
           >
-            Log in
+            {__('Log in')}
           </Button>
 
           {canResetPassword && (
             <Link href={route('password.request')}>
-              Forgot your password?
+              {__('Forgot your password?')}
             </Link>
           )}
         </Box>
