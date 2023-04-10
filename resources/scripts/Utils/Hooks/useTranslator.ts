@@ -1,17 +1,9 @@
 import { ApiResponse } from '@/Types/ApiResponse';
+import { Translation } from '@/Types/Dictionary';
+import { DictionaryContext } from '@/Utils/Providers/DictionaryProvider';
 import { AxiosError } from 'axios';
-import { isEqual } from 'lodash';
-import { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
+import { useContext, useEffect, useState } from 'react';
 import route from 'ziggy-js';
-
-export type Translation = {
-  key: string;
-  replace?: Record<string, string | number>,
-  translation: string;
-}
-
-export type Dictionary = readonly Translation[];
 
 export default function useTranslator(
   /**
@@ -20,7 +12,7 @@ export default function useTranslator(
    */
   keys?: (Translation['key'] | Omit<Translation, 'translation'>)[],
 ) {
-  const [cookies, setCookies] = useCookies(['dictionary']);
+  const { getTranslation, saveTranslation } = useContext(DictionaryContext);
   const [error, setError] = useState<AxiosError<ApiResponse> | null>(null);
 
   /**
@@ -42,29 +34,6 @@ export default function useTranslator(
   };
 
   /**
-   * Get a translation.
-   *
-   * @param key The translation key.
-   * @param replace The replace object.
-   */
-  const get = (
-    key: Translation['key'],
-    replace?: Translation['replace'],
-  ) => (<Dictionary>cookies.dictionary || []).find((item: Translation) => (
-    item.key === key && isEqual(item.replace, replace)
-  ));
-
-  const saveTranslations = (translations: Translation[]) => {
-    const dictionary = <Dictionary>cookies.dictionary || [];
-
-    setCookies('dictionary', [...dictionary, ...translations], {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 30, // 1 month
-      sameSite: 'lax',
-    });
-  };
-
-  /**
    * Load a translation.
    *
    * @param key The translation key.
@@ -74,14 +43,14 @@ export default function useTranslator(
     key: Translation['key'],
     replace?: Translation['replace'],
   ) => {
-    if (get(key, replace)) {
+    if (getTranslation(key, replace)) {
       return;
     }
 
     const translation = await fetchTranslation(key, replace);
 
     if (translation) {
-      saveTranslations([{ key, replace, translation }]);
+      saveTranslation({ key, replace, translation });
     }
   };
 
@@ -95,7 +64,7 @@ export default function useTranslator(
   ) => {
     // Get all keys that doesn't exist in the dictionary.
     const unexistKeys = keysToLoad.filter((k) => (
-      !get(k.key, k.replace)
+      !getTranslation(k.key, k.replace)
     ));
 
     // Fetch all translation.
@@ -104,10 +73,12 @@ export default function useTranslator(
     ) as string[];
 
     // Save translations to the dictionary.
-    saveTranslations(translations.map((translation, index) => ({
-      ...unexistKeys[index],
-      translation,
-    })));
+    translations.forEach((translation, index) => {
+      saveTranslation({
+        ...unexistKeys[index],
+        translation,
+      });
+    });
   };
 
   // Adding translation on mount
@@ -146,7 +117,7 @@ export default function useTranslator(
      * @param replace The replace object.
      */
     __: (key: Translation['key'], replace?: Translation['replace']) => (
-      get(key, replace)?.translation ?? key
+      getTranslation(key, replace)?.translation ?? key
     ),
   };
 }

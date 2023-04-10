@@ -13,6 +13,7 @@ import '../styles/app.css';
 import AppConfig from './Config/App';
 import ThemeLayout from './Layouts/ThemeLayout';
 import './bootstrap';
+import DictionaryProvider from './Utils/Providers/DictionaryProvider';
 
 const appName = AppConfig.name;
 
@@ -35,9 +36,11 @@ const appName = AppConfig.name;
           <StyledEngineProvider injectFirst>
             <SnackbarProvider>
               <CookiesProvider>
-                <ThemeLayout>
-                  <App {...props} />
-                </ThemeLayout>
+                <DictionaryProvider>
+                  <ThemeLayout>
+                    <App {...props} />
+                  </ThemeLayout>
+                </DictionaryProvider>
               </CookiesProvider>
             </SnackbarProvider>
           </StyledEngineProvider>
