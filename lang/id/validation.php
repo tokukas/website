@@ -162,6 +162,7 @@ return [
         'day' => 'hari',
         'deleted_at' => 'dihapus pada',
         'description' => 'deskripsi',
+        'dimension' => 'dimensi',
         'district' => 'daerah',
         'duration' => 'durasi',
         'email' => 'surel',

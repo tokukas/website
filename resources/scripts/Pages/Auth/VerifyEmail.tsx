@@ -1,6 +1,7 @@
 import AppHead from '@/Components/AppHead';
 import DismissSnackbarAction from '@/Components/Snackbar/Action/Dismiss';
 import GuestLayout from '@/Layouts/GuestLayout';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import { useForm } from '@inertiajs/react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,6 +15,16 @@ type TPropsVerifyEmail = {
 }
 
 export default function VerifyEmail({ status }: TPropsVerifyEmail) {
+  const { __ } = useTranslator([
+    'Logout',
+    'Resend Verification Email',
+    'Verify Email Address',
+    'view.auth.verify_email.confirm_verification',
+    'view.auth.verify_email.thank_you_note',
+    'view.auth.verify_email.notif_message',
+    'We have sent a verification email to your email address.',
+  ]);
+
   const { post, processing } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -21,8 +32,7 @@ export default function VerifyEmail({ status }: TPropsVerifyEmail) {
   React.useEffect(() => {
     if (status === 'verification-link-sent') {
       enqueueSnackbar(
-        `A new verification link has been sent to the email address you
-          provided during registration.`,
+        __('view.auth.verify_email.notif_message'),
         {
           variant: 'success',
           action: DismissSnackbarAction,
@@ -35,9 +45,10 @@ export default function VerifyEmail({ status }: TPropsVerifyEmail) {
   return (
     <GuestLayout>
       <AppHead
-        title="Verifikasi Email"
-        description="Kami telah mengirimkan email verifikasi ke alamat
-          email Anda. Silakan cek email Anda untuk melanjutkan."
+        title={__('Verify Email Address')}
+        description={__(
+          'We have sent a verification email to your email address.',
+        )}
       />
 
       <Typography
@@ -45,13 +56,11 @@ export default function VerifyEmail({ status }: TPropsVerifyEmail) {
         component="h1"
         sx={{ textAlign: 'center', mb: 3.2 }}
       >
-        Thanks for signing up!
+        {__('view.auth.verify_email.thank_you_note')}
       </Typography>
 
       <Typography>
-        Before getting started, could you verify your email address by clicking
-        on the link we just emailed to you? If you didn&apos;t receive the
-        email, we will gladly send you another.
+        {__('view.auth.verify_email.confirm_verification')}
       </Typography>
 
       <Box
@@ -69,7 +78,7 @@ export default function VerifyEmail({ status }: TPropsVerifyEmail) {
           disabled={processing}
           sx={{ flexGrow: 1 }}
         >
-          Resend Verification Email
+          {__('Resend Verification Email')}
         </Button>
 
         <Button
@@ -77,7 +86,7 @@ export default function VerifyEmail({ status }: TPropsVerifyEmail) {
           onClick={() => post(route('logout'))}
           sx={{ flexGrow: 1 }}
         >
-          Log Out
+          {__('Logout')}
         </Button>
       </Box>
     </GuestLayout>

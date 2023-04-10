@@ -1,5 +1,6 @@
 import AppHead from '@/Components/AppHead';
 import GuestLayout from '@/Layouts/GuestLayout';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import { useForm } from '@inertiajs/react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,6 +13,14 @@ type TPropsResetPassword = {
 }
 
 export default function ResetPassword({ token, email }: TPropsResetPassword) {
+  const { __ } = useTranslator([
+    'Confirm Password',
+    'Create a new password for your account.',
+    'Email',
+    'New Password',
+    'Reset Password',
+  ]);
+
   const {
     data, setData, post, processing, errors, reset,
   } = useForm({
@@ -42,15 +51,14 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
   return (
     <GuestLayout>
       <AppHead
-        title="Atur Ulang Kata Sandi"
-        description="Buat kata sandi baru untuk akun Anda.
-          Pastikan kata sandi Anda kuat dan mudah diingat."
+        title={__('Reset Password')}
+        description={__('Create a new password for your account.')}
       />
 
       <form onSubmit={submit}>
         <TextField
           id="email"
-          label="Email"
+          label={__('Email')}
           name="email"
           value={data.email}
           autoComplete="email"
@@ -65,7 +73,7 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
 
         <TextField
           id="password"
-          label="New Password"
+          label={__('New Password')}
           name="password"
           type="password"
           value={data.password}
@@ -82,7 +90,7 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
 
         <TextField
           id="password_confirmation"
-          label="Confirm New Password"
+          label={__('Confirm Password')}
           name="password_confirmation"
           type="password"
           value={data.password_confirmation}
@@ -105,7 +113,7 @@ export default function ResetPassword({ token, email }: TPropsResetPassword) {
           sx={{ mt: 3.2 }}
           fullWidth
         >
-          Reset Password
+          {__('Reset Password')}
         </Button>
       </form>
     </GuestLayout>

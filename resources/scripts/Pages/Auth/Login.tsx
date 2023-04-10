@@ -62,7 +62,6 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
     'Forgot your password?',
     'Login',
     'Login to your Tokukas account to start transaction.',
-    'Log in',
     'Password',
     'Remember me',
   ]);
@@ -137,7 +136,7 @@ export default function Login({ status, canResetPassword }: TPropsLogin) {
             type="submit"
             disabled={processing}
           >
-            {__('Log in')}
+            {__('Login')}
           </Button>
 
           {canResetPassword && (

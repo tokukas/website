@@ -191,6 +191,7 @@ return [
         'day' => 'day',
         'deleted_at' => 'deleted at',
         'description' => 'description',
+        'dimension' => 'dimension',
         'district' => 'district',
         'duration' => 'duration',
         'email' => 'email',
@@ -214,6 +215,7 @@ return [
         'month' => 'month',
         'name' => 'name',
         'national_code' => 'national code',
+        'num_of_pages' => 'number of pages',
         'number' => 'number',
         'password' => 'password',
         'password_confirmation' => 'password confirmation',
@@ -247,7 +249,10 @@ return [
         'title' => 'title',
         'updated_at' => 'updated at',
         'username' => 'username',
+        'weight' => 'weight',
+        'width' => 'width',
         'year' => 'year',
+        'year_published' => 'year published',
     ],
 
 ];

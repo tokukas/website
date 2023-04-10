@@ -6,6 +6,7 @@ import Data from '@/Components/VerticalTable/Data';
 import { Image } from '@/Entities/Image';
 import { Product } from '@/Entities/Product';
 import DefaultLayout from '@/Layouts/DefaultLayout';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import Language from '@/Utils/Language';
 import CloseIcon from '@mui/icons-material/Close';
 import Backdrop from '@mui/material/Backdrop';
@@ -25,6 +26,25 @@ type TPropsShowProduct = {
 }
 
 export default function ShowProductPublic({ product }: TPropsShowProduct) {
+  const { __ } = useTranslator([
+    { key: ':amount left', replace: { amount: product.stock } },
+    { key: ':amount pages', replace: { amount: product.book.num_of_pages } },
+    'Click to open full screen',
+    'Close',
+    'Out of stock',
+    'Order Via',
+    'validation.attributes.author',
+    'validation.attributes.description',
+    'validation.attributes.dimension',
+    'validation.attributes.isbn',
+    'validation.attributes.language',
+    'validation.attributes.num_of_pages',
+    'validation.attributes.publisher',
+    'validation.attributes.title',
+    'validation.attributes.weight',
+    'validation.attributes.year_published',
+  ]);
+
   const isPhotosExists = React.useMemo<boolean>(() => (
     !!product?.photos && !!product.photos.length
   ), [product]);
@@ -70,7 +90,7 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
                     width: '100%',
                     objectFit: 'cover',
                   }}
-                  title="Click to open full screen"
+                  title={__('Click to open full screen')}
                 />
               </Box>
             ))}
@@ -100,7 +120,9 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
               : theme.palette.error.main)}
             fontWeight={(theme) => theme.typography.fontWeightBold}
           >
-            {product.stock ? `${product.stock} tersisa` : 'Stok habis'}
+            {product.stock
+              ? __(':amount left', { amount: product.stock })
+              : __('Out of stock')}
           </Typography>
 
           <Box
@@ -123,7 +145,7 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
                 target="_blank"
                 endIcon={<ShopeeLogo className="w-14" variant="white" />}
               >
-                Pesan via
+                {__('Order Via')}
               </Button>
             )}
 
@@ -135,7 +157,7 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
                 target="_blank"
                 endIcon={<TokopediaLogo className="w-20" variant="white" />}
               >
-                Pesan via
+                {__('Order Via')}
               </Button>
             )}
           </Box>
@@ -145,9 +167,12 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
           <VerticalTable
             placeholder="-"
             data={[
-              { label: 'Judul', value: product.book.title },
               {
-                label: 'Penulis',
+                label: __('validation.attributes.title'),
+                value: product.book.title,
+              },
+              {
+                label: __('validation.attributes.author'),
                 disabledDataStyle: true,
                 value: product.book.authors?.length
                   ? product.book.authors?.map((author) => (
@@ -161,18 +186,42 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
                     <Data empty>-</Data>
                   ),
               },
-              { label: 'Penerbit', value: product.book.publisher?.name },
-              { label: 'Tahun Terbit', value: product.book.year_published },
               {
-                label: 'Bahasa',
+                label: __('validation.attributes.publisher'),
+                value: product.book.publisher?.name,
+              },
+              {
+                label: __('validation.attributes.year_published'),
+                value: product.book.year_published,
+              },
+              {
+                label: __('validation.attributes.language'),
                 value: Language.getLanguageByCode(product.book.language_code)
                   ?.native,
               },
-              { label: 'Jumlah Halaman', value: `${product.book.num_of_pages} halaman` },
-              { label: 'Dimensi', value: `${product.book.width} cm X ${product.book.height} cm` },
-              { label: 'Berat', value: `${product.book.weight} gram` },
-              { label: 'ISBN', value: product.book.isbn },
-              { label: 'Deskripsi', value: product.book.description },
+              {
+                label: __('validation.attributes.num_of_pages'),
+                value: __(
+                  ':amount pages',
+                  { amount: product.book.num_of_pages },
+                ),
+              },
+              {
+                label: __('validation.attributes.dimension'),
+                value: `${product.book.width} cm X ${product.book.height} cm`,
+              },
+              {
+                label: __('validation.attributes.weight'),
+                value: `${product.book.weight} gram`,
+              },
+              {
+                label: __('validation.attributes.isbn'),
+                value: product.book.isbn,
+              },
+              {
+                label: __('validation.attributes.description'),
+                value: product.book.description,
+              },
             ]}
           />
         </Box>
@@ -215,9 +264,9 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
                 right: 16,
               }}
             >
-              <Tooltip title="Close" arrow>
+              <Tooltip title={__('Close')} arrow>
                 <IconButton
-                  aria-label="close"
+                  aria-label={__('Close')}
                   onClick={() => setPhotoBackdrop(null)}
                   sx={{
                     color: (theme) => theme.palette.grey[300],

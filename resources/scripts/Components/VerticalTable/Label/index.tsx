@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 const Label = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
   fontSize: theme.typography.fontSize,
+  textTransform: 'capitalize',
 }));
 
 export default Label;
