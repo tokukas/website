@@ -1,4 +1,5 @@
 import { Dictionary, Translation } from '@/Types/Dictionary';
+import { isEqual } from 'lodash';
 
 type Action = {
   type: 'added' | 'removed';
@@ -12,6 +13,16 @@ export default function dictionaryReducer(
   const { type, payload } = action;
   switch (type) {
     case 'added': {
+      // Make sure if translation is not already exists
+      const isExists = dictionary.some((t) => (
+        t.key === payload.key
+        && isEqual(t.replace, payload.replace)
+      ));
+
+      if (isExists) {
+        return dictionary;
+      }
+
       return [
         ...dictionary,
         payload,

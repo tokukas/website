@@ -1,6 +1,5 @@
 import { Dictionary, Translation } from '@/Types/Dictionary';
 import React from 'react';
-import { useCookies } from 'react-cookie';
 import dictionaryReducer from './dictionaryReducer';
 
 export type DictionaryContextType = {
@@ -27,11 +26,7 @@ export type DictionaryProviderProps = {
 export default function DictionaryProvider({
   children,
 }: DictionaryProviderProps) {
-  const [cookies, setCookies] = useCookies(['dictionary']);
-  const [dictionary, dispatch] = React.useReducer(
-    dictionaryReducer,
-    cookies.dictionary as Translation[] ?? [],
-  );
+  const [dictionary, dispatch] = React.useReducer(dictionaryReducer, []);
 
   /**
    * Get a translation.
@@ -64,13 +59,20 @@ export default function DictionaryProvider({
     saveTranslation,
   }), [dictionary]);
 
+  // Load dictionary from storage
+  React.useEffect(() => {
+    const strDictionary = localStorage.getItem('dictionary');
+
+    if (strDictionary) {
+      (JSON.parse(strDictionary) as Dictionary).forEach((t) => {
+        dispatch({ type: 'added', payload: t });
+      });
+    }
+  }, []);
+
   // Save dictionary to cookies every time dictionary changed
   React.useEffect(() => {
-    setCookies('dictionary', dictionary, {
-      path: '/',
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: 'lax',
-    });
+    localStorage.setItem('dictionary', JSON.stringify(dictionary));
   }, [dictionary]);
 
   return (
