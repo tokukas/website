@@ -7,6 +7,7 @@ import RegisterMenu from '@/Components/Navbar/MenuItem/Items/RegisterMenu';
 import SettingsMenu from '@/Components/Navbar/MenuItem/Items/SettingsMenu';
 import { Product } from '@/Entities/Product';
 import BaseLayout from '@/Layouts/BaseLayout';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -23,6 +24,13 @@ export type TPropsWelcome = {
 }
 
 export default function Welcome({ photoPlaceholder, products }: TPropsWelcome) {
+  const { __ } = useTranslator([
+    'Dashboard',
+    'Login',
+    'Register',
+    'Settings',
+  ]);
+
   return (
     <>
       <AppHead
