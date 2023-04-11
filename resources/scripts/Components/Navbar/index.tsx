@@ -27,7 +27,8 @@ export type TPropsNavbar = AppBarProps & {
    * The navbar items.
    * If not provided, the default navbar items will be used.
    *
-   * Note: The `name` will be automatically translated.
+   * Note: Navbar will try to translate the `name`, so make sure to provide
+   * the translation key using `useTranslator` hook in parent component.
    *
    * @default DEFAULT_NAV_ITEMS
    */
@@ -43,7 +44,8 @@ export type TPropsNavbar = AppBarProps & {
   /**
    * The function to set the main user menus.
    *
-   * Note: The `name` will be automatically translated.
+   * Note: Navbar will try to translate the `name`, so make sure to provide
+   * the translation key using `useTranslator` hook in parent component.
    *
    * @param isUserAuthenticated Whether the user is authenticated or not.
    * @returns The main user menus.
@@ -71,9 +73,7 @@ export default function Navbar({
     'Dark Mode',
     'FAQ',
     'Light Mode',
-    'Login',
     'Logout',
-    'Register',
   ]);
 
   const [anchorElNav,
