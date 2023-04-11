@@ -1,4 +1,3 @@
-import AppHead from '@/Components/AppHead';
 import ShopeeLogo from '@/Components/Logo/Shopee';
 import TokopediaLogo from '@/Components/Logo/Tokopedia';
 import VerticalTable from '@/Components/VerticalTable';
@@ -52,12 +51,9 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
   const [photoBackdrop, setPhotoBackdrop] = React.useState<Image | null>(null);
 
   return (
-    <>
-      <AppHead title={product.name} />
-
+    <DefaultLayout title={product.name}>
       <Box
         sx={{
-          width: '100vw',
           display: 'grid',
           gridTemplateColumns: {
             xs: '1fr',
@@ -201,10 +197,9 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
               },
               {
                 label: __('validation.attributes.num_of_pages'),
-                value: __(
-                  ':amount pages',
-                  { amount: product.book.num_of_pages },
-                ),
+                value: __(':amount pages', {
+                  amount: product.book.num_of_pages,
+                }),
               },
               {
                 label: __('validation.attributes.dimension'),
@@ -279,17 +274,6 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
           </Box>
         )}
       </Backdrop>
-    </>
+    </DefaultLayout>
   );
 }
-
-/**
- * Set the parent layout for this page.
- *
- * @see https://inertiajs.com/pages#persistent-layouts
- */
-ShowProductPublic.layout = (children: React.ReactNode) => (
-  <DefaultLayout>
-    {children}
-  </DefaultLayout>
-);
