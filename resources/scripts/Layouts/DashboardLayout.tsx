@@ -42,7 +42,7 @@ export default function DashboardLayout({
   return (
     <BaseLayout>
       <AppHead title={title} description={description} />
-      <Navbar withoutNavItems />
+      <Navbar maxWidth="xl" withoutNavItems />
       <Box sx={{ display: 'flex', mt: '70px' }}>
         <Sidebar
           width={240}

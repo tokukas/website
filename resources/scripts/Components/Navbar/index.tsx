@@ -13,7 +13,7 @@ import AppBar, { AppBarProps } from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
+import Container, { ContainerProps } from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -24,6 +24,12 @@ import * as React from 'react';
 
 export type TPropsNavbar = AppBarProps & {
   /**
+   * Determine the max-width of the navbar. The navbar width grows with the size of the screen. Set to false to disable maxWidth.
+   *
+   * @default 'lg'
+   */
+  maxWidth?: ContainerProps['maxWidth'];
+  /**
    * The navbar items.
    * If not provided, the default navbar items will be used.
    *
@@ -33,14 +39,12 @@ export type TPropsNavbar = AppBarProps & {
    * @default DEFAULT_NAV_ITEMS
    */
   navItems?: TPropsNavMenuItem[];
-
   /**
    * Whether to display the navbar items or not.
    *
    * @default false
    */
   withoutNavItems?: boolean;
-
   /**
    * The function to set the main user menus.
    *
@@ -66,7 +70,11 @@ export const MENU_ITEM_DIVIDER: TPropsNavMenuItem = {
  * The Navbar component.
  */
 export default function Navbar({
-  navItems, withoutNavItems, setMainUserMenus, ...props
+  maxWidth,
+  navItems,
+  setMainUserMenus,
+  withoutNavItems,
+  ...props
 }: TPropsNavbar) {
   const { __ } = useTranslator([
     'About',
@@ -143,7 +151,7 @@ export default function Navbar({
     <AppBar
       {...props}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth={maxWidth}>
         <Toolbar
           disableGutters
           sx={{ justifyContent: 'space-between' }}
@@ -299,6 +307,7 @@ export default function Navbar({
 }
 
 Navbar.defaultProps = {
+  maxWidth: 'lg',
   navItems: undefined,
   withoutNavItems: false,
   setMainUserMenus: undefined,
