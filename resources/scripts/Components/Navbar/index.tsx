@@ -1,12 +1,13 @@
+import Link from '@/Components/Link';
 import BrandLogo from '@/Components/Logo/Brand';
 import NavMenuItem, { TPropsNavMenuItem } from '@/Components/Navbar/MenuItem';
+import LogoutMenu from '@/Components/Navbar/MenuItem/Items/LogoutMenu';
 import AppConfig from '@/Config/App';
 import AuthContext from '@/Utils/AuthContext';
 import ColorModeContext from '@/Utils/ColorModeContext';
-import { useForm } from '@inertiajs/react';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar, { AppBarProps } from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
@@ -20,9 +21,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import route from 'ziggy-js';
-import useTranslator from '@/Utils/Hooks/useTranslator';
-import Link from '../Link';
 
 export type TPropsNavbar = AppBarProps & {
   /**
@@ -52,6 +50,11 @@ export type TPropsNavbar = AppBarProps & {
    */
   setMainUserMenus?: (isUserAuthenticated: boolean) => TPropsNavMenuItem[];
 };
+
+export const DEFAULT_NAV_ITEMS: TPropsNavMenuItem[] = [
+  { name: 'About' },
+  { name: 'FAQ' },
+];
 
 export const MENU_ITEM_DIVIDER: TPropsNavMenuItem = {
   name: 'DIVIDER',
@@ -93,17 +96,11 @@ export default function Navbar({
 
   const { name: appName } = AppConfig;
   const { user } = React.useContext(AuthContext);
-  const { post } = useForm();
   const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
   const [userMenus, setUserMenus] = React.useState<TPropsNavMenuItem[]>([]);
   const [displayedNavItems,
     setDisplayedNavItems] = React.useState<TPropsNavMenuItem[]>([]);
-
-  const defaultNavItems: TPropsNavMenuItem[] = [
-    { name: 'About' },
-    { name: 'FAQ' },
-  ];
 
   React.useEffect(() => {
     if (withoutNavItems) {
@@ -116,7 +113,7 @@ export default function Navbar({
       return;
     }
 
-    setDisplayedNavItems(defaultNavItems);
+    setDisplayedNavItems(DEFAULT_NAV_ITEMS);
   }, [navItems, withoutNavItems]);
 
   const themeMenu = React.useMemo<TPropsNavMenuItem>(() => ({
@@ -127,15 +124,6 @@ export default function Navbar({
     onClick: toggleColorMode,
   }), [colorMode]);
 
-  const logoutMenu: TPropsNavMenuItem = {
-    name: 'Logout',
-    icon: <LogoutIcon fontSize="small" />,
-    onClick: (e) => {
-      e.preventDefault();
-      post(route('logout'));
-    },
-  };
-
   React.useEffect(() => {
     const mainUserMenus = setMainUserMenus
       ? setMainUserMenus(!!user) : [];
@@ -144,7 +132,7 @@ export default function Navbar({
       ...mainUserMenus,
       themeMenu,
       MENU_ITEM_DIVIDER,
-      logoutMenu,
+      LogoutMenu,
     ] : [
       ...mainUserMenus,
       themeMenu,
