@@ -1,12 +1,13 @@
+import Link from '@/Components/Link';
 import BrandLogo from '@/Components/Logo/Brand';
 import NavMenuItem, { TPropsNavMenuItem } from '@/Components/Navbar/MenuItem';
+import LogoutMenu from '@/Components/Navbar/MenuItem/Items/LogoutMenu';
 import AppConfig from '@/Config/App';
 import AuthContext from '@/Utils/AuthContext';
 import ColorModeContext from '@/Utils/ColorModeContext';
-import { useForm } from '@inertiajs/react';
+import useTranslator from '@/Utils/Hooks/useTranslator';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar, { AppBarProps } from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
@@ -20,14 +21,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import route from 'ziggy-js';
-import useTranslator from '@/Utils/Hooks/useTranslator';
-import Link from '../Link';
 
 export type TPropsNavbar = AppBarProps & {
   /**
    * The navbar items.
    * If not provided, the default navbar items will be used.
+   *
+   * Note: The `name` will be automatically translated.
    *
    * @default DEFAULT_NAV_ITEMS
    */
@@ -43,11 +43,18 @@ export type TPropsNavbar = AppBarProps & {
   /**
    * The function to set the main user menus.
    *
+   * Note: The `name` will be automatically translated.
+   *
    * @param isUserAuthenticated Whether the user is authenticated or not.
    * @returns The main user menus.
    */
   setMainUserMenus?: (isUserAuthenticated: boolean) => TPropsNavMenuItem[];
 };
+
+export const DEFAULT_NAV_ITEMS: TPropsNavMenuItem[] = [
+  { name: 'About' },
+  { name: 'FAQ' },
+];
 
 export const MENU_ITEM_DIVIDER: TPropsNavMenuItem = {
   name: 'DIVIDER',
@@ -57,24 +64,22 @@ export const MENU_ITEM_DIVIDER: TPropsNavMenuItem = {
  * The Navbar component.
  */
 export default function Navbar({
-  navItems = [], withoutNavItems, setMainUserMenus, ...props
+  navItems, withoutNavItems, setMainUserMenus, ...props
 }: TPropsNavbar) {
-  const [anchorElNav,
-    setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser,
-    setAnchorElUser] = React.useState<null | HTMLElement>(null);
-
   const { __ } = useTranslator([
     'About',
     'Dark Mode',
     'FAQ',
     'Light Mode',
+    'Login',
+    'Logout',
+    'Register',
   ]);
 
-  const defaultNavItems: TPropsNavMenuItem[] = [
-    { name: __('About') },
-    { name: __('FAQ') },
-  ];
+  const [anchorElNav,
+    setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser,
+    setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -91,44 +96,47 @@ export default function Navbar({
 
   const { name: appName } = AppConfig;
   const { user } = React.useContext(AuthContext);
-  const { post } = useForm();
-  const [userMenus, setUserMenus] = React.useState<TPropsNavMenuItem[]>([]);
   const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
-  let displayedNavItems = navItems.length ? navItems : defaultNavItems;
-  displayedNavItems = withoutNavItems ? [] : displayedNavItems;
+  const [userMenus, setUserMenus] = React.useState<TPropsNavMenuItem[]>([]);
+  const [displayedNavItems,
+    setDisplayedNavItems] = React.useState<TPropsNavMenuItem[]>([]);
 
   React.useEffect(() => {
-    const themeMenu: TPropsNavMenuItem = {
-      name: colorMode === 'light' ? __('Dark Mode') : __('Light Mode'),
-      icon: colorMode === 'light'
-        ? <Brightness4Icon fontSize="small" />
-        : <Brightness7Icon fontSize="small" />,
-      onClick: toggleColorMode,
-    };
+    if (withoutNavItems) {
+      setDisplayedNavItems([]);
+      return;
+    }
 
+    if (navItems && navItems.length) {
+      setDisplayedNavItems(navItems);
+      return;
+    }
+
+    setDisplayedNavItems(DEFAULT_NAV_ITEMS);
+  }, [navItems, withoutNavItems]);
+
+  const themeMenu = React.useMemo<TPropsNavMenuItem>(() => ({
+    name: colorMode === 'light' ? 'Dark Mode' : 'Light Mode',
+    icon: colorMode === 'light'
+      ? <Brightness4Icon fontSize="small" />
+      : <Brightness7Icon fontSize="small" />,
+    onClick: toggleColorMode,
+  }), [colorMode]);
+
+  React.useEffect(() => {
     const mainUserMenus = setMainUserMenus
       ? setMainUserMenus(!!user) : [];
 
-    setUserMenus(user
-      ? [
-        ...mainUserMenus,
-        themeMenu,
-        MENU_ITEM_DIVIDER,
-        {
-          name: 'Logout',
-          icon: <LogoutIcon fontSize="small" />,
-          onClick: (e) => {
-            if (e) {
-              e.preventDefault();
-            }
-            post(route('logout'));
-          },
-        },
-      ] : [
-        ...mainUserMenus,
-        themeMenu,
-      ]);
+    setUserMenus(user ? [
+      ...mainUserMenus,
+      themeMenu,
+      MENU_ITEM_DIVIDER,
+      LogoutMenu,
+    ] : [
+      ...mainUserMenus,
+      themeMenu,
+    ]);
   }, [user, colorMode]);
 
   return (
@@ -181,6 +189,7 @@ export default function Navbar({
                 <NavMenuItem
                   {...navItem}
                   key={navItem.name}
+                  name={__(navItem.name)}
                   onClick={handleCloseNavMenu}
                 />
               ))}
@@ -233,7 +242,7 @@ export default function Navbar({
                   fontSize: 'medium',
                 }}
               >
-                {navItem.name}
+                {__(navItem.name)}
               </Button>
             ))}
           </Box>
@@ -272,6 +281,7 @@ export default function Navbar({
                   <NavMenuItem
                     {...menu}
                     key={menu.name}
+                    name={__(menu.name)}
                     onClick={(e) => {
                       if (menu.onClick) { menu.onClick(e); }
                       handleCloseUserMenu();
