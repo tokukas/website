@@ -30,7 +30,7 @@
         "@emotion/styled": "^11.10.6",
         "@fontsource/quicksand": "^4.5.12",
         "@headlessui/react": "^1.7.13",
-        "@inertiajs/react": "^1.0.2",
+        "@inertiajs/react": "^1.0.3",
         "@mui/icons-material": "^5.11.16",
         "@mui/material": "^5.11.16",
         "@mui/x-data-grid": "^6.0.4",
