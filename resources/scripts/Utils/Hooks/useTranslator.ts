@@ -1,6 +1,7 @@
 import { ApiResponse } from '@/Types/ApiResponse';
 import { Translation } from '@/Types/Dictionary';
 import { DictionaryContext } from '@/Utils/Providers/DictionaryProvider';
+import { router, usePage } from '@inertiajs/react';
 import { AxiosError } from 'axios';
 import { isEqual } from 'lodash';
 import { useContext, useEffect, useState } from 'react';
@@ -13,7 +14,8 @@ export default function useTranslator(
    */
   keys?: (Translation['key'] | Omit<Translation, 'translation'>)[],
 ) {
-  const { dictionary, saveTranslation } = useContext(DictionaryContext);
+  const lang = usePage().props.locale as string;
+  const { dictionary, saveTranslation, reset } = useContext(DictionaryContext);
   const [error, setError] = useState<AxiosError<ApiResponse> | null>(null);
 
   /**
@@ -90,6 +92,17 @@ export default function useTranslator(
     });
   };
 
+  const changeLanguage = (language: string) => {
+    router.post(route('settings.language.set'), {
+      language,
+    }, {
+      onSuccess: () => {
+        reset();
+        window.location.reload();
+      },
+    });
+  };
+
   // Adding translation on mount
   useEffect(() => {
     if (keys) {
@@ -107,6 +120,14 @@ export default function useTranslator(
   }, []);
 
   return {
+    /**
+     * Change the app language.
+     */
+    changeLanguage,
+    /**
+     * Get current app language.
+     */
+    lang,
     /**
      * Load a translation by key and replace.
      *

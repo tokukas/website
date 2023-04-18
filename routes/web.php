@@ -16,36 +16,46 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])
-    ->name('home');
+Route::middleware('lang')->group(function () {
+    Route::get('/', [HomeController::class, 'index'])
+        ->name('home');
 
-Route::resource('products', 'App\Http\Controllers\ProductController');
+    Route::resource('products', 'App\Http\Controllers\ProductController');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::middleware('admin-only')->group(function () {
-        Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
-            ->name('dashboard');
-
-        Route::resource('books', 'App\Http\Controllers\BookController');
-
-        Route::resource('publishers', 'App\Http\Controllers\PublisherController')
-            ->only(['store']);
-
-        Route::resource('categories', 'App\Http\Controllers\CategoryController')
-            ->only(['store']);
-
-        Route::resource('authors', 'App\Http\Controllers\AuthorController')
-            ->only(['store']);
-
-        Route::post('products/export', ['App\Http\Controllers\ProductController', 'exportExcel'])
-            ->name('products.export');
-
-        Route::resource('images', 'App\Http\Controllers\ImageController')
-            ->only(['destroy']);
-    });
-
-    Route::get('/settings', fn () => Inertia::render('Settings'))
+    Route::get('/settings', ['App\Http\Controllers\SettingsController', 'language'])
         ->name('settings');
+
+    Route::controller('App\Http\Controllers\SettingsController')
+        ->prefix('settings')
+        ->name('settings.')
+        ->group(function () {
+            Route::get('/language', 'language')->name('language');
+            Route::post('/language', 'setLanguage')->name('language.set');
+        });
+
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::middleware('admin-only')->group(function () {
+            Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
+                ->name('dashboard');
+
+            Route::resource('books', 'App\Http\Controllers\BookController');
+
+            Route::resource('publishers', 'App\Http\Controllers\PublisherController')
+                ->only(['store']);
+
+            Route::resource('categories', 'App\Http\Controllers\CategoryController')
+                ->only(['store']);
+
+            Route::resource('authors', 'App\Http\Controllers\AuthorController')
+                ->only(['store']);
+
+            Route::post('products/export', ['App\Http\Controllers\ProductController', 'exportExcel'])
+                ->name('products.export');
+
+            Route::resource('images', 'App\Http\Controllers\ImageController')
+                ->only(['destroy']);
+        });
+    });
 });
 
 require __DIR__.'/auth.php';

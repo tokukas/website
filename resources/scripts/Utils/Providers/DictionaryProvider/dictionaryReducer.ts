@@ -2,8 +2,8 @@ import { Dictionary, Translation } from '@/Types/Dictionary';
 import { isEqual } from 'lodash';
 
 type Action = {
-  type: 'added' | 'removed';
-  payload: Translation;
+  type: 'added' | 'removed' | 'reset';
+  payload?: Translation;
 };
 
 export default function dictionaryReducer(
@@ -11,6 +11,18 @@ export default function dictionaryReducer(
   action: Action,
 ) {
   const { type, payload } = action;
+
+  if (!payload) {
+    switch (type) {
+      case 'reset': {
+        return [] as Dictionary;
+      }
+      default: {
+        throw Error('Invalid action type');
+      }
+    }
+  }
+
   switch (type) {
     case 'added': {
       // Make sure if translation is not already exists
