@@ -5,11 +5,15 @@ import dictionaryReducer from './dictionaryReducer';
 export type DictionaryContextType = {
   dictionary: Dictionary;
   saveTranslation: (translation: Translation) => void;
+  reset: () => void;
 };
 
 export const DictionaryContext = React.createContext<DictionaryContextType>({
   dictionary: [],
   saveTranslation: () => {
+    //
+  },
+  reset: () => {
     //
   },
 });
@@ -45,9 +49,14 @@ export default function DictionaryProvider({
     dispatch({ type: 'added', payload: translation });
   };
 
+  const reset = () => {
+    dispatch({ type: 'reset' });
+  };
+
   const dictionaryContext = React.useMemo<DictionaryContextType>(() => ({
     dictionary,
     saveTranslation,
+    reset,
   }), [dictionary]);
 
   // Load dictionary from storage
