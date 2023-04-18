@@ -36,9 +36,9 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => fn () => $request->user(),
             ],
-            'flash' => fn () => [
-                'message' => $request->session()->get('message'),
-                'status' => $request->session()->get('status'),
+            'flash' => [
+                'message' => fn () => $request->session()->get('message'),
+                'status' => fn () => $request->session()->get('status'),
             ],
             'locale' => fn () => app()->getLocale(),
             'ziggy' => function () use ($request) {

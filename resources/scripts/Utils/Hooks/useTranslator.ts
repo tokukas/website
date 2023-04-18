@@ -1,7 +1,7 @@
 import { ApiResponse } from '@/Types/ApiResponse';
 import { Translation } from '@/Types/Dictionary';
 import { DictionaryContext } from '@/Utils/Providers/DictionaryProvider';
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { AxiosError } from 'axios';
 import { isEqual } from 'lodash';
 import { useContext, useEffect, useState } from 'react';
@@ -92,6 +92,17 @@ export default function useTranslator(
     });
   };
 
+  const changeLanguage = (language: string) => {
+    router.post(route('settings.language.set'), {
+      language,
+    }, {
+      onSuccess: () => {
+        reset();
+        window.location.reload();
+      },
+    });
+  };
+
   // Adding translation on mount
   useEffect(() => {
     if (keys) {
@@ -108,15 +119,11 @@ export default function useTranslator(
     }
   }, []);
 
-  useEffect(() => {
-    // Clear error on language change
-    setError(null);
-
-    // Reset dictionary on language change
-    reset();
-  }, [lang]);
-
   return {
+    /**
+     * Change the app language.
+     */
+    changeLanguage,
     /**
      * Get current app language.
      */
