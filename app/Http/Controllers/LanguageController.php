@@ -15,13 +15,18 @@ class LanguageController extends Controller
             $request->validate([
                 'key' => ['required', 'string'],
                 'replace' => ['nullable', 'array'],
+                'locale' => [
+                    'nullable',
+                    'string',
+                    'in:' . implode(',', config('language.available')),
+                ],
             ]);
         } catch (\Throwable $th) {
             return $this->failureResponse($th->getMessage(), 400);
         }
 
         return $this->successResponse(
-            __($request->key, $request->replace ?? [])
+            __($request->key, $request->replace ?? [], $request->locale)
         );
     }
 }

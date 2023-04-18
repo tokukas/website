@@ -30,7 +30,7 @@ export default function useTranslator(
   ) => {
     const response = await window.axios.post<ApiResponse<string>>(
       route('translate'),
-      { key, replace },
+      { key, replace, locale: lang },
     );
 
     return response.data.data;
