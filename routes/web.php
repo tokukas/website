@@ -31,6 +31,7 @@ Route::middleware('lang')->group(function () {
         ->group(function () {
             Route::get('/language', 'language')->name('language');
             Route::post('/language', 'setLanguage')->name('language.set');
+            Route::get('/appearance', 'appearance')->name('appearance');
         });
 
     Route::middleware(['auth', 'verified'])->group(function () {

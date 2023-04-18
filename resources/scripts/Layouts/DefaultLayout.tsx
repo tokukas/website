@@ -47,6 +47,7 @@ export default function DefaultLayout({
         ] : [
           LoginMenu,
           RegisterMenu,
+          SettingsMenu,
         ])}
       />
 
