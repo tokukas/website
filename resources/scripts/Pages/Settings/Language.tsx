@@ -28,7 +28,7 @@ export default function LanguageSettings({ languages }: LanguageSettingsProps) {
       <TextField
         id="language"
         select
-        defaultValue={locale}
+        value={locale}
         fullWidth
         onChange={(e) => {
           router.post(route('settings.language.set'), {
