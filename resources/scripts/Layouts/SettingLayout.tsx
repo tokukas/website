@@ -23,6 +23,7 @@ const sidebarItems: TPropsSidebarItem[] = [
     key: 'appearance',
     name: 'Appearance',
     icon: <DarkModeIcon />,
+    href: route('settings.appearance'),
   },
 ];
 

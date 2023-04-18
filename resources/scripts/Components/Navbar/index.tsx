@@ -1,13 +1,14 @@
 import Link from '@/Components/Link';
 import BrandLogo from '@/Components/Logo/Brand';
 import NavMenuItem, { TPropsNavMenuItem } from '@/Components/Navbar/MenuItem';
+import DashboardMenu from '@/Components/Navbar/MenuItem/Items/DashboardMenu';
+import LoginMenu from '@/Components/Navbar/MenuItem/Items/LoginMenu';
 import LogoutMenu from '@/Components/Navbar/MenuItem/Items/LogoutMenu';
+import RegisterMenu from '@/Components/Navbar/MenuItem/Items/RegisterMenu';
+import SettingsMenu from '@/Components/Navbar/MenuItem/Items/SettingsMenu';
 import AppConfig from '@/Config/App';
 import AuthContext from '@/Utils/AuthContext';
-import ColorModeContext from '@/Utils/ColorModeContext';
 import useTranslator from '@/Utils/Hooks/useTranslator';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppBar, { AppBarProps } from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
@@ -78,10 +79,12 @@ export default function Navbar({
 }: TPropsNavbar) {
   const { __ } = useTranslator([
     'About',
-    'Dark Mode',
+    'Dashboard',
     'FAQ',
-    'Light Mode',
+    'Login',
     'Logout',
+    'Register',
+    'Settings',
   ]);
 
   const [anchorElNav,
@@ -104,7 +107,6 @@ export default function Navbar({
 
   const { name: appName } = AppConfig;
   const { user } = React.useContext(AuthContext);
-  const { colorMode, toggleColorMode } = React.useContext(ColorModeContext);
 
   const [userMenus, setUserMenus] = React.useState<TPropsNavMenuItem[]>([]);
   const [displayedNavItems,
@@ -124,28 +126,23 @@ export default function Navbar({
     setDisplayedNavItems(DEFAULT_NAV_ITEMS);
   }, [navItems, withoutNavItems]);
 
-  const themeMenu = React.useMemo<TPropsNavMenuItem>(() => ({
-    name: colorMode === 'light' ? 'Dark Mode' : 'Light Mode',
-    icon: colorMode === 'light'
-      ? <Brightness4Icon fontSize="small" />
-      : <Brightness7Icon fontSize="small" />,
-    onClick: toggleColorMode,
-  }), [colorMode]);
-
   React.useEffect(() => {
     const mainUserMenus = setMainUserMenus
       ? setMainUserMenus(!!user) : [];
 
     setUserMenus(user ? [
+      DashboardMenu,
+      SettingsMenu,
       ...mainUserMenus,
-      themeMenu,
       MENU_ITEM_DIVIDER,
       LogoutMenu,
     ] : [
+      LoginMenu,
+      RegisterMenu,
       ...mainUserMenus,
-      themeMenu,
+      SettingsMenu,
     ]);
-  }, [user, colorMode]);
+  }, [user]);
 
   return (
     <AppBar

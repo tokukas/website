@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ChangeLanguageRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -23,5 +22,10 @@ class SettingsController extends Controller
         session()->put('lang', $request->language);
 
         return redirect()->back();
+    }
+
+    public function appearance(Request $request)
+    {
+        return Inertia::render('Settings/Appearance');
     }
 }

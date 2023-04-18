@@ -18,7 +18,7 @@ class LanguageController extends Controller
                 'locale' => [
                     'nullable',
                     'string',
-                    'in:' . implode(',', config('language.available')),
+                    'in:'.implode(',', config('language.available')),
                 ],
             ]);
         } catch (\Throwable $th) {

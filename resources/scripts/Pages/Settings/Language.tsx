@@ -19,7 +19,7 @@ export default function LanguageSettings({ languages }: LanguageSettingsProps) {
   ]);
 
   return (
-    <SettingLayout activeSidebarKey="language">
+    <>
       <Typography variant="h5" gutterBottom>
         {__('Change the app language')}
       </Typography>
@@ -40,6 +40,19 @@ export default function LanguageSettings({ languages }: LanguageSettingsProps) {
         ))}
       </TextField>
 
-    </SettingLayout>
+    </>
   );
 }
+
+/**
+ * Set the parent layout for this page.
+ *
+ * @see https://inertiajs.com/pages#persistent-layouts
+ */
+LanguageSettings.layout = (children: React.ReactNode) => (
+  <SettingLayout
+    activeSidebarKey="language"
+  >
+    {children}
+  </SettingLayout>
+);
