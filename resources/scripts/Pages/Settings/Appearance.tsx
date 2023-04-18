@@ -31,7 +31,7 @@ export default function AppearanceSettings() {
   ];
 
   return (
-    <SettingLayout activeSidebarKey="appearance">
+    <>
       <Typography variant="h5" gutterBottom>
         {__('Change the app appearance')}
       </Typography>
@@ -48,6 +48,19 @@ export default function AppearanceSettings() {
           </Button>
         ))}
       </ButtonGroup>
-    </SettingLayout>
+    </>
   );
 }
+
+/**
+ * Set the parent layout for this page.
+ *
+ * @see https://inertiajs.com/pages#persistent-layouts
+ */
+AppearanceSettings.layout = (children: React.ReactNode) => (
+  <SettingLayout
+    activeSidebarKey="appearance"
+  >
+    {children}
+  </SettingLayout>
+);
