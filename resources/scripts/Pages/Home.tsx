@@ -1,3 +1,4 @@
+import Footer from '@/Components/Footer';
 import Link from '@/Components/Link';
 import { Product } from '@/Entities/Product';
 import DefaultLayout from '@/Layouts/DefaultLayout';
@@ -7,7 +8,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
+import React from 'react';
 import route from 'ziggy-js';
 
 export type TPropsWelcome = {
@@ -30,6 +31,7 @@ export default function Welcome({ photoPlaceholder, products }: TPropsWelcome) {
           columnGap: 2,
           justifyContent: 'center',
           mt: 2,
+          py: 4,
         }}
       >
         {products.map((product) => (
@@ -70,6 +72,8 @@ export default function Welcome({ photoPlaceholder, products }: TPropsWelcome) {
           </Card>
         ))}
       </Box>
+
+      <Footer />
     </DefaultLayout>
   );
 }
