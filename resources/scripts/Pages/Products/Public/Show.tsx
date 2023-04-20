@@ -66,6 +66,7 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
             xs: 2,
             md: 4,
           },
+          py: 3,
         }}
       >
         {isPhotosExists && (

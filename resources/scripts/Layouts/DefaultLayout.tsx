@@ -1,8 +1,8 @@
 import AppHead, { TPropsAppHead } from '@/Components/AppHead';
 import Navbar from '@/Components/Navbar';
+import BaseLayout from '@/Layouts/BaseLayout';
 import Container, { ContainerProps } from '@mui/material/Container';
-import * as React from 'react';
-import BaseLayout from './BaseLayout';
+import React from 'react';
 
 export type TPropsDefaultLayout = Omit<TPropsAppHead, 'children'> & {
   /**
@@ -34,7 +34,6 @@ export default function DefaultLayout({
         maxWidth={maxWidth}
         sx={{
           mt: '70px',
-          p: 3,
         }}
       >
         {children}
