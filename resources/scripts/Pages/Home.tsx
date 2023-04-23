@@ -62,6 +62,9 @@ export default function Welcome({ photoPlaceholder, products }: TPropsWelcome) {
                 sx={{ width: 160, height: 160 }}
                 image={getPhoto(product.photos)}
                 title={product.name}
+                component="img"
+                loading="lazy"
+                alt={product.name}
               />
               <CardContent>
                 <Typography
