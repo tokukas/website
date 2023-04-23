@@ -1,7 +1,9 @@
 import Footer from '@/Components/Footer';
 import Link from '@/Components/Link';
+import { Image } from '@/Entities/Image';
 import { Product } from '@/Entities/Product';
 import DefaultLayout from '@/Layouts/DefaultLayout';
+import { getImageUrl } from '@/Utils/Helpers/Images';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -17,6 +19,17 @@ export type TPropsWelcome = {
 }
 
 export default function Welcome({ photoPlaceholder, products }: TPropsWelcome) {
+  /**
+   * Get product photo or use placeholder if not available.
+   */
+  const getPhoto = (photos?: Image[], index = 0) => {
+    const photo = photos?.at(index);
+    return photo ? getImageUrl(photo, {
+      width: 160,
+      type: 'webp',
+    }) : photoPlaceholder;
+  };
+
   return (
     <DefaultLayout
       title="Tokukas - Toko Buku Bekas"
@@ -47,7 +60,7 @@ export default function Welcome({ photoPlaceholder, products }: TPropsWelcome) {
             >
               <CardMedia
                 sx={{ width: 160, height: 160 }}
-                image={product.photos?.at(0)?.url ?? photoPlaceholder}
+                image={getPhoto(product.photos)}
                 title={product.name}
               />
               <CardContent>

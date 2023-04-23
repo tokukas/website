@@ -5,6 +5,7 @@ import Data from '@/Components/VerticalTable/Data';
 import { Image } from '@/Entities/Image';
 import { Product } from '@/Entities/Product';
 import DefaultLayout from '@/Layouts/DefaultLayout';
+import { getImageUrl } from '@/Utils/Helpers/Images';
 import useTranslator from '@/Utils/Hooks/useTranslator';
 import Language from '@/Utils/Language';
 import CloseIcon from '@mui/icons-material/Close';
@@ -80,7 +81,10 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
                 onClick={() => setPhotoBackdrop(photo)}
               >
                 <img
-                  src={photo.url}
+                  src={getImageUrl(photo, {
+                    width: 400,
+                    type: 'webp',
+                  })}
                   alt={photo.caption}
                   loading="lazy"
                   style={{

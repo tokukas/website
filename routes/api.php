@@ -20,3 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/translate', ['App\Http\Controllers\LanguageController', 'translate'])
     ->name('translate');
+
+// TODO: merge this route with `images` resource route.
+Route::get('img/{image}', [App\Http\Controllers\ImageController::class, 'show'])
+    ->name('images.show');
