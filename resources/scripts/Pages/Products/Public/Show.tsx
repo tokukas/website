@@ -245,7 +245,10 @@ export default function ShowProductPublic({ product }: TPropsShowProduct) {
             }}
           >
             <img
-              src={photoBackdrop.url}
+              src={getImageUrl(photoBackdrop, {
+                width: 720,
+                type: 'webp',
+              })}
               alt={photoBackdrop.caption}
               loading="lazy"
               style={{

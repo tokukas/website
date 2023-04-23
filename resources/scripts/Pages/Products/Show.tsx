@@ -5,6 +5,7 @@ import Data from '@/Components/VerticalTable/Data';
 import { Image } from '@/Entities/Image';
 import { Product } from '@/Entities/Product';
 import DashboardLayout from '@/Layouts/DashboardLayout';
+import { getImageUrl } from '@/Utils/Helpers/Images';
 import { router } from '@inertiajs/react';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -121,7 +122,10 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
                 onClick={() => setPhotoBackdrop(photo)}
               >
                 <img
-                  src={photo.url}
+                  src={getImageUrl(photo, {
+                    width: 400,
+                    type: 'webp',
+                  })}
                   alt={photo.caption}
                   loading="lazy"
                   style={{
@@ -215,7 +219,10 @@ export default function ShowProduct({ product }: TPropsShowProduct) {
             }}
           >
             <img
-              src={photoBackdrop.url}
+              src={getImageUrl(photoBackdrop, {
+                width: 720,
+                type: 'webp',
+              })}
               alt={photoBackdrop.caption}
               loading="lazy"
               style={{
