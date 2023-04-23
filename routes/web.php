@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,6 +20,9 @@ Route::middleware('lang')->group(function () {
         ->name('home');
 
     Route::resource('products', 'App\Http\Controllers\ProductController');
+
+    Route::resource('images', App\Http\Controllers\ImageController::class)
+        ->only(['show', 'destroy']);
 
     Route::get('/settings', ['App\Http\Controllers\SettingsController', 'language'])
         ->name('settings');
@@ -52,9 +54,6 @@ Route::middleware('lang')->group(function () {
 
             Route::post('products/export', ['App\Http\Controllers\ProductController', 'exportExcel'])
                 ->name('products.export');
-
-            Route::resource('images', 'App\Http\Controllers\ImageController')
-                ->only(['destroy']);
         });
     });
 });

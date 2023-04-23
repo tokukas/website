@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetImageRequest;
 use App\Models\Image;
 use App\Traits\ApiResponser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class ImageController extends Controller
 {
     use ApiResponser;
+
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified'])->except(['show']);
+    }
 
     // /**
     //  * Display a listing of the resource.
