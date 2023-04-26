@@ -55,10 +55,10 @@ class ImageController extends Controller
 
         try {
             $options = $request->validate([
-                'height' => ['nullable', 'integer'],
-                'quality' => ['nullable', 'integer'],
+                'height' => ['nullable', 'integer', 'max:2000'],
+                'quality' => ['nullable', 'integer', 'min:0', 'max:100'],
                 'type' => ['nullable', 'in:jpg,png,gif,tif,bmp,ico,psd,webp,data-url'],
-                'width' => ['nullable', 'integer'],
+                'width' => ['nullable', 'integer', 'max:2000'],
             ]);
         } catch (ValidationException $th) {
             return $this->failureResponse($th->getMessage(), 400);
