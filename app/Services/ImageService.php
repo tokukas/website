@@ -29,6 +29,14 @@ class ImageService
 
         $img = IImage::make(Storage::get($image->path));
 
+        if (isset($options['width'])) {
+            $img->widen($options['width']);
+        }
+
+        if (isset($options['height'])) {
+            $img->heighten($options['height']);
+        }
+
         if (isset($options['width']) && isset($options['height'])) {
             $img->resize($options['width'], $options['height']);
         }
