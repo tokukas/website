@@ -3,19 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Services\ImageService;
 use App\Traits\ApiResponser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class ImageController extends Controller
 {
     use ApiResponser;
 
+    protected ImageService $imageService;
+
     public function __construct()
     {
         $this->middleware(['auth', 'verified'])->except(['show']);
+
+        $this->imageService = new ImageService();
     }
 
     // /**
@@ -47,8 +51,10 @@ class ImageController extends Controller
      */
     public function show(Request $request, Image $image)
     {
+        $options = [];
+
         try {
-            $request->validate([
+            $options = $request->validate([
                 'height' => ['nullable', 'integer'],
                 'quality' => ['nullable', 'integer'],
                 'type' => ['nullable', 'in:jpg,png,gif,tif,bmp,ico,psd,webp,data-url'],
@@ -58,26 +64,7 @@ class ImageController extends Controller
             return $this->failureResponse($th->getMessage(), 400);
         }
 
-        $img = \Intervention\Image\Facades\Image::make(
-            Storage::get($image->path)
-        );
-
-        if ($request->has('width')) {
-            $img->widen($request->width);
-        }
-
-        if ($request->has('height')) {
-            $img->heighten($request->height);
-        }
-
-        if ($request->has('width') && $request->has('height')) {
-            $img->resize($request->width, $request->height);
-        }
-
-        return $img->response(
-            $request->type ?? null,
-            $request->quality ?? 90,
-        );
+        return $this->imageService->get($image, $options);
     }
 
     // /**
@@ -101,10 +88,7 @@ class ImageController extends Controller
      */
     public function destroy(Image $image): RedirectResponse
     {
-        if (
-            $image->delete()
-            && Storage::delete($image->path)
-        ) {
+        if ($this->imageService->delete($image)) {
             $this->setFlashSuccess('Image deleted successfully');
         } else {
             $this->setFlashError('Failed to delete the image');

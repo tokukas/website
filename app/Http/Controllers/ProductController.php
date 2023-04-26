@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Book;
 use App\Models\Product;
+use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -143,7 +144,7 @@ class ProductController extends Controller
     {
         $statuses = array_map(function (UploadedFile $photo) use ($product) {
             // Save the photo file into images folder.
-            $path = Storage::putFile('images', $photo);
+            $path = (new ImageService)->store($photo);
 
             if (! $path) {
                 return false;
