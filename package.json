@@ -50,6 +50,6 @@
         "react-material-ui-carousel": "^3.4.2",
         "tailwindcss": "^3.3.1",
         "vite": "^4.3.9",
-        "ziggy-js": "^1.5.0"
+        "ziggy-js": "^1.6.0"
     }
 }
